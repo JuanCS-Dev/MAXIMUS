@@ -1,0 +1,98 @@
+# Maximus 2.0 - KServe & Knative Configuration
+# ============================================
+# 
+# Serverless and Model Serving configuration.
+# DO NOT APPLY until billing is configured.
+
+---
+# KServe InferenceService (Placeholder for Future Models)
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: maximus-model-server
+  namespace: maximus-prod
+spec:
+  predictor:
+    # Example: Serving a custom model (e.g., specialized embedding model)
+    # This is a placeholder for future use when we deploy custom models
+    sklearn:
+      storageUri: "gs://maximus-models/sklearn/v1"
+      resources:
+        requests:
+          cpu: 1
+          memory: 2Gi
+
+---
+# Knative Service - HCL Planner (Serverless)
+# Replaces the standard Deployment for serverless scaling (scale-to-zero)
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: hcl-planner-serverless
+  namespace: maximus-prod
+spec:
+  template:
+    metadata:
+      annotations:
+        # Scale to zero when idle to save costs
+        autoscaling.knative.dev/minScale: "0"
+        autoscaling.knative.dev/maxScale: "10"
+        # Target concurrency per pod
+        autoscaling.knative.dev/target: "10"
+    spec:
+      containers:
+      - image: gcr.io/PROJECT_ID/hcl-planner:latest
+        env:
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: maximus-secrets
+              key: GEMINI_API_KEY
+        - name: GEMINI_MONTHLY_BUDGET_USD
+          value: "200"
+        envFrom:
+        - configMapRef:
+            name: maximus-config
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+
+---
+# Knative Service - Meta Orchestrator (Serverless)
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: meta-orchestrator-serverless
+  namespace: maximus-prod
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "1"  # Keep 1 warm for orchestration
+        autoscaling.knative.dev/maxScale: "5"
+    spec:
+      containers:
+      - image: gcr.io/PROJECT_ID/meta-orchestrator:latest
+        envFrom:
+        - configMapRef:
+            name: maximus-config
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+
+---
+# KubeEdge Configuration (Placeholder)
+# For future edge deployment
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kubeedge-config
+  namespace: maximus-prod
+data:
+  edge-site: "enabled"
+  cloud-core-address: "cloud-core.kubeedge.svc.cluster.local"

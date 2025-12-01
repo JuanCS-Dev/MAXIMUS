@@ -1,0 +1,237 @@
+# Maximus 2.0 - GCloud Deployment
+# ================================
+# 
+# Kubernetes manifests for production deployment.
+# DO NOT APPLY until billing is configured.
+
+---
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: maximus-prod
+  labels:
+    app: maximus
+    environment: production
+
+---
+# ConfigMap - Shared Configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: maximus-config
+  namespace: maximus-prod
+data:
+  ENVIRONMENT: "production"
+  LOG_LEVEL: "INFO"
+  QDRANT_URL: "http://qdrant:6333"
+
+---
+# Secret - API Keys (PLACEHOLDER - Replace with actual secrets)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: maximus-secrets
+  namespace: maximus-prod
+type: Opaque
+stringData:
+  GEMINI_API_KEY: "REPLACE_WITH_REAL_KEY"
+  # Add other secrets as needed
+
+---
+# Qdrant Vector Database
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: qdrant
+  namespace: maximus-prod
+spec:
+  serviceName: qdrant
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qdrant
+  template:
+    metadata:
+      labels:
+        app: qdrant
+    spec:
+      containers:
+      - name: qdrant
+        image: qdrant/qdrant:v1.7.4
+        ports:
+        - containerPort: 6333
+          name: http
+        - containerPort: 6334
+          name: grpc
+        env:
+        - name: QDRANT__SERVICE__GRPC_PORT
+          value: "6334"
+        volumeMounts:
+        - name: qdrant-storage
+          mountPath: /qdrant/storage
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+  volumeClaimTemplates:
+  - metadata:
+      name: qdrant-storage
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 10Gi
+
+---
+# Qdrant Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: qdrant
+  namespace: maximus-prod
+spec:
+  selector:
+    app: qdrant
+  ports:
+  - name: http
+    port: 6333
+    targetPort: 6333
+  - name: grpc
+    port: 6334
+    targetPort: 6334
+  type: ClusterIP
+
+---
+# HCL Planner Service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hcl-planner
+  namespace: maximus-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hcl-planner
+  template:
+    metadata:
+      labels:
+        app: hcl-planner
+    spec:
+      containers:
+      - name: hcl-planner
+        image: gcr.io/PROJECT_ID/hcl-planner:latest
+        ports:
+        - containerPort: 8001
+        env:
+        - name: GEMINI_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: maximus-secrets
+              key: GEMINI_API_KEY
+        - name: GEMINI_MODEL
+          value: "gemini-3-pro-preview"
+        - name: GEMINI_MONTHLY_BUDGET_USD
+          value: "200"
+        envFrom:
+        - configMapRef:
+            name: maximus-config
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+
+---
+# HCL Planner Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: hcl-planner
+  namespace: maximus-prod
+spec:
+  selector:
+    app: hcl-planner
+  ports:
+  - port: 8001
+    targetPort: 8001
+  type: ClusterIP
+
+---
+# Meta Orchestrator
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: meta-orchestrator
+  namespace: maximus-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: meta-orchestrator
+  template:
+    metadata:
+      labels:
+        app: meta-orchestrator
+    spec:
+      containers:
+      - name: meta-orchestrator
+        image: gcr.io/PROJECT_ID/meta-orchestrator:latest
+        ports:
+        - containerPort: 8003
+        envFrom:
+        - configMapRef:
+            name: maximus-config
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+
+---
+# Horizontal Pod Autoscaler - HCL Planner
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hcl-planner-hpa
+  namespace: maximus-prod
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: hcl-planner
+  minReplicas: 2
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
