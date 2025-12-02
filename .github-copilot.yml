@@ -1,0 +1,214 @@
+---
+# GitHub Copilot CLI - Maximus 2.0 Configuration
+# Project: MAXIMUS - Constitutional Meta-Cognitive AI
+# Last Updated: 2025-12-01
+
+# System Configuration
+system:
+  current_date: "2025-12-01"
+  timezone: "UTC"
+  project_name: "MAXIMUS 2.0"
+  project_description: "Constitutional Meta-Cognitive AI that Manages Agents"
+
+# Confirm date on every initialization
+date_check:
+  enabled: true
+  current_date: "2025-12-01"
+  message: |
+    ⚠️  DATE VERIFICATION REQUIRED
+    Current date: December 1, 2025
+    All timestamps and documentation must reflect this date.
+
+# Code Standards - Enforced Constitution
+coding_standards:
+  constitution_path: "docs/CODE_CONSTITUTION.md"
+  enforce_on_write: true
+  
+  rules:
+    # The 4 Pillars
+    - name: "Escalabilidade"
+      description: "Async/await, RESTful APIs, Kafka streaming"
+      severity: "error"
+      
+    - name: "Manutenibilidade"
+      description: "Files < 400 lines, zero TODOs, 100% docstrings"
+      severity: "error"
+      checks:
+        - max_file_lines: 400
+        - no_todos: true
+        - docstring_coverage: 100
+        
+    - name: "Padrão Google"
+      description: "mypy --strict, pylint >= 9.5, 100% type hints"
+      severity: "error"
+      checks:
+        - mypy_strict: true
+        - pylint_min_score: 9.5
+        - type_hint_coverage: 100
+        
+    - name: "CODE_CONSTITUTION"
+      description: "Constitutional compliance enforced"
+      severity: "error"
+      reference: "docs/CODE_CONSTITUTION.md"
+
+  # The Triad of Rationalization
+  philosophical_checks:
+    - name: "VERDADE (Truth)"
+      description: "Never lie, deceive, or trick the user"
+      check: "no_hallucinations"
+      
+    - name: "SABEDORIA (Wisdom)"
+      description: "Know before acting. Never act generically."
+      check: "context_driven"
+      
+    - name: "JUSTIÇA (Justice)"
+      description: "Each agent does only what is assigned"
+      check: "role_adherence"
+
+  # Padrão Pagani - Zero Tolerance
+  forbidden_patterns:
+    - pattern: "// TODO:"
+      reason: "Placeholders forbidden (Padrão Pagani)"
+      severity: "CAPITAL"
+      
+    - pattern: "// FIXME:"
+      reason: "Placeholders forbidden (Padrão Pagani)"
+      severity: "CAPITAL"
+      
+    - pattern: "// HACK:"
+      reason: "Placeholders forbidden (Padrão Pagani)"
+      severity: "CAPITAL"
+      
+    - pattern: "Mock implementations"
+      reason: "No fake solutions (Padrão Pagani)"
+      severity: "CAPITAL"
+
+# Quality Gates
+quality_gates:
+  test_coverage:
+    minimum: 99
+    unit: "percentage"
+    
+  file_size:
+    maximum: 500
+    ideal: 400
+    unit: "lines"
+    
+  type_coverage:
+    minimum: 100
+    unit: "percentage"
+    
+  cyclomatic_complexity:
+    maximum: 10
+    unit: "per_function"
+
+# Project Architecture
+architecture:
+  pattern: "Microservices + Meta-Cognitive Layer"
+  core_services: 13
+  
+  services:
+    - name: "meta_orchestrator"
+      port: 8100
+      description: "ROMA pattern agent orchestration"
+      
+    - name: "metacognitive_reflector"
+      port: 8002
+      description: "Consciousness layer - Triad enforcement"
+      
+    - name: "episodic_memory"
+      port: 8005
+      description: "Vector memory (ChromaDB)"
+      
+    - name: "ethical_audit_service"
+      port: 8006
+      description: "Constitutional validation"
+
+# Plugin System
+plugins:
+  protocols:
+    - "MCP"
+    - "REST"
+    - "gRPC"
+  
+  pattern: "ROMA (Recursive Orchestration with Meta-Agents)"
+  
+  status:
+    mcp:
+      ready: true
+      testing: "Prometheus integration (Dec 2, 2025)"
+    rest:
+      ready: true
+      status: "Production"
+    grpc:
+      ready: true
+      status: "Production"
+
+# Development Workflow
+workflow:
+  pre_commit:
+    - "black --check ."
+    - "mypy --strict ."
+    - "pylint --fail-under=9.5 ."
+    - "pytest --cov --cov-fail-under=99"
+    
+  commit_format: |
+    <type>(<scope>): <subject>
+    
+    Types: feat, fix, refactor, docs, test, chore
+    
+  guardian_agents:
+    enabled: true
+    description: "Automated constitutional enforcement"
+    checks:
+      - "No placeholders in production code"
+      - "Test coverage >= 99%"
+      - "File size <= 500 lines"
+      - "No dark patterns"
+
+# Documentation Standards
+documentation:
+  style: "Google"
+  required:
+    - "Module docstrings"
+    - "Class docstrings"
+    - "Function docstrings (public)"
+    - "Complex algorithm explanations"
+  
+  readme_sections:
+    - "Quick Start"
+    - "Architecture"
+    - "API"
+    - "Configuration"
+    - "Development"
+    - "Troubleshooting"
+
+# AI Behavior Guidelines
+ai_guidelines:
+  safety_mode: "high"
+  hallucination_tolerance: "zero"
+  
+  behavior:
+    - "Always enforce CODE_CONSTITUTION.md"
+    - "Validate date on every session (2025-12-01)"
+    - "No placeholders/TODOs in production code"
+    - "100% type hints on new code"
+    - "Files must be < 400 lines (max 500)"
+    - "Test coverage must be >= 99%"
+    - "Follow Google Python Style Guide"
+    
+  meta_cognitive:
+    - "Reflect on code quality before committing"
+    - "Check Triad compliance (Truth, Wisdom, Justice)"
+    - "Validate constitutional adherence"
+
+# References
+references:
+  constitution: "docs/CODE_CONSTITUTION.md"
+  architecture: "docs/MAXIMUS_ARCHITECTURE_DIAGRAM.md"
+  meta_cognitive_standard: "docs/META_COGNITIVE_AGENT_STANDARD.md"
+  agi_research: "docs/AGI & Meta-Agents: State-of-the-Art Deep Research Report.md"
+
+# Version
+version: "2.0.0"
+updated: "2025-12-01T23:59:00Z"
