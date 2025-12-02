@@ -15,7 +15,9 @@ disable=
     import-outside-toplevel,
     unused-variable,
     unused-import,
-    line-too-long
+    line-too-long,
+    no-member,
+    missing-class-docstring
 
 [FORMAT]
 max-line-length=100

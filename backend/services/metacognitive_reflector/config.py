@@ -22,9 +22,9 @@ def create_service_settings() -> "ServiceSettings":
 def create_llm_settings() -> "LLMSettings":
     """Factory for LLMSettings."""
     return LLMSettings(
-        api_key="dummy_key", # Default for tests
-        model="gemini-2.0-pro-exp",
-        temperature=0.7,
+        api_key="dummy_key",  # Default for tests
+        model="gemini-3-pro-preview",  # Gemini 3 Pro (December 2025)
+        thinking_level="high",
         max_tokens=8192
     )
 
@@ -47,16 +47,17 @@ class ServiceSettings(BaseSettings):
 
 class LLMSettings(BaseSettings):
     """
-    LLM configuration settings.
+    LLM configuration settings for Gemini 3 Pro (December 2025).
     """
     api_key: str = Field(..., validation_alias="GEMINI_API_KEY")
     model: str = Field(
-        default="gemini-2.0-pro-exp",
+        default="gemini-3-pro-preview",
         validation_alias="LLM_MODEL"
     )
-    temperature: float = Field(
-        default=0.7,
-        validation_alias="LLM_TEMPERATURE"
+    thinking_level: str = Field(
+        default="high",
+        validation_alias="LLM_THINKING_LEVEL",
+        description="Gemini 3 reasoning depth: 'low' or 'high'"
     )
     max_tokens: int = Field(
         default=8192,

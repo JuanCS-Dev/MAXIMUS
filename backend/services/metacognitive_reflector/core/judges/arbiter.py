@@ -53,10 +53,11 @@ from __future__ import annotations
 
 import asyncio
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from .base import JudgePlugin, JudgeVerdict
 from .resilience import ResilientJudgeWrapper
+
 from .voting import (
     TribunalDecision,
     TribunalVerdict,
@@ -118,6 +119,7 @@ class EnsembleArbiter:  # pylint: disable=too-many-instance-attributes
             use_resilience: Wrap judges with ResilientJudgeWrapper
         """
         # Wrap judges with resilience if requested
+        self._judges: Dict[str, Union[JudgePlugin, ResilientJudgeWrapper]]
         if use_resilience:
             self._judges = {
                 j.name: ResilientJudgeWrapper(j) for j in judges
@@ -266,7 +268,7 @@ class EnsembleArbiter:  # pylint: disable=too-many-instance-attributes
             return_exceptions=True
         )
 
-        verdicts = {}
+        verdicts: Dict[str, JudgeVerdict] = {}
         for name, result in zip(tasks.keys(), results):
             if isinstance(result, Exception):
                 # Create abstention verdict for exceptions
@@ -275,7 +277,7 @@ class EnsembleArbiter:  # pylint: disable=too-many-instance-attributes
                     pillar=self._judges[name].pillar,
                     reason=f"Exception: {str(result)[:100]}",
                 )
-            else:
+            elif isinstance(result, JudgeVerdict):
                 verdicts[name] = result
 
         return verdicts

@@ -16,7 +16,7 @@ from dataclasses import dataclass
 import json
 import logging
 
-from ..plugins.base import Task, TaskPriority  # pylint: disable=relative-beyond-top-level
+from plugins.base import Task, TaskPriority
 
 
 logger = logging.getLogger(__name__)

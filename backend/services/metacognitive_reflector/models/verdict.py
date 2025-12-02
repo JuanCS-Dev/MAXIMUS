@@ -75,7 +75,7 @@ class JudgeVerdictModel(BaseModel):
     execution_time_ms: float = Field(default=0.0)
     metadata: Dict[str, Any] = Field(default_factory=dict)
 
-    class Config:
+    class Config:  # pylint: disable=missing-class-docstring
         use_enum_values = True
 
 
@@ -108,7 +108,7 @@ class TribunalVerdictModel(BaseModel):
     execution_time_ms: float = Field(default=0.0)
     timestamp: datetime = Field(default_factory=datetime.now)
 
-    class Config:
+    class Config:  # pylint: disable=missing-class-docstring
         use_enum_values = True
 
 
@@ -138,7 +138,7 @@ class AppealRequest(BaseModel):
     new_evidence: List[EvidenceModel] = Field(default_factory=list)
     requested_by: str = Field(default="agent", description="Who requested appeal")
 
-    class Config:
+    class Config:  # pylint: disable=missing-class-docstring
         use_enum_values = True
 
 

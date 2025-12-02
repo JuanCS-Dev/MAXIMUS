@@ -14,10 +14,10 @@ from typing import Dict, List, Optional, Set, Any, cast
 from datetime import datetime
 import logging
 
-from ..plugins.base import (  # pylint: disable=relative-beyond-top-level
+from plugins.base import (
     AgentPlugin,
     AgentPluginMetadata,
-    Task  # pylint: disable=relative-beyond-top-level
+    Task
 )
 
 

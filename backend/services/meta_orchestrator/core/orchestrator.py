@@ -17,7 +17,7 @@ import logging
 
 from .agent_registry import AgentRegistry
 from .task_decomposer import TaskDecomposer
-from ..plugins.base import Task, TaskStatus, TaskResult  # pylint: disable=relative-beyond-top-level
+from plugins.base import Task, TaskStatus, TaskResult
 
 
 logger = logging.getLogger(__name__)

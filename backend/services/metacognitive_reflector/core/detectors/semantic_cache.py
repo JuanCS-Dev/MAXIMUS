@@ -12,20 +12,8 @@ Operation Modes:
 - NORMAL: L1 + L2 + L3 (3 samples), timeout 5s
 - DEEP: L1 + L2 + L3 (10 samples), timeout 30s
 
-Based on:
-- GPTCache: 100x speedup potential
-- Portkey: 20% hit rate @ 99% accuracy
-
-Architecture:
-    ┌─────────────────────────────────────────────────────────┐
-    │                VERITAS - TIERED CACHE                    │
-    ├─────────────────────────────────────────────────────────┤
-    │  Request → Hash → L1 Cache (Exact Match, <1ms)          │
-    │              ↓ miss                                      │
-    │            L2 Cache (Semantic Similarity, ~50ms)        │
-    │              ↓ miss                                      │
-    │            L3 Compute (Full Entropy, ~5-15s)            │
-    └─────────────────────────────────────────────────────────┘
+Based on GPTCache (100x speedup) and Portkey (20% hit rate @ 99% accuracy).
+Flow: Request → Hash → L1 → (miss) → L2 → (miss) → L3 Compute
 """
 
 from __future__ import annotations
