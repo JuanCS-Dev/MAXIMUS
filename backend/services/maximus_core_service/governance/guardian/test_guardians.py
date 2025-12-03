@@ -21,7 +21,7 @@ import pytest
 from .article_ii_guardian import ArticleIIGuardian
 from .article_iii_guardian import ArticleIIIGuardian
 from .article_iv_guardian import ArticleIVGuardian
-from .article_v_guardian import ArticleVGuardian
+from .article_v import ArticleVGuardian
 from .base import (
     ConstitutionalArticle,
     ConstitutionalViolation,

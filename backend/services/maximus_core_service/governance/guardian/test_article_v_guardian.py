@@ -38,7 +38,7 @@ from unittest.mock import patch
 
 import pytest
 
-from governance.guardian.article_v_guardian import ArticleVGuardian
+from governance.guardian.article_v import ArticleVGuardian
 from governance.guardian.base import (
     ConstitutionalArticle,
     GuardianPriority,

@@ -25,7 +25,7 @@ Quality: REGRA DE OURO compliant (zero mocks, zero placeholders, zero incomplete
 from __future__ import annotations
 
 
-from .api_routes import create_governance_api
+from .api import create_governance_api
 from .event_broadcaster import BroadcastOptions, EventBroadcaster
 from .sse_server import GovernanceSSEServer, SSEEvent, decision_to_sse_data
 
