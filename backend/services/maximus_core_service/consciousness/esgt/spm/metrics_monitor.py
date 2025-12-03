@@ -96,7 +96,7 @@ class MetricsSPM(SpecializedProcessingModule):
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                print(f"[MetricsSPM {self.spm_id}] Monitoring error: {e}")
+                logger.info("[MetricsSPM %s] Monitoring error: {e}", self.spm_id)
                 await asyncio.sleep(interval_s)
 
     async def _collect_snapshot(self) -> MetricsSnapshot:
@@ -193,7 +193,9 @@ class MetricsSPM(SpecializedProcessingModule):
         """Compute salience of metrics snapshot."""
         cpu_novelty = max(0.0, (snapshot.cpu_usage_percent - 60.0) / 40.0)
         mem_novelty = max(0.0, (snapshot.memory_usage_percent - 60.0) / 40.0)
-        error_novelty = min(1.0, snapshot.error_rate_per_min / self.config.high_error_rate_threshold)
+        error_novelty = min(
+            1.0, snapshot.error_rate_per_min / self.config.high_error_rate_threshold
+        )
 
         novelty = min(1.0, max(cpu_novelty, mem_novelty, error_novelty))
 
@@ -236,7 +238,7 @@ class MetricsSPM(SpecializedProcessingModule):
             try:
                 callback(output)
             except Exception as e:
-                print(f"[MetricsSPM {self.spm_id}] Callback error: {e}")
+                logger.info("[MetricsSPM %s] Callback error: {e}", self.spm_id)
 
     async def process(self) -> SPMOutput | None:
         """Process and generate output (required by base class)."""

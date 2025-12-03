@@ -76,9 +76,15 @@ class Layer3Operational(PredictiveCodingLayerBase):
         # Attention weights (Query, Key, Value projections for scaled dot-product attention)
         # W_q, W_k, W_v: [hidden_dim, input_dim]
         limit = np.sqrt(6.0 / (config.input_dim + config.hidden_dim))
-        self._W_q = np.random.uniform(-limit, limit, (config.hidden_dim, config.input_dim)).astype(np.float32)
-        self._W_k = np.random.uniform(-limit, limit, (config.hidden_dim, config.input_dim)).astype(np.float32)
-        self._W_v = np.random.uniform(-limit, limit, (config.hidden_dim, config.input_dim)).astype(np.float32)
+        self._W_q = np.random.uniform(-limit, limit, (config.hidden_dim, config.input_dim)).astype(
+            np.float32
+        )
+        self._W_k = np.random.uniform(-limit, limit, (config.hidden_dim, config.input_dim)).astype(
+            np.float32
+        )
+        self._W_v = np.random.uniform(-limit, limit, (config.hidden_dim, config.input_dim)).astype(
+            np.float32
+        )
 
     def get_layer_name(self) -> str:
         """Return layer name for logging."""
@@ -157,7 +163,7 @@ class Layer3Operational(PredictiveCodingLayerBase):
             if len(pattern) < self.config.input_dim:
                 pattern = np.pad(pattern, (0, self.config.input_dim - len(pattern)))
             elif len(pattern) > self.config.input_dim:
-                pattern = pattern[:self.config.input_dim]
+                pattern = pattern[: self.config.input_dim]
             processed_context.append(pattern)
 
         # Stack context patterns [seq_len, input_dim]
@@ -175,7 +181,9 @@ class Layer3Operational(PredictiveCodingLayerBase):
 
         # Softmax over last dimension (attention weights)
         exp_scores = np.exp(scores - np.max(scores, axis=-1, keepdims=True))  # Numerical stability
-        attention_weights = exp_scores / exp_scores.sum(axis=-1, keepdims=True)  # [seq_len, seq_len]
+        attention_weights = exp_scores / exp_scores.sum(
+            axis=-1, keepdims=True
+        )  # [seq_len, seq_len]
 
         # Apply attention to values
         attended = attention_weights @ V  # [seq_len, hidden_dim]

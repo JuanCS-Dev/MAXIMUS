@@ -27,7 +27,9 @@ class PTPSynchronizer:
     thalamocortical pacemaker neurons that coordinate gamma oscillations.
     """
 
-    def __init__(self, node_id: str, role: ClockRole = ClockRole.SLAVE, target_jitter_ns: float = 100.0) -> None:
+    def __init__(
+        self, node_id: str, role: ClockRole = ClockRole.SLAVE, target_jitter_ns: float = 100.0
+    ) -> None:
         self.node_id = node_id
         self.role = role
         self.target_jitter_ns = target_jitter_ns
@@ -64,14 +66,14 @@ class PTPSynchronizer:
 
         if self.role == ClockRole.GRAND_MASTER:
             self.state = SyncState.MASTER_SYNC
-            print(f"⏰ {self.node_id}: Grand Master clock started")
+            logger.info("⏰ %s: Grand Master clock started", self.node_id)
             self._sync_task = asyncio.create_task(self._update_grand_master_time())
         elif self.role == ClockRole.SLAVE:
             self.state = SyncState.LISTENING
-            print(f"⏰ {self.node_id}: Slave mode - waiting for master")
+            logger.info("⏰ %s: Slave mode - waiting for master", self.node_id)
         elif self.role == ClockRole.MASTER:
             self.state = SyncState.MASTER_SYNC
-            print(f"⏰ {self.node_id}: Backup Master clock started")
+            logger.info("⏰ %s: Backup Master clock started", self.node_id)
 
     async def stop(self) -> None:
         """Stop synchronization process."""
@@ -84,7 +86,9 @@ class PTPSynchronizer:
                 pass
         self.state = SyncState.PASSIVE
 
-    async def sync_to_master(self, master_id: str, master_time_source: Callable | None = None) -> SyncResult:
+    async def sync_to_master(
+        self, master_id: str, master_time_source: Callable | None = None
+    ) -> SyncResult:
         """Synchronize to a master clock using PTP protocol."""
         if self.role == ClockRole.GRAND_MASTER:
             return SyncResult(success=False, message="Grand Master does not sync to other clocks")
@@ -125,7 +129,9 @@ class PTPSynchronizer:
 
             error = filtered_offset
             self.integral_error += error
-            self.integral_error = max(-self.integral_max, min(self.integral_max, self.integral_error))
+            self.integral_error = max(
+                -self.integral_max, min(self.integral_max, self.integral_error)
+            )
 
             adjustment = self.kp * error + self.ki * self.integral_error
             self.offset_ns = filtered_offset
@@ -165,7 +171,9 @@ class PTPSynchronizer:
             )
 
             if self.state == SyncState.SLAVE_SYNC and avg_jitter < self.target_jitter_ns:
-                print(f"✅ {self.node_id}: Achieved ESGT-quality sync (jitter={avg_jitter:.1f}ns < {self.target_jitter_ns}ns)")
+                logger.info(
+                    f"✅ {self.node_id}: Achieved ESGT-quality sync (jitter={avg_jitter:.1f}ns < {self.target_jitter_ns}ns)"
+                )
 
             return result
 
@@ -221,13 +229,15 @@ class PTPSynchronizer:
 
     async def continuous_sync(self, master_id: str, interval_sec: float = 1.0) -> None:
         """Continuously synchronize to master at specified interval."""
-        print(f"🔄 {self.node_id}: Starting continuous sync to {master_id} (interval={interval_sec}s)")
+        logger.info(
+            f"🔄 {self.node_id}: Starting continuous sync to {master_id} (interval={interval_sec}s)"
+        )
 
         while self._running:
             result = await self.sync_to_master(master_id)
 
             if not result.success:
-                print(f"⚠️  {self.node_id}: Sync failed - {result.message}")
+                logger.info("⚠️  %s: Sync failed - {result.message}", self.node_id)
 
             await asyncio.sleep(interval_sec)
 

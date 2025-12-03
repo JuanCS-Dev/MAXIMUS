@@ -190,7 +190,7 @@ class SimpleSPM(SpecializedProcessingModule):
                 break
             except Exception as e:
                 # Graceful degradation - log and continue
-                print(f"[SimpleSPM {self.spm_id}] Error in processing: {e}")
+                logger.info("[SimpleSPM %s] Error in processing: {e}", self.spm_id)
                 await asyncio.sleep(interval_s)
 
     def _generate_single_output(self) -> SPMOutput:
@@ -203,7 +203,9 @@ class SimpleSPM(SpecializedProcessingModule):
         novelty = max(
             0.0,
             min(
-                1.0, self.config.base_novelty + random.uniform(-self.config.salience_noise, self.config.salience_noise)
+                1.0,
+                self.config.base_novelty
+                + random.uniform(-self.config.salience_noise, self.config.salience_noise),
             ),
         )
 
@@ -211,14 +213,17 @@ class SimpleSPM(SpecializedProcessingModule):
             0.0,
             min(
                 1.0,
-                self.config.base_relevance + random.uniform(-self.config.salience_noise, self.config.salience_noise),
+                self.config.base_relevance
+                + random.uniform(-self.config.salience_noise, self.config.salience_noise),
             ),
         )
 
         urgency = max(
             0.0,
             min(
-                1.0, self.config.base_urgency + random.uniform(-self.config.salience_noise, self.config.salience_noise)
+                1.0,
+                self.config.base_urgency
+                + random.uniform(-self.config.salience_noise, self.config.salience_noise),
             ),
         )
 
@@ -293,7 +298,7 @@ class SimpleSPM(SpecializedProcessingModule):
                 callback(output)
             except Exception as e:
                 # Don't let callback errors stop processing
-                print(f"[SimpleSPM {self.spm_id}] Callback error: {e}")
+                logger.info("[SimpleSPM %s] Callback error: {e}", self.spm_id)
 
     # =========================================================================
     # Abstract Method Implementations
@@ -320,7 +325,9 @@ class SimpleSPM(SpecializedProcessingModule):
         novelty = max(
             0.0,
             min(
-                1.0, self.config.base_novelty + random.uniform(-self.config.salience_noise, self.config.salience_noise)
+                1.0,
+                self.config.base_novelty
+                + random.uniform(-self.config.salience_noise, self.config.salience_noise),
             ),
         )
 
@@ -328,14 +335,17 @@ class SimpleSPM(SpecializedProcessingModule):
             0.0,
             min(
                 1.0,
-                self.config.base_relevance + random.uniform(-self.config.salience_noise, self.config.salience_noise),
+                self.config.base_relevance
+                + random.uniform(-self.config.salience_noise, self.config.salience_noise),
             ),
         )
 
         urgency = max(
             0.0,
             min(
-                1.0, self.config.base_urgency + random.uniform(-self.config.salience_noise, self.config.salience_noise)
+                1.0,
+                self.config.base_urgency
+                + random.uniform(-self.config.salience_noise, self.config.salience_noise),
             ),
         )
 

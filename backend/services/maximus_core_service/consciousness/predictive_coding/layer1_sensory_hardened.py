@@ -77,9 +77,13 @@ class Layer1Sensory(PredictiveCodingLayerBase):
         limit_enc = np.sqrt(6.0 / (config.input_dim + config.hidden_dim))
         limit_dec = np.sqrt(6.0 / (config.hidden_dim + config.input_dim))
 
-        self._W_enc = np.random.uniform(-limit_enc, limit_enc, (config.hidden_dim, config.input_dim)).astype(np.float32)
+        self._W_enc = np.random.uniform(
+            -limit_enc, limit_enc, (config.hidden_dim, config.input_dim)
+        ).astype(np.float32)
         self._b_enc = np.zeros(config.hidden_dim, dtype=np.float32)
-        self._W_dec = np.random.uniform(-limit_dec, limit_dec, (config.input_dim, config.hidden_dim)).astype(np.float32)
+        self._W_dec = np.random.uniform(
+            -limit_dec, limit_dec, (config.input_dim, config.hidden_dim)
+        ).astype(np.float32)
         self._b_dec = np.zeros(config.input_dim, dtype=np.float32)
 
     def get_layer_name(self) -> str:
@@ -151,7 +155,7 @@ class Layer1Sensory(PredictiveCodingLayerBase):
         if len(input_data) < self.config.input_dim:
             input_data = np.pad(input_data, (0, self.config.input_dim - len(input_data)))
         elif len(input_data) > self.config.input_dim:
-            input_data = input_data[:self.config.input_dim]
+            input_data = input_data[: self.config.input_dim]
 
         # Linear projection with tanh activation
         latent = np.tanh(self._W_enc @ input_data + self._b_enc)
@@ -183,7 +187,7 @@ class Layer1Sensory(PredictiveCodingLayerBase):
         if len(latent) < self.config.hidden_dim:
             latent = np.pad(latent, (0, self.config.hidden_dim - len(latent)))
         elif len(latent) > self.config.hidden_dim:
-            latent = latent[:self.config.hidden_dim]
+            latent = latent[: self.config.hidden_dim]
 
         # Linear projection with sigmoid activation (for bounded reconstruction)
         reconstruction = 1.0 / (1.0 + np.exp(-(self._W_dec @ latent + self._b_dec)))  # Sigmoid

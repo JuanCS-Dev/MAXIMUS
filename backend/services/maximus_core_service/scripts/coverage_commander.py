@@ -342,41 +342,37 @@ class CoverageCommander:
         status = self.get_status()
 
         if "error" in status:
-            print(f"❌ {status['error']}")
-            print(f"💡 {status['solution']}")
+            logger.info("❌ %s", status['error'])
+            logger.info("💡 %s", status['solution'])
             return
 
-        print("\n" + "=" * 70)
-        print("📊 COVERAGE COMMANDER - Status Report")
-        print("=" * 70)
-        print()
-        print(f"📈 Progresso Global: {status['completed']}/{status['total_modules']} ({status['progress_pct']:.2f}%)")
-        print()
-        print("Prioridades:")
+        logger.info("=" * 70)
+        logger.info("📊 COVERAGE COMMANDER - Status Report")
+        logger.info("=" * 70)
+        logger.info("📈 Progresso Global: %s/%s (%.2f%%)", status['completed'], status['total_modules'], status['progress_pct'])
+        logger.info("Prioridades:")
         for prio, data in status["priorities"].items():
             emoji = {"P0": "🔴", "P1": "🟠", "P2": "🟡", "P3": "🟢"}[prio]
-            print(f"  {emoji} {prio}: {data['done']}/{data['total']} ({data['pct']:.1f}%)")
-        print()
+            logger.info("  %s %s: %s/%s (%.1f%%)", emoji, prio, data['done'], data['total'], data['pct'])
 
         # Show next 5 targets
         targets = self.get_next_targets(5)
         if targets:
-            print("🎯 Próximos 5 Alvos:")
+            logger.info("🎯 Próximos 5 Alvos:")
             for i, target in enumerate(targets, 1):
-                print(f"  {i}. {target}")
-            print()
+                logger.info("  %s. %s", i, target)
 
         # Check for regressions
         regressions = self.check_regressions()
         if regressions:
-            print("⚠️  ALERTA: Regressões Detectadas!")
+            logger.info("⚠️  ALERTA: Regressões Detectadas!")
             for reg in regressions:
-                print(
-                    f"  - {reg['module']}: {reg['previous_pct']:.1f}% → {reg['current_pct']:.1f}% (-{reg['drop_pct']:.1f}%)"
+                logger.info(
+                    "  - %s: %.1f%% → %.1f%% (-%.1f%%)",
+                    reg['module'], reg['previous_pct'], reg['current_pct'], reg['drop_pct']
                 )
-            print()
 
-        print("=" * 70)
+        logger.info("=" * 70)
 
 
 def main():
@@ -439,12 +435,12 @@ def main():
     if args.check_regressions:
         regressions = commander.check_regressions()
         if regressions:
-            print(f"⚠️  {len(regressions)} regression(s) detected!")
+            logger.info("⚠️  %s regression(s) detected!", len(regressions))
             for reg in regressions:
-                print(f"  {reg['module']}: {reg['previous_pct']:.1f}% → {reg['current_pct']:.1f}%")
+                logger.info("  %s: {reg['previous_pct']:.1f}% → {reg['current_pct']:.1f}%", reg['module'])
             sys.exit(1)
         else:
-            print("✅ No regressions detected")
+            logger.info("✅ No regressions detected")
             return
 
     # Phase mode
@@ -452,42 +448,42 @@ def main():
         if args.phase == "A":
             # Run all partial coverage modules
             targets = commander.get_next_targets(60)  # All partial coverage
-            print(f"🚀 Executing FASE A: {len(targets)} modules")
+            logger.info("🚀 Executing FASE A: %s modules", len(targets))
         elif args.phase == "B":
             # Run simple zero coverage modules
             targets = commander.get_next_targets(100, priority="P3")
-            print(f"🚀 Executing FASE B: {len(targets)} modules")
+            logger.info("🚀 Executing FASE B: %s modules", len(targets))
         elif args.phase == "C":
             # Run core modules
             targets = commander.get_next_targets(50, priority="P1")
-            print(f"🚀 Executing FASE C: {len(targets)} modules")
+            logger.info("🚀 Executing FASE C: %s modules", len(targets))
         elif args.phase == "D":
             # Run remaining modules
             targets = commander.get_next_targets(999)  # All remaining
-            print(f"🚀 Executing FASE D: {len(targets)} modules")
+            logger.info("🚀 Executing FASE D: %s modules", len(targets))
     else:
         # Batch mode
         targets = commander.get_next_targets(args.batch, priority=args.priority)
-        print(f"🎯 Running batch of {len(targets)} modules")
+        logger.info("🎯 Running batch of %s modules", len(targets))
 
     if not targets:
-        print("✅ No pending modules found - Coverage plan complete!")
+        logger.info("✅ No pending modules found - Coverage plan complete!")
         return
 
     # Run coverage
     success = commander.run_coverage_for_modules(targets)
 
     if not success:
-        print("❌ Tests failed or coverage did not improve")
+        logger.info("❌ Tests failed or coverage did not improve")
         sys.exit(1)
 
     # Update plan if requested
     if args.update_plan:
         # Plan update feature is available via manual MASTER_COVERAGE_PLAN.md editing
-        print("📝 Updating MASTER_COVERAGE_PLAN.md...")
-        print("   Note: Manual plan update required - check coverage.json for 95%+ modules")
+        logger.info("📝 Updating MASTER_COVERAGE_PLAN.md...")
+        logger.info("   Note: Manual plan update required - check coverage.json for 95%+ modules")
 
-    print("✅ Batch complete!")
+    logger.info("✅ Batch complete!")
 
 
 if __name__ == "__main__":

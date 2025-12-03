@@ -35,7 +35,9 @@ class AutobiographicalNarrative:
         ordered = sorted(episodes, key=lambda ep: ep.timestamp)
         coherence = self._compute_coherence(ordered)
         narrative = self._build_text(ordered)
-        return NarrativeResult(narrative=narrative, coherence_score=coherence, episode_count=len(ordered))
+        return NarrativeResult(
+            narrative=narrative, coherence_score=coherence, episode_count=len(ordered)
+        )
 
     def _compute_coherence(self, episodes: Sequence[Episode]) -> float:
         if not episodes:
@@ -43,7 +45,9 @@ class AutobiographicalNarrative:
         temporal_coherence = self._binder.coherence(episodes)
         focus_stability = self._binder.focus_stability(episodes)
         confidence_avg = sum(ep.confidence for ep in episodes) / len(episodes)
-        return max(0.0, min(1.0, 0.5 * temporal_coherence + 0.3 * focus_stability + 0.2 * confidence_avg))
+        return max(
+            0.0, min(1.0, 0.5 * temporal_coherence + 0.3 * focus_stability + 0.2 * confidence_avg)
+        )
 
     def _build_text(self, episodes: Sequence[Episode]) -> str:
         if not episodes:

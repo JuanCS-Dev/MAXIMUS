@@ -9,6 +9,7 @@ from enum import Enum
 
 class ClockRole(Enum):
     """Role of a node in PTP clock hierarchy."""
+
     GRAND_MASTER = "grand_master"  # Primary time source
     MASTER = "master"  # Backup time source
     SLAVE = "slave"  # Synchronized to master
@@ -17,6 +18,7 @@ class ClockRole(Enum):
 
 class SyncState(Enum):
     """Synchronization state of a node."""
+
     PASSIVE = "passive"
     INITIALIZING = "initializing"
     LISTENING = "listening"
@@ -36,7 +38,9 @@ class ClockOffset:
     last_sync: float  # Timestamp of last synchronization
     quality: float  # 0.0-1.0 sync quality
 
-    def is_acceptable_for_esgt(self, threshold_ns: float = 1000.0, quality_threshold: float = 0.20) -> bool:
+    def is_acceptable_for_esgt(
+        self, threshold_ns: float = 1000.0, quality_threshold: float = 0.20
+    ) -> bool:
         """Check if synchronization quality is sufficient for ESGT participation."""
         if self.drift_ppm > 1000.0:
             return False
@@ -48,6 +52,7 @@ class ClockOffset:
 @dataclass
 class SyncResult:
     """Result of a synchronization operation."""
+
     success: bool
     offset_ns: float = 0.0
     jitter_ns: float = 0.0

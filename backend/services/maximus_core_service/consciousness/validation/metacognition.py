@@ -38,7 +38,9 @@ class MetacognitionValidator:
         attention_state = result.attention_state
         summary = result.self_summary
         boundary = result.boundary_assessment
-        episodic_coherence_value = result.episodic_coherence if result.episodic_coherence is not None else 0.0
+        episodic_coherence_value = (
+            result.episodic_coherence if result.episodic_coherence is not None else 0.0
+        )
 
         if attention_state is None:
             issues.append("Attention state ausente do resultado LRR")
@@ -55,7 +57,9 @@ class MetacognitionValidator:
         narrative_coherence = 0.0
         if summary:
             boundary_factor = boundary.stability if boundary else 0.0
-            narrative_coherence = 0.5 * summary.confidence + 0.3 * episodic_coherence_value + 0.2 * boundary_factor
+            narrative_coherence = (
+                0.5 * summary.confidence + 0.3 * episodic_coherence_value + 0.2 * boundary_factor
+            )
         else:
             issues.append("Sem narrativa para avaliar coerência")
 

@@ -16,9 +16,9 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(name)s - %(level
 
 async def test_hcl_single_cycle():
     """Test a single HCL cycle in dry-run mode."""
-    print("=" * 60)
-    print("HCL Integration Test - Single Cycle")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("HCL Integration Test - Single Cycle")
+    logger.info("=" * 60)
 
     # Initialize HCL in dry-run mode
     hcl = HomeostaticControlLoop(
@@ -29,55 +29,56 @@ async def test_hcl_single_cycle():
 
     try:
         # Initialize components
-        print("\n1. Initializing HCL components...")
+        logger.info("\n1. Initializing HCL components...")
         await hcl.initialize()
-        print("✓ Components initialized")
+        logger.info("✓ Components initialized")
 
         # Run a single cycle by setting running=True then stopping after 1 iteration
-        print("\n2. Running single HCL cycle...")
+        logger.info("\n2. Running single HCL cycle...")
         hcl.running = True
 
         # Manually execute one cycle
 
         # Monitor
-        print("\n3. MONITOR - Collecting metrics...")
+        logger.info("\n3. MONITOR - Collecting metrics...")
         metrics = await hcl.monitor.collect_metrics()
-        print(f"✓ Collected {len(metrics)} metrics")
-        print(
-            f"  Sample metrics: cpu={metrics.get('cpu_percent', 0):.1f}%, "
-            f"memory={metrics.get('memory_percent', 0):.1f}%"
+        logger.info("✓ Collected %s metrics", len(metrics))
+        logger.info(
+            "  Sample metrics: cpu=%.1f%%, memory=%.1f%%",
+            metrics.get('cpu_percent', 0),
+            metrics.get('memory_percent', 0)
         )
 
         # Analyze
-        print("\n4. ANALYZE - Detecting issues...")
+        logger.info("\n4. ANALYZE - Detecting issues...")
         analysis = await hcl._analyze_metrics(metrics)
-        print(f"✓ Analysis complete: {analysis.get('summary', 'N/A')}")
-        print(f"  Anomaly: {analysis.get('anomaly', {}).get('is_anomaly', False)}")
-        print(f"  Degradation: {analysis.get('degradation', {}).get('is_degraded', False)}")
+        logger.info("✓ Analysis complete: %s", analysis.get('summary', 'N/A'))
+        logger.info("  Anomaly: %s", analysis.get('anomaly', {}).get('is_anomaly', False))
+        logger.info("  Degradation: %s", analysis.get('degradation', {}).get('is_degraded', False))
 
         # Plan
-        print("\n5. PLAN - Generating actions...")
+        logger.info("\n5. PLAN - Generating actions...")
         plan = await hcl._plan_actions(metrics, analysis)
-        print(f"✓ Plan created: Mode={plan['operational_mode']}, Actions={len(plan['actions'])}")
+        logger.info("✓ Plan created: Mode=%s, Actions={len(plan['actions'])}", plan['operational_mode'])
         if plan["actions"]:
-            print(f"  First action: {plan['actions'][0]}")
+            logger.info("  First action: %s", plan['actions'][0])
 
         # Execute
-        print("\n6. EXECUTE - Applying actions (dry-run)...")
+        logger.info("\n6. EXECUTE - Applying actions (dry-run)...")
         execution = await hcl._execute_plan(plan, metrics)
-        print(f"✓ Execution complete: Success={execution['success']}, Applied={execution['applied_count']}")
+        logger.info("✓ Execution complete: Success=%s, Applied={execution['applied_count']}", execution['success'])
 
         # Knowledge
-        print("\n7. KNOWLEDGE - Storing decision...")
+        logger.info("\n7. KNOWLEDGE - Storing decision...")
         await hcl._store_decision(metrics, analysis, plan, execution)
-        print("✓ Decision stored in knowledge base")
+        logger.info("✓ Decision stored in knowledge base")
 
-        print("\n" + "=" * 60)
-        print("✓ HCL Integration Test PASSED")
-        print("=" * 60)
+        logger.info("=" * 60)
+        logger.info("✓ HCL Integration Test PASSED")
+        logger.info("=" * 60)
 
     except Exception as e:
-        print(f"\n✗ Test FAILED: {e}")
+        logger.info("\n✗ Test FAILED: %s", e)
         import traceback
 
         traceback.print_exc()
@@ -89,28 +90,28 @@ async def test_hcl_single_cycle():
 
 async def test_hcl_components():
     """Test individual HCL components."""
-    print("\n" + "=" * 60)
-    print("HCL Component Tests")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("HCL Component Tests")
+    logger.info("=" * 60)
 
     # Test Monitor
-    print("\n1. Testing SystemMonitor...")
+    logger.info("\n1. Testing SystemMonitor...")
     from monitor.system_monitor import SystemMonitor
 
     monitor = SystemMonitor()
     metrics = await monitor.collect_metrics()
-    print(f"✓ SystemMonitor OK - {len(metrics)} metrics collected")
+    logger.info("✓ SystemMonitor OK - %s metrics collected", len(metrics))
 
     # Test Analyzers
-    print("\n2. Testing AnomalyDetector...")
+    logger.info("\n2. Testing AnomalyDetector...")
     from analyze.anomaly_detector import AnomalyDetector
 
     detector = AnomalyDetector()
     metric_array = [50, 60, 70, 0.5, 100]  # Mock metrics
     result = detector.detect(metric_array)
-    print(f"✓ AnomalyDetector OK - Score: {result.get('score', 0):.3f}")
+    logger.info("✓ AnomalyDetector OK - Score: %.3f", result.get('score', 0))
 
-    print("\n3. Testing FailurePredictor...")
+    logger.info("\n3. Testing FailurePredictor...")
     from analyze.failure_predictor import FailurePredictor
 
     predictor = FailurePredictor()
@@ -121,56 +122,56 @@ async def test_hcl_components():
         "disk_io_degradation": False,
     }
     result = predictor.predict(features)
-    print(f"✓ FailurePredictor OK - Probability: {result.get('failure_probability', 0):.2%}")
+    logger.info("✓ FailurePredictor OK - Probability: %.2%", result.get('failure_probability', 0))
 
     # Test Planners
-    print("\n4. Testing FuzzyLogicController...")
+    logger.info("\n4. Testing FuzzyLogicController...")
     from plan.fuzzy_controller import FuzzyLogicController
 
     fuzzy = FuzzyLogicController()
     mode = fuzzy.select_mode(cpu_usage=60, error_rate=0.01, latency=200)
-    print(f"✓ FuzzyLogicController OK - Mode: {mode}")
+    logger.info("✓ FuzzyLogicController OK - Mode: %s", mode)
 
     # Test Actuators
-    print("\n5. Testing KubernetesActuator (dry-run)...")
+    logger.info("\n5. Testing KubernetesActuator (dry-run)...")
     from execute.kubernetes_actuator import KubernetesActuator
 
     k8s = KubernetesActuator(dry_run_mode=True)
     result = k8s.adjust_hpa("test-service", min_replicas=2, max_replicas=5)
-    print(f"✓ KubernetesActuator OK - Dry-run: {result.get('dry_run', False)}")
+    logger.info("✓ KubernetesActuator OK - Dry-run: %s", result.get('dry_run', False))
 
-    print("\n6. Testing DockerActuator (dry-run)...")
+    logger.info("\n6. Testing DockerActuator (dry-run)...")
     from execute.docker_actuator import DockerActuator
 
     docker = DockerActuator(dry_run_mode=True)
     result = await docker.scale_service("test-service", replicas=3)
-    print(f"✓ DockerActuator OK - Dry-run: {result.get('dry_run', False)}")
+    logger.info("✓ DockerActuator OK - Dry-run: %s", result.get('dry_run', False))
 
-    print("\n7. Testing CacheActuator (dry-run)...")
+    logger.info("\n7. Testing CacheActuator (dry-run)...")
     from execute.cache_actuator import CacheActuator
 
     cache = CacheActuator(dry_run_mode=True)
     result = await cache.set_cache_strategy("balanced")
-    print(f"✓ CacheActuator OK - Dry-run: {result.get('dry_run', False)}")
+    logger.info("✓ CacheActuator OK - Dry-run: %s", result.get('dry_run', False))
 
-    print("\n8. Testing SafetyManager...")
+    logger.info("\n8. Testing SafetyManager...")
     from execute.safety_manager import SafetyManager
 
     safety = SafetyManager()
     can_execute = safety.check_rate_limit("CRITICAL")
-    print(f"✓ SafetyManager OK - Rate limit check: {can_execute}")
+    logger.info("✓ SafetyManager OK - Rate limit check: %s", can_execute)
 
-    print("\n" + "=" * 60)
-    print("✓ All Component Tests PASSED")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("✓ All Component Tests PASSED")
+    logger.info("=" * 60)
 
 
 async def main():
     """Run all tests."""
-    print("\n" + "=" * 60)
-    print("MAXIMUS AI 3.0 - FASE 1 Integration Tests")
-    print("Homeostatic Control Loop (HCL)")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("MAXIMUS AI 3.0 - FASE 1 Integration Tests")
+    logger.info("Homeostatic Control Loop (HCL)")
+    logger.info("=" * 60)
 
     # Test components
     await test_hcl_components()
@@ -178,9 +179,9 @@ async def main():
     # Test full cycle
     await test_hcl_single_cycle()
 
-    print("\n" + "=" * 60)
-    print("All tests completed successfully! 🎉")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("All tests completed successfully! 🎉")
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":

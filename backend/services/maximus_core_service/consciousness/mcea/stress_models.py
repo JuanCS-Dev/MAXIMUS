@@ -9,6 +9,7 @@ from enum import Enum
 
 class StressLevel(Enum):
     """Classification of stress intensity (0.0-1.0 range)."""
+
     NONE = "none"  # 0.0-0.2
     MILD = "mild"  # 0.2-0.4
     MODERATE = "moderate"  # 0.4-0.6
@@ -18,6 +19,7 @@ class StressLevel(Enum):
 
 class StressType(Enum):
     """Types of stress that can be applied."""
+
     COMPUTATIONAL_LOAD = "computational_load"  # High CPU/memory
     ERROR_INJECTION = "error_injection"  # System failures
     NETWORK_DEGRADATION = "network_degradation"  # Latency/loss

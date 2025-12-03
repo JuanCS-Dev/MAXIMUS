@@ -69,9 +69,7 @@ async def process_social_signal_through_pfc(
     try:
         # Process through PrefrontalCortex
         response = await pfc.process_social_signal(
-            user_id=user_id,
-            context=context,
-            signal_type=signal_type
+            user_id=user_id, context=context, signal_type=signal_type
         )
 
         social_signals_counter[0] += 1
@@ -87,7 +85,7 @@ async def process_social_signal_through_pfc(
             }
 
     except Exception as e:
-        print(f"⚠️  PFC processing failed: {e}")
+        logger.info("⚠️  PFC processing failed: %s", e)
 
     return None
 

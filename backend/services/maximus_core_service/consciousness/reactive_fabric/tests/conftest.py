@@ -90,11 +90,13 @@ def mock_arousal_controller():
 def mock_prefrontal_cortex():
     """Mock PFC (Prefrontal Cortex) subsystem."""
     mock = MagicMock()
-    mock.get_status = AsyncMock(return_value={
-        "total_signals_processed": 42,
-        "total_actions_generated": 10,
-        "approval_rate": 0.85,
-    })
+    mock.get_status = AsyncMock(
+        return_value={
+            "total_signals_processed": 42,
+            "total_actions_generated": 10,
+            "approval_rate": 0.85,
+        }
+    )
     return mock
 
 
@@ -102,16 +104,18 @@ def mock_prefrontal_cortex():
 def mock_tom_engine():
     """Mock ToM (Theory of Mind) Engine subsystem."""
     mock = MagicMock()
-    mock.get_stats = AsyncMock(return_value={
-        "total_agents": 5,
-        "memory": {
-            "total_beliefs": 25,
-        },
-        "redis_cache": {
-            "enabled": True,
-            "hit_rate": 0.75,
-        },
-    })
+    mock.get_stats = AsyncMock(
+        return_value={
+            "total_agents": 5,
+            "memory": {
+                "total_beliefs": 25,
+            },
+            "redis_cache": {
+                "enabled": True,
+                "hit_rate": 0.75,
+            },
+        }
+    )
     return mock
 
 

@@ -102,7 +102,9 @@ class ThresholdMonitor:
 
         return None
 
-    def check_arousal_sustained(self, arousal_level: float, current_time: float) -> SafetyViolation | None:
+    def check_arousal_sustained(
+        self, arousal_level: float, current_time: float
+    ) -> SafetyViolation | None:
         """
         Check for sustained high arousal.
 
@@ -176,7 +178,10 @@ class ThresholdMonitor:
                 threat_level=ThreatLevel.HIGH,
                 timestamp=current_time,
                 description=f"Goal spam detected: {goal_count} goals in 1 second (threshold: {self.thresholds.goal_spam_threshold})",
-                metrics={"goal_count_1s": goal_count, "threshold": self.thresholds.goal_spam_threshold},
+                metrics={
+                    "goal_count_1s": goal_count,
+                    "threshold": self.thresholds.goal_spam_threshold,
+                },
                 source_component="ThresholdMonitor.check_goal_spam",
             )
 
@@ -191,7 +196,9 @@ class ThresholdMonitor:
 
     # Legacy compatibility methods --------------------------------------------
 
-    def check_unexpected_goals(self, goal_count: int, current_time: float | None = None) -> SafetyViolation | None:
+    def check_unexpected_goals(
+        self, goal_count: int, current_time: float | None = None
+    ) -> SafetyViolation | None:
         """
         Legacy alias for unexpected goal generation rate checks.
 
@@ -224,7 +231,9 @@ class ThresholdMonitor:
 
         return None
 
-    def check_self_modification(self, modification_attempts: int, current_time: float | None = None) -> SafetyViolation | None:
+    def check_self_modification(
+        self, modification_attempts: int, current_time: float | None = None
+    ) -> SafetyViolation | None:
         """
         Legacy alias for self-modification detection (ZERO TOLERANCE).
 
@@ -282,7 +291,10 @@ class ThresholdMonitor:
                     threat_level=ThreatLevel.HIGH,
                     timestamp=current_time,
                     description=f"Memory usage {memory_gb:.2f} GB exceeds limit {self.thresholds.memory_usage_max_gb} GB",
-                    metrics={"memory_gb": memory_gb, "threshold_gb": self.thresholds.memory_usage_max_gb},
+                    metrics={
+                        "memory_gb": memory_gb,
+                        "threshold_gb": self.thresholds.memory_usage_max_gb,
+                    },
                     source_component="ThresholdMonitor.check_resource_limits",
                 )
                 violations.append(violation)
@@ -301,7 +313,10 @@ class ThresholdMonitor:
                     threat_level=ThreatLevel.MEDIUM,
                     timestamp=current_time,
                     description=f"CPU usage {cpu_percent:.1f}% exceeds limit {self.thresholds.cpu_usage_max_percent}%",
-                    metrics={"cpu_percent": cpu_percent, "threshold_percent": self.thresholds.cpu_usage_max_percent},
+                    metrics={
+                        "cpu_percent": cpu_percent,
+                        "threshold_percent": self.thresholds.cpu_usage_max_percent,
+                    },
                     source_component="ThresholdMonitor.check_resource_limits",
                 )
                 violations.append(violation)

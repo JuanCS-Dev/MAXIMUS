@@ -146,7 +146,11 @@ class AnomalyDetector:
                 threat_level=ThreatLevel.HIGH,
                 timestamp=time.time(),
                 description=f"Memory leak detected: {growth_ratio:.2f}x baseline",
-                metrics={"memory_gb": memory_gb, "baseline_mean": baseline_mean, "growth_ratio": growth_ratio},
+                metrics={
+                    "memory_gb": memory_gb,
+                    "baseline_mean": baseline_mean,
+                    "growth_ratio": growth_ratio,
+                },
                 source_component="AnomalyDetector._detect_memory_leak",
             )
 
@@ -218,7 +222,11 @@ class AnomalyDetector:
                 threat_level=ThreatLevel.HIGH,
                 timestamp=time.time(),
                 description=f"Coherence collapse detected: {drop_ratio * 100:.0f}% drop from baseline",
-                metrics={"coherence": coherence, "baseline_mean": baseline_mean, "drop_ratio": drop_ratio},
+                metrics={
+                    "coherence": coherence,
+                    "baseline_mean": baseline_mean,
+                    "drop_ratio": drop_ratio,
+                },
                 source_component="AnomalyDetector._detect_coherence_collapse",
             )
 

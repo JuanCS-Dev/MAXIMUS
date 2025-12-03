@@ -61,9 +61,9 @@ def create_mock_data_source(source_id: str, anomaly_probability: float = 0.1):
 
 async def test_peripheral_monitor():
     """Test peripheral monitor scanning."""
-    print("\n" + "=" * 60)
-    print("Test 1: Peripheral Monitor")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("Test 1: Peripheral Monitor")
+    logger.info("=" * 60)
 
     monitor = PeripheralMonitor(scan_interval_seconds=0.1)
 
@@ -71,22 +71,22 @@ async def test_peripheral_monitor():
     sources = [create_mock_data_source(f"source_{i}", anomaly_probability=0.3) for i in range(10)]
 
     # Perform scan
-    print("\nScanning 10 data sources...")
+    logger.info("\nScanning 10 data sources...")
     detections = await monitor.scan_all(sources)
 
-    print(f"✓ Peripheral scan complete: {len(detections)} detections")
+    logger.info("✓ Peripheral scan complete: %s detections", len(detections))
 
     for detection in detections[:5]:  # Show first 5
-        print(f"  - {detection.target_id}: {detection.detection_type} (confidence={detection.confidence:.2f})")
+        logger.info("  - %s: {detection.detection_type} (confidence={detection.confidence:.2f})", detection.target_id)
 
-    print("\n✓ Test passed - Peripheral monitor functional")
+    logger.info("\n✓ Test passed - Peripheral monitor functional")
 
 
 async def test_foveal_analyzer():
     """Test foveal analyzer deep analysis."""
-    print("\n" + "=" * 60)
-    print("Test 2: Foveal Analyzer")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("Test 2: Foveal Analyzer")
+    logger.info("=" * 60)
 
     analyzer = FovealAnalyzer()
 
@@ -101,29 +101,29 @@ async def test_foveal_analyzer():
         metadata={"z_score": 5.5, "value": 120, "mean": 50, "std": 10},
     )
 
-    print("\nPerforming deep analysis on high-salience target...")
+    logger.info("\nPerforming deep analysis on high-salience target...")
     analysis = await analyzer.deep_analyze(detection)
 
-    print("✓ Foveal analysis complete:")
-    print(f"  - Threat level: {analysis.threat_level}")
-    print(f"  - Confidence: {analysis.confidence:.2f}")
-    print(f"  - Analysis time: {analysis.analysis_time_ms:.1f}ms")
-    print(f"  - Findings: {len(analysis.findings)}")
-    print(f"  - Actions: {', '.join(analysis.recommended_actions[:3])}")
+    logger.info("✓ Foveal analysis complete:")
+    logger.info("  - Threat level: %s", analysis.threat_level)
+    logger.info("  - Confidence: %.2f", analysis.confidence)
+    logger.info("  - Analysis time: %.1fms", analysis.analysis_time_ms)
+    logger.info("  - Findings: %s", len(analysis.findings))
+    logger.info("  - Actions: %s", ', '.join(analysis.recommended_actions[:3]))
 
     if analysis.analysis_time_ms < 100:
-        print("\n✓ Performance target met (<100ms)")
+        logger.info("\n✓ Performance target met (<100ms)")
     else:
-        print(f"\n⚠ Performance warning: {analysis.analysis_time_ms:.1f}ms (target <100ms)")
+        logger.info("\n⚠ Performance warning: %.1fms (target <100ms)", analysis.analysis_time_ms)
 
-    print("\n✓ Test passed - Foveal analyzer functional")
+    logger.info("\n✓ Test passed - Foveal analyzer functional")
 
 
 async def test_salience_scorer():
     """Test salience scoring."""
-    print("\n" + "=" * 60)
-    print("Test 3: Salience Scorer")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("Test 3: Salience Scorer")
+    logger.info("=" * 60)
 
     scorer = SalienceScorer(foveal_threshold=0.6)
 
@@ -156,23 +156,23 @@ async def test_salience_scorer():
         },
     ]
 
-    print("\nScoring events for salience...")
+    logger.info("\nScoring events for salience...")
     for event in test_events:
         score = scorer.calculate_salience(event)
 
-        print(f"\n  Event: {event['id']}")
-        print(f"    Score: {score.score:.3f} ({score.level.name})")
-        print(f"    Foveal required: {score.requires_foveal}")
-        print(f"    Factors: novelty={score.factors['novelty']:.2f}, threat={score.factors['threat']:.2f}")
+        logger.info("\n  Event: %s", event['id'])
+        logger.info("    Score: {score.score:.3f} (%s)", score.level.name)
+        logger.info("    Foveal required: %s", score.requires_foveal)
+        logger.info("    Factors: novelty=%.2f, threat={score.factors['threat']:.2f}", score.factors['novelty'])
 
-    print("\n✓ Test passed - Salience scorer functional")
+    logger.info("\n✓ Test passed - Salience scorer functional")
 
 
 async def test_full_attention_system():
     """Test complete attention system."""
-    print("\n" + "=" * 60)
-    print("Test 4: Full Attention System")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("Test 4: Full Attention System")
+    logger.info("=" * 60)
 
     attention = AttentionSystem(foveal_threshold=0.6, scan_interval=0.5)
 
@@ -186,10 +186,10 @@ async def test_full_attention_system():
 
     def on_critical(analysis: FovealAnalysis):
         critical_findings.append(analysis)
-        print(f"\n🚨 CRITICAL: {analysis.target_id} - {analysis.threat_level}")
+        logger.info("\n🚨 CRITICAL: %s - {analysis.threat_level}", analysis.target_id)
 
     # Run attention system for 3 cycles
-    print("\nStarting attention system (3 cycles)...")
+    logger.info("\nStarting attention system (3 cycles)...")
 
     async def run_cycles():
         cycle_count = 0
@@ -207,11 +207,11 @@ async def test_full_attention_system():
 
     # Actually just run 3 manual cycles
     for cycle in range(3):
-        print(f"\n  Cycle {cycle + 1}/3...")
+        logger.info("\n  Cycle %s/3...", cycle + 1)
 
         # Peripheral scan
         detections = await attention.peripheral.scan_all(sources)
-        print(f"    Peripheral: {len(detections)} detections")
+        logger.info("    Peripheral: %s detections", len(detections))
 
         # Score and analyze high-salience targets
         foveal_count = 0
@@ -232,28 +232,28 @@ async def test_full_attention_system():
                 if analysis.threat_level == "CRITICAL":
                     on_critical(analysis)
 
-        print(f"    Foveal: {foveal_count} deep analyses")
+        logger.info("    Foveal: %s deep analyses", foveal_count)
 
         await asyncio.sleep(0.5)
 
     # Get performance stats
     stats = attention.get_performance_stats()
 
-    print("\n✓ Attention system completed 3 cycles")
-    print(f"  - Total peripheral detections: {stats['peripheral']['detections_total']}")
-    print(f"  - Total foveal analyses: {stats['foveal']['analyses_total']}")
-    print(f"  - Avg foveal time: {stats['foveal']['avg_analysis_time_ms']:.1f}ms")
-    print(f"  - Critical findings: {len(critical_findings)}")
+    logger.info("\n✓ Attention system completed 3 cycles")
+    logger.info("  - Total peripheral detections: %s", stats['peripheral']['detections_total'])
+    logger.info("  - Total foveal analyses: %s", stats['foveal']['analyses_total'])
+    logger.info("  - Avg foveal time: %.1fms", stats['foveal']['avg_analysis_time_ms'])
+    logger.info("  - Critical findings: %s", len(critical_findings))
 
-    print("\n✓ Test passed - Full attention system functional")
+    logger.info("\n✓ Test passed - Full attention system functional")
 
 
 async def main():
     """Run all tests."""
-    print("\n" + "=" * 60)
-    print("MAXIMUS AI 3.0 - FASE 0 Integration Tests")
-    print("Attention System (Foveal/Peripheral)")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("MAXIMUS AI 3.0 - FASE 0 Integration Tests")
+    logger.info("Attention System (Foveal/Peripheral)")
+    logger.info("=" * 60)
 
     # Run tests
     await test_peripheral_monitor()
@@ -261,10 +261,9 @@ async def main():
     await test_salience_scorer()
     await test_full_attention_system()
 
-    print("\n" + "=" * 60)
-    print("✓ All tests passed! Attention system ready for production. 🎉")
-    print("=" * 60)
-    print()
+    logger.info("=" * 60)
+    logger.info("✓ All tests passed! Attention system ready for production. 🎉")
+    logger.info("=" * 60)
 
 
 if __name__ == "__main__":

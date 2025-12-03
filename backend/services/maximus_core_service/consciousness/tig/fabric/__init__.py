@@ -55,9 +55,9 @@ Usage Example:
     is_valid, violations = metrics.validate_iit_compliance()
 
     if is_valid:
-        print("Fabric ready for consciousness emergence")
+        logger.info("Fabric ready for consciousness emergence")
     else:
-        print(f"IIT violations: {violations}")
+        logger.info("IIT violations: %s", violations)
 
 Historical Note:
 ----------------

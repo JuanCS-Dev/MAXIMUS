@@ -112,7 +112,9 @@ class PredictiveCodingLayerBase(ABC):
     Thread Safety: NOT thread-safe. Use external locking for async/parallel calls.
     """
 
-    def __init__(self, config: LayerConfig, kill_switch_callback: Callable[[str], None] | None = None):
+    def __init__(
+        self, config: LayerConfig, kill_switch_callback: Callable[[str], None] | None = None
+    ):
         """Initialize predictive coding layer.
 
         Args:
@@ -291,7 +293,9 @@ class PredictiveCodingLayerBase(ABC):
             # Track if we clipped
             if abs(raw_error) > self.config.max_prediction_error:
                 self._bounded_errors += 1
-                logger.warning(f"⚠️ {layer_name} ERROR CLIPPED: {raw_error:.3f} → {clipped_error:.3f}")
+                logger.warning(
+                    f"⚠️ {layer_name} ERROR CLIPPED: {raw_error:.3f} → {clipped_error:.3f}"
+                )
 
             # Track for averaging
             self._prediction_errors.append(clipped_error)
@@ -331,8 +335,16 @@ class PredictiveCodingLayerBase(ABC):
 
     def get_state(self) -> LayerState:
         """Get observable layer state."""
-        avg_error = sum(self._prediction_errors) / len(self._prediction_errors) if self._prediction_errors else 0.0
-        avg_time = sum(self._computation_times) / len(self._computation_times) if self._computation_times else 0.0
+        avg_error = (
+            sum(self._prediction_errors) / len(self._prediction_errors)
+            if self._prediction_errors
+            else 0.0
+        )
+        avg_time = (
+            sum(self._computation_times) / len(self._computation_times)
+            if self._computation_times
+            else 0.0
+        )
 
         return LayerState(
             layer_id=self.config.layer_id,

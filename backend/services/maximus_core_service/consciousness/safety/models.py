@@ -84,7 +84,9 @@ class SafetyViolation:
 
         if isinstance(violation_type, SafetyViolationType):
             modern_violation = violation_type
-            legacy_violation = _MODERN_TO_LEGACY_VIOLATION.get(modern_violation, ViolationType.UNKNOWN_BEHAVIOR)
+            legacy_violation = _MODERN_TO_LEGACY_VIOLATION.get(
+                modern_violation, ViolationType.UNKNOWN_BEHAVIOR
+            )
         else:
             if isinstance(violation_type, str):
                 try:
@@ -315,7 +317,8 @@ class StateSnapshot:
             "recent_events": self.recent_events,
             "active_goals": self.active_goals,
             "violations": [
-                violation.to_dict() if hasattr(violation, "to_dict") else violation for violation in self.violations
+                violation.to_dict() if hasattr(violation, "to_dict") else violation
+                for violation in self.violations
             ],
         }
 
@@ -339,12 +342,20 @@ class StateSnapshot:
                 violations.append(
                     SafetyViolation(
                         violation_id=violation.get("violation_id", "legacy"),
-                        violation_type=ViolationType(violation.get("violation_type", ViolationType.UNKNOWN_BEHAVIOR.value))
-                        if isinstance(violation.get("violation_type"), str)
-                        else violation.get("violation_type", ViolationType.UNKNOWN_BEHAVIOR),
-                        severity=SafetyLevel(violation.get("severity", SafetyLevel.WARNING.value))
-                        if isinstance(violation.get("severity"), str)
-                        else violation.get("severity", SafetyLevel.WARNING),
+                        violation_type=(
+                            ViolationType(
+                                violation.get(
+                                    "violation_type", ViolationType.UNKNOWN_BEHAVIOR.value
+                                )
+                            )
+                            if isinstance(violation.get("violation_type"), str)
+                            else violation.get("violation_type", ViolationType.UNKNOWN_BEHAVIOR)
+                        ),
+                        severity=(
+                            SafetyLevel(violation.get("severity", SafetyLevel.WARNING.value))
+                            if isinstance(violation.get("severity"), str)
+                            else violation.get("severity", SafetyLevel.WARNING)
+                        ),
                         timestamp=timestamp,
                         description=violation.get("description"),
                         metrics=violation.get("metrics"),

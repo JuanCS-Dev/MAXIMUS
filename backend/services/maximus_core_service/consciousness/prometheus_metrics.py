@@ -32,7 +32,13 @@ from typing import Any
 from collections.abc import Callable
 
 from fastapi import Response, Request
-from prometheus_client import CONTENT_TYPE_LATEST, CollectorRegistry, Counter, Gauge, generate_latest
+from prometheus_client import (
+    CONTENT_TYPE_LATEST,
+    CollectorRegistry,
+    Counter,
+    Gauge,
+    generate_latest,
+)
 
 # ==================== PROMETHEUS REGISTRY ====================
 
@@ -44,7 +50,9 @@ consciousness_registry = CollectorRegistry()
 
 # ESGT Frequency (Hz)
 esgt_frequency = Gauge(
-    "consciousness_esgt_frequency", "ESGT ignition frequency in Hz (threshold: 10 Hz)", registry=consciousness_registry
+    "consciousness_esgt_frequency",
+    "ESGT ignition frequency in Hz (threshold: 10 Hz)",
+    registry=consciousness_registry,
 )
 
 # Arousal Level (0-1)
@@ -56,12 +64,16 @@ arousal_level = Gauge(
 
 # Goals Per Minute
 goals_per_minute = Gauge(
-    "consciousness_goals_per_minute", "Goal generation rate per minute (threshold: 5)", registry=consciousness_registry
+    "consciousness_goals_per_minute",
+    "Goal generation rate per minute (threshold: 5)",
+    registry=consciousness_registry,
 )
 
 # Safety Violations Total
 violations_total = Counter(
-    "consciousness_violations_total", "Total safety violations detected", registry=consciousness_registry
+    "consciousness_violations_total",
+    "Total safety violations detected",
+    registry=consciousness_registry,
 )
 
 # Violations by Severity
@@ -89,13 +101,19 @@ kill_switch_active = Gauge(
 
 # System Uptime
 uptime_seconds = Gauge(
-    "consciousness_uptime_seconds", "Consciousness system uptime in seconds", registry=consciousness_registry
+    "consciousness_uptime_seconds",
+    "Consciousness system uptime in seconds",
+    registry=consciousness_registry,
 )
 
 # TIG Metrics
-tig_node_count = Gauge("consciousness_tig_node_count", "Number of TIG fabric nodes", registry=consciousness_registry)
+tig_node_count = Gauge(
+    "consciousness_tig_node_count", "Number of TIG fabric nodes", registry=consciousness_registry
+)
 
-tig_edge_count = Gauge("consciousness_tig_edge_count", "Number of TIG fabric edges", registry=consciousness_registry)
+tig_edge_count = Gauge(
+    "consciousness_tig_edge_count", "Number of TIG fabric edges", registry=consciousness_registry
+)
 
 # Monitoring Active
 monitoring_active = Gauge(
@@ -112,9 +130,13 @@ self_modification_attempts = Counter(
 )
 
 # Resource Usage
-memory_usage_gb = Gauge("consciousness_memory_usage_gb", "Memory usage in GB", registry=consciousness_registry)
+memory_usage_gb = Gauge(
+    "consciousness_memory_usage_gb", "Memory usage in GB", registry=consciousness_registry
+)
 
-cpu_usage_percent = Gauge("consciousness_cpu_usage_percent", "CPU usage percentage", registry=consciousness_registry)
+cpu_usage_percent = Gauge(
+    "consciousness_cpu_usage_percent", "CPU usage percentage", registry=consciousness_registry
+)
 
 
 # ==================== SYSTEM STARTUP TIME ====================
@@ -186,7 +208,7 @@ def update_metrics(system: Any) -> None:
         # cpu_usage_percent.set(get_cpu_usage())
 
     except Exception as e:
-        print(f"⚠️  Error updating Prometheus metrics: {e}")
+        logger.info("⚠️  Error updating Prometheus metrics: %s", e)
 
 
 def update_violation_metrics(violations: list) -> None:
@@ -202,7 +224,11 @@ def update_violation_metrics(violations: list) -> None:
         violations_total.inc()
 
         # Increment by severity
-        severity = violation.severity.value if hasattr(violation.severity, "value") else str(violation.severity)
+        severity = (
+            violation.severity.value
+            if hasattr(violation.severity, "value")
+            else str(violation.severity)
+        )
         violations_by_severity.labels(severity=severity).inc()
 
         # Increment by type
@@ -237,7 +263,9 @@ def get_metrics_handler() -> Callable[[Request], Response]:
 
     def metrics_endpoint(request: Request) -> Response:
         """Prometheus metrics endpoint."""
-        return Response(content=generate_latest(consciousness_registry), media_type=CONTENT_TYPE_LATEST)
+        return Response(
+            content=generate_latest(consciousness_registry), media_type=CONTENT_TYPE_LATEST
+        )
 
     return metrics_endpoint
 

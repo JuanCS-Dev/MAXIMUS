@@ -389,31 +389,31 @@ class ONNXExporter:
         Args:
             result: Export result
         """
-        print("\n" + "=" * 80)
-        print("ONNX EXPORT REPORT")
-        print("=" * 80)
+        logger.info("=" * 80)
+        logger.info("ONNX EXPORT REPORT")
+        logger.info("=" * 80)
 
-        print("\nModel Info:")
-        print(f"  ONNX file: {result.onnx_path}")
-        print(f"  Opset version: {result.opset_version}")
-        print(f"  Model size: {result.model_size_mb:.2f} MB")
-        print(f"  Parameters: {result.num_parameters:,}")
+        logger.info("\nModel Info:")
+        logger.info("  ONNX file: %s", result.onnx_path)
+        logger.info("  Opset version: %s", result.opset_version)
+        logger.info("  Model size: %.2f MB", result.model_size_mb)
+        logger.info("  Parameters: %s", f"{result.num_parameters:,}")
 
-        print("\nInput Shapes:")
+        logger.info("\nInput Shapes:")
         for i, shape in enumerate(result.input_shapes):
             shape_str = str(shape).replace("-1", "dynamic")
-            print(f"  {self.config.input_names[i]}: {shape_str}")
+            logger.info("  %s: {shape_str}", self.config.input_names[i])
 
-        print("\nOutput Shapes:")
+        logger.info("\nOutput Shapes:")
         for i, shape in enumerate(result.output_shapes):
             shape_str = str(shape).replace("-1", "dynamic")
-            print(f"  {self.config.output_names[i]}: {shape_str}")
+            logger.info("  %s: {shape_str}", self.config.output_names[i])
 
-        print("\nValidation:")
-        print(f"  Model validation: {'✓ PASSED' if result.validation_passed else '✗ FAILED'}")
-        print(f"  Inference test: {'✓ PASSED' if result.inference_test_passed else '✗ FAILED'}")
+        logger.info("\nValidation:")
+        logger.info("  Model validation: %s", '✓ PASSED' if result.validation_passed else '✗ FAILED')
+        logger.info("  Inference test: %s", '✓ PASSED' if result.inference_test_passed else '✗ FAILED')
 
-        print("=" * 80)
+        logger.info("=" * 80)
 
 
 # =============================================================================

@@ -487,29 +487,29 @@ class ModelPruner:
         Args:
             result: Pruning result
         """
-        print("\n" + "=" * 80)
-        print("PRUNING REPORT")
-        print("=" * 80)
+        logger.info("=" * 80)
+        logger.info("PRUNING REPORT")
+        logger.info("=" * 80)
 
-        print("\nOverall:")
-        print(f"  Total parameters: {result.original_params:,}")
-        print(f"  Pruned parameters: {result.pruned_params:,}")
-        print(f"  Sparsity achieved: {result.sparsity_achieved:.1%}")
+        logger.info("\nOverall:")
+        logger.info("  Total parameters: %s", f"{result.original_params:,}")
+        logger.info("  Pruned parameters: %s", f"{result.pruned_params:,}")
+        logger.info("  Sparsity achieved: %.1f%%", result.sparsity_achieved)
 
-        print("\nModel Size:")
-        print(f"  Original: {result.original_size_mb:.2f} MB")
-        print(f"  Pruned: {result.pruned_size_mb:.2f} MB")
-        print(f"  Reduction: {result.size_reduction_pct:.1f}%")
+        logger.info("\nModel Size:")
+        logger.info("  Original: %.2f MB", result.original_size_mb)
+        logger.info("  Pruned: %.2f MB", result.pruned_size_mb)
+        logger.info("  Reduction: %.1f%%", result.size_reduction_pct)
 
         if result.layer_sparsity:
-            print("\nLayer-wise Sparsity:")
-            print(f"  {'Layer':>40} {'Sparsity':>15}")
-            print("  " + "-" * 55)
+            logger.info("\nLayer-wise Sparsity:")
+            logger.info("  %-40s %15s", "Layer", "Sparsity")
+            logger.info("  " + "-" * 55)
 
             for layer_name, sparsity in sorted(result.layer_sparsity.items(), key=lambda x: x[1], reverse=True):
-                print(f"  {layer_name:>40} {sparsity:>15.1%}")
+                logger.info("  %-40s %14.1f%%", layer_name, sparsity * 100)
 
-        print("=" * 80)
+        logger.info("=" * 80)
 
 
 # =============================================================================

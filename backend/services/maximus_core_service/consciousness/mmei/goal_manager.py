@@ -58,13 +58,13 @@ class GoalManager:
         goal = manager.generate_goal_from_need("rest_need", 0.85, NeedUrgency.CRITICAL)
 
         if goal:
-            print(f"Generated: {goal}")
+            logger.info("Generated: %s", goal)
             # Execute goal...
             manager.mark_goal_executed(goal.goal_id)
 
         # Get health metrics
         metrics = manager.get_health_metrics()
-        print(f"Active goals: {metrics['active_goals']}")
+        logger.info("Active goals: %s", metrics['active_goals'])
     """
 
     def __init__(self):
@@ -227,7 +227,7 @@ class GoalManager:
         # FASE VII: Overflow = 3+ critical needs simultaneously
         if len(critical_needs) >= 3:
             self.need_overflow_events += 1
-            print(f"⚠️  MMEI OVERFLOW: {len(critical_needs)} critical needs: {critical_needs}")
+            logger.info("⚠️  MMEI OVERFLOW: %s critical needs: {critical_needs}", len(critical_needs))
 
             # In production, this would notify Safety Core
             # For now, just log and count

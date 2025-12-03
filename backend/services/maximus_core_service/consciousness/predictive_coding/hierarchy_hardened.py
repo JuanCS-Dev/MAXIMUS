@@ -128,7 +128,9 @@ class PredictiveCodingHierarchy:
     """
 
     def __init__(
-        self, config: HierarchyConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None
+        self,
+        config: HierarchyConfig | None = None,
+        kill_switch_callback: Callable[[str], None] | None = None,
     ):
         """Initialize predictive coding hierarchy.
 
@@ -226,13 +228,17 @@ class PredictiveCodingHierarchy:
             if len(self._prediction_errors) > 100:
                 self._prediction_errors.pop(0)
 
-            logger.debug(f"Hierarchy cycle complete: {cycle_time_ms:.2f}ms, avg_error={avg_error:.3f}")
+            logger.debug(
+                f"Hierarchy cycle complete: {cycle_time_ms:.2f}ms, avg_error={avg_error:.3f}"
+            )
 
             return errors
 
         except TimeoutError:
             self.total_timeouts += 1
-            logger.error(f"⚠️ Hierarchy TIMEOUT ({self.config.max_hierarchy_cycle_time_ms}ms exceeded)")
+            logger.error(
+                f"⚠️ Hierarchy TIMEOUT ({self.config.max_hierarchy_cycle_time_ms}ms exceeded)"
+            )
 
             if self.total_timeouts >= 5:
                 logger.critical("🔴 Too many hierarchy timeouts - triggering kill switch")
@@ -400,8 +406,14 @@ class PredictiveCodingHierarchy:
 
     def get_state(self) -> HierarchyState:
         """Get observable hierarchy state."""
-        avg_cycle_time = sum(self._cycle_times) / len(self._cycle_times) if self._cycle_times else 0.0
-        avg_error = sum(self._prediction_errors) / len(self._prediction_errors) if self._prediction_errors else 0.0
+        avg_cycle_time = (
+            sum(self._cycle_times) / len(self._cycle_times) if self._cycle_times else 0.0
+        )
+        avg_error = (
+            sum(self._prediction_errors) / len(self._prediction_errors)
+            if self._prediction_errors
+            else 0.0
+        )
 
         return HierarchyState(
             total_cycles=self.total_cycles,

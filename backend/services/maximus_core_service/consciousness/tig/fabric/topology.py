@@ -112,7 +112,9 @@ class TopologyGenerator:
         # Compute 75th percentile threshold - use sorted approach (NumPy-safe)
         sorted_degrees = sorted(degree_values)
         p75_index = int(len(sorted_degrees) * 0.75)
-        threshold = sorted_degrees[p75_index] if p75_index < len(sorted_degrees) else sorted_degrees[-1]
+        threshold = (
+            sorted_degrees[p75_index] if p75_index < len(sorted_degrees) else sorted_degrees[-1]
+        )
         high_degree_nodes = [n for n, d in degrees.items() if d > threshold]
 
         for hub in high_degree_nodes:

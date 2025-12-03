@@ -135,7 +135,7 @@ class SpecializedProcessingModule(ABC):
         self._running = True
         self._processing_task = asyncio.create_task(self._processing_loop())
 
-        print(f"🔄 SPM {self.spm_id} ({self.spm_type.value}) started")
+        logger.info("🔄 SPM %s ({self.spm_type.value}) started", self.spm_id)
 
     async def stop(self) -> None:
         """Stop processing."""
@@ -173,7 +173,7 @@ class SpecializedProcessingModule(ABC):
                 await asyncio.sleep(self.processing_interval)
 
             except Exception as e:
-                print(f"⚠️  SPM {self.spm_id} processing error: {e}")
+                logger.info("⚠️  SPM %s processing error: {e}", self.spm_id)
                 await asyncio.sleep(self.processing_interval)
 
     @abstractmethod
@@ -233,7 +233,9 @@ class SpecializedProcessingModule(ABC):
         Returns:
             List of SPMOutputs sorted by salience (descending)
         """
-        sorted_outputs = sorted(self.output_queue, key=lambda o: o.salience.compute_total(), reverse=True)
+        sorted_outputs = sorted(
+            self.output_queue, key=lambda o: o.salience.compute_total(), reverse=True
+        )
         return sorted_outputs[:n]
 
     def get_success_rate(self) -> float:

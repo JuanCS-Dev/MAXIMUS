@@ -91,7 +91,9 @@ class IntrospectionEngine:
 
             highlight = IntrospectionHighlight(
                 level=level.level,
-                belief_content=level.beliefs[0].content if level.beliefs else "Belief not registered",
+                belief_content=(
+                    level.beliefs[0].content if level.beliefs else "Belief not registered"
+                ),
                 confidence=level.coherence,
                 justification_summary=self.belief_explainer.summarise_justification(level),
             )

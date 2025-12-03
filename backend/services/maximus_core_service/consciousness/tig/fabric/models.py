@@ -112,7 +112,10 @@ class CircuitBreaker:
         """
         if self.state == "open":
             # Check if recovery timeout elapsed
-            if self.last_failure_time and time.time() - self.last_failure_time > self.recovery_timeout:
+            if (
+                self.last_failure_time
+                and time.time() - self.last_failure_time > self.recovery_timeout
+            ):
                 self.state = "half_open"
                 return False
             return True

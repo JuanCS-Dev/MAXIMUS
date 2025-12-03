@@ -84,8 +84,8 @@ class MetricsCollector:
         metrics = await collector.collect()
 
         # Access specific metrics
-        print(f"Arousal: {metrics.arousal_level}")
-        print(f"ESGT Success: {metrics.esgt_success_rate}")
+        logger.info("Arousal: %s", metrics.arousal_level)
+        logger.info("ESGT Success: %s", metrics.esgt_success_rate)
     """
 
     def __init__(self, consciousness_system: Any):
@@ -164,10 +164,12 @@ class MetricsCollector:
 
             metrics.tig_node_count = len(self.system.tig_fabric.nodes)
             metrics.tig_edge_count = tig_metrics.edge_count
-            metrics.tig_avg_latency_us = tig_metrics.avg_latency_us if hasattr(tig_metrics, 'avg_latency_us') else 0.0
+            metrics.tig_avg_latency_us = (
+                tig_metrics.avg_latency_us if hasattr(tig_metrics, "avg_latency_us") else 0.0
+            )
 
             # Get current coherence if available
-            if hasattr(self.system.tig_fabric, 'get_coherence'):
+            if hasattr(self.system.tig_fabric, "get_coherence"):
                 coherence = self.system.tig_fabric.get_coherence()
                 metrics.tig_coherence = coherence if coherence else 0.0
 
@@ -185,7 +187,7 @@ class MetricsCollector:
             metrics.esgt_avg_coherence = coordinator.get_recent_coherence(window=10)
 
             # Calculate frequency (events per second in last minute)
-            if hasattr(coordinator, 'ignition_timestamps') and coordinator.ignition_timestamps:
+            if hasattr(coordinator, "ignition_timestamps") and coordinator.ignition_timestamps:
                 now = time.time()
                 recent = [t for t in coordinator.ignition_timestamps if now - t < 60.0]
                 metrics.esgt_frequency_hz = len(recent) / 60.0
@@ -201,7 +203,11 @@ class MetricsCollector:
 
             if arousal_state:
                 metrics.arousal_level = arousal_state.arousal
-                metrics.arousal_classification = arousal_state.level.value if hasattr(arousal_state.level, 'value') else str(arousal_state.level)
+                metrics.arousal_classification = (
+                    arousal_state.level.value
+                    if hasattr(arousal_state.level, "value")
+                    else str(arousal_state.level)
+                )
                 metrics.arousal_stress = arousal_state.temporal_contribution
                 metrics.arousal_need = arousal_state.need_contribution
 

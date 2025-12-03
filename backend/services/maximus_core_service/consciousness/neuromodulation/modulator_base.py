@@ -68,10 +68,16 @@ class ModulatorConfig:
     def __post_init__(self):
         """Validate configuration - fail fast if invalid."""
         assert 0.0 <= self.baseline <= 1.0, f"Baseline {self.baseline} must be in [0, 1]"
-        assert self.min_level < self.max_level, f"Min {self.min_level} must be < max {self.max_level}"
+        assert (
+            self.min_level < self.max_level
+        ), f"Min {self.min_level} must be < max {self.max_level}"
         assert 0.0 < self.decay_rate <= 1.0, f"Decay rate {self.decay_rate} must be in (0, 1]"
-        assert 0.0 < self.smoothing_factor <= 1.0, f"Smoothing {self.smoothing_factor} must be in (0, 1]"
-        assert 0.0 < self.desensitization_threshold <= 1.0, "Desensitization threshold must be in (0, 1]"
+        assert (
+            0.0 < self.smoothing_factor <= 1.0
+        ), f"Smoothing {self.smoothing_factor} must be in (0, 1]"
+        assert (
+            0.0 < self.desensitization_threshold <= 1.0
+        ), "Desensitization threshold must be in (0, 1]"
         assert 0.0 < self.desensitization_factor <= 1.0, "Desensitization factor must be in (0, 1]"
         assert 0.0 < self.max_change_per_step <= 1.0, "Max change per step must be in (0, 1]"
 
@@ -130,7 +136,9 @@ class NeuromodulatorBase(ABC):
     MAX_CONSECUTIVE_ANOMALIES = 5  # Consecutive bound violations before opening
 
     def __init__(
-        self, config: ModulatorConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None
+        self,
+        config: ModulatorConfig | None = None,
+        kill_switch_callback: Callable[[str], None] | None = None,
     ):
         """Initialize neuromodulator.
 
@@ -224,9 +232,7 @@ class NeuromodulatorBase(ABC):
 
         # Circuit breaker check (CRITICAL)
         if self._circuit_breaker_open:
-            error_msg = (
-                f"{modulator_name.capitalize()}Modulator circuit breaker OPEN - modulation rejected (source={source})"
-            )
+            error_msg = f"{modulator_name.capitalize()}Modulator circuit breaker OPEN - modulation rejected (source={source})"
             logger.error(f"🔴 {error_msg}")
 
             if self._kill_switch:
@@ -375,7 +381,9 @@ class NeuromodulatorBase(ABC):
             f"{prefix}_circuit_breaker_open": self._circuit_breaker_open,
             f"{prefix}_total_modulations": self._total_modulations,
             f"{prefix}_bounded_corrections": self._bounded_corrections,
-            f"{prefix}_bound_hit_rate": (self._bounded_corrections / max(1, self._total_modulations)),
+            f"{prefix}_bound_hit_rate": (
+                self._bounded_corrections / max(1, self._total_modulations)
+            ),
             f"{prefix}_desensitization_events": self._desensitization_events,
             f"{prefix}_consecutive_anomalies": self._consecutive_anomalies,
         }

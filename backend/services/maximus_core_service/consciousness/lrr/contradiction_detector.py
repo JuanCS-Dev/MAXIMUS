@@ -37,7 +37,9 @@ class FirstOrderLogic:
     NEGATION_MARKERS: Tuple[str, ...] = ("not ", "¬", "~", "no ", "isn't", "aren't")
 
     @staticmethod
-    def normalise(statement: str) -> str:  # pragma: no cover - internal normalization, tested via is_direct_negation
+    def normalise(
+        statement: str,
+    ) -> str:  # pragma: no cover - internal normalization, tested via is_direct_negation
         """
         Convert natural-language belief content into a canonical predicate-like
         representation to support equivalence and negation checks.
@@ -113,9 +115,7 @@ class ContradictionDetector:
         self.contradiction_history: List["Contradiction"] = []
         self.summary_history: List[ContradictionSummary] = []
 
-    async def detect_contradictions(
-        self, belief_graph: "BeliefGraph"
-    ) -> List["Contradiction"]:
+    async def detect_contradictions(self, belief_graph: "BeliefGraph") -> List["Contradiction"]:
         """
         Detect contradições no grafo de crenças.
 
@@ -127,9 +127,7 @@ class ContradictionDetector:
             return belief_graph.detect_contradictions()
 
         contradictions = await asyncio.to_thread(_scan)
-        contradictions = self._augment_with_logical_checks(
-            contradictions, belief_graph.beliefs
-        )
+        contradictions = self._augment_with_logical_checks(contradictions, belief_graph.beliefs)
 
         self._update_history(contradictions)
         return contradictions
@@ -150,8 +148,7 @@ class ContradictionDetector:
         the structural heuristics might miss (e.g., lexical variations).
         """
         seen_pairs: Set[Tuple[str, str]] = {
-            self._sorted_pair(c.belief_a.content, c.belief_b.content)
-            for c in contradictions
+            self._sorted_pair(c.belief_a.content, c.belief_b.content) for c in contradictions
         }
 
         additional: List["Contradiction"] = []
@@ -163,9 +160,7 @@ class ContradictionDetector:
                 if pair in seen_pairs:
                     continue
 
-                if self.logic_engine.is_direct_negation(
-                    belief_a.content, belief_b.content
-                ):
+                if self.logic_engine.is_direct_negation(belief_a.content, belief_b.content):
                     from .recursive_reasoner import (
                         Contradiction,
                         ContradictionType,
@@ -250,19 +245,21 @@ class BeliefRevision:
         removed: List["Belief"] = []
         modified: List["Belief"] = []
 
-        target_beliefs = self._target_beliefs_for_resolution(
-            contradiction, strategy
-        )
+        target_beliefs = self._target_beliefs_for_resolution(contradiction, strategy)
         for belief in target_beliefs:
             before_conf = belief.confidence
             belief_graph.resolve_belief(belief, resolution)
-            if strategy == self._hitl_strategy():  # pragma: no cover - strategy helpers tested via revise_belief_graph
+            if (
+                strategy == self._hitl_strategy()
+            ):  # pragma: no cover - strategy helpers tested via revise_belief_graph
                 modified.append(belief)  # pragma: no cover
             elif strategy == self._temporize_strategy():  # pragma: no cover
                 modified.append(belief)  # pragma: no cover
             elif strategy == self._contextualize_strategy():  # pragma: no cover
                 modified.append(belief)  # pragma: no cover
-            elif strategy == self._weaken_strategy() and belief.confidence < before_conf:  # pragma: no cover - weaken strategy tested
+            elif (
+                strategy == self._weaken_strategy() and belief.confidence < before_conf
+            ):  # pragma: no cover - weaken strategy tested
                 modified.append(belief)  # pragma: no cover
             elif belief not in belief_graph.beliefs:
                 removed.append(belief)
@@ -310,8 +307,12 @@ class BeliefRevision:
 
         return [contradiction.belief_a, contradiction.belief_b]
 
-    def _select_weaker_belief(self, contradiction: "Contradiction") -> Sequence["Belief"]:  # pragma: no cover - helper method tested via revise_belief_graph
-        if contradiction.belief_a.confidence <= contradiction.belief_b.confidence:  # pragma: no cover
+    def _select_weaker_belief(
+        self, contradiction: "Contradiction"
+    ) -> Sequence["Belief"]:  # pragma: no cover - helper method tested via revise_belief_graph
+        if (
+            contradiction.belief_a.confidence <= contradiction.belief_b.confidence
+        ):  # pragma: no cover
             return [contradiction.belief_a]  # pragma: no cover
         return [contradiction.belief_b]  # pragma: no cover
 

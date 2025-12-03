@@ -42,7 +42,7 @@ class MetacognitiveMonitor:
 
         # Get current confidence
         confidence = monitor.calculate_confidence()
-        print(f"Current confidence: {confidence:.2f}")  # 0.80
+        logger.info("Current confidence: %.2f", confidence)  # 0.80
 
     Future Enhancements (Phase 2):
     - Cognitive bias detection (confirmation, anchoring, availability)
@@ -79,7 +79,9 @@ class MetacognitiveMonitor:
         self.errors.append(error)
         self.total_recordings += 1
 
-        logger.debug(f"Metacog: Recorded error={error:.3f}, total_recordings={self.total_recordings}")
+        logger.debug(
+            f"Metacog: Recorded error={error:.3f}, total_recordings={self.total_recordings}"
+        )
 
     def calculate_confidence(self) -> float:
         """Calculate current confidence based on recent errors.

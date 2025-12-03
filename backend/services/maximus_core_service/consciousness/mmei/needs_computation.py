@@ -88,7 +88,9 @@ class NeedsComputation:
 
         # REPAIR NEED: Error rate and system integrity
         # Normalize error rate to [0, 1] using critical threshold
-        error_rate_normalized = min(metrics.error_rate_per_min / self.config.error_rate_critical, 1.0)
+        error_rate_normalized = min(
+            metrics.error_rate_per_min / self.config.error_rate_critical, 1.0
+        )
 
         # Exception count contributes (saturates at 10 exceptions)
         exception_contribution = min(metrics.exception_count / 10.0, 1.0)

@@ -29,7 +29,12 @@ from prometheus_client import Gauge
 
 from consciousness.esgt.coordinator import ESGTCoordinator, TriggerConditions
 from consciousness.mcea.controller import ArousalConfig, ArousalController
-from consciousness.safety import ConsciousnessSafetyProtocol, SafetyThresholds, SafetyViolation, ShutdownReason
+from consciousness.safety import (
+    ConsciousnessSafetyProtocol,
+    SafetyThresholds,
+    SafetyViolation,
+    ShutdownReason,
+)
 from consciousness.tig.fabric import TIGFabric, TopologyConfig
 
 # TRACK 1: PrefrontalCortex integration
@@ -42,14 +47,22 @@ from motor_integridade_processual.arbiter.decision import DecisionArbiter
 from consciousness.reactive_fabric.orchestration import DataOrchestrator
 
 # Prometheus Metrics
-consciousness_tig_node_count = Gauge("consciousness_tig_node_count", "Number of nodes in the TIG fabric")
+consciousness_tig_node_count = Gauge(
+    "consciousness_tig_node_count", "Number of nodes in the TIG fabric"
+)
 consciousness_tig_edges = Gauge("consciousness_tig_edge_count", "Number of edges in the TIG fabric")
-consciousness_esgt_frequency = Gauge("consciousness_esgt_frequency", "Current frequency of the ESGT coordinator")
-consciousness_arousal_level = Gauge("consciousness_arousal_level", "Current arousal level of the MCEA controller")
+consciousness_esgt_frequency = Gauge(
+    "consciousness_esgt_frequency", "Current frequency of the ESGT coordinator"
+)
+consciousness_arousal_level = Gauge(
+    "consciousness_arousal_level", "Current arousal level of the MCEA controller"
+)
 consciousness_kill_switch_active = Gauge(
     "consciousness_kill_switch_active", "Status of Safety Core kill switch (0=OK, 1=ENGAGED)"
 )
-consciousness_violations_total = Gauge("consciousness_violations_total", "Number of active safety violations")
+consciousness_violations_total = Gauge(
+    "consciousness_violations_total", "Number of active safety violations"
+)
 
 
 @dataclass
@@ -155,33 +168,35 @@ class ConsciousnessSystem:
             Exception: If any component fails to initialize
         """
         if self._running:
-            print("⚠️  Consciousness system already running")
+            logger.info("⚠️  Consciousness system already running")
             return
 
-        print("🧠 Starting Consciousness System...")
+        logger.info("🧠 Starting Consciousness System...")
 
         try:
             # 1. Initialize TIG Fabric (ASYNC - non-blocking)
-            print("  ├─ Creating TIG Fabric...")
+            logger.info("  ├─ Creating TIG Fabric...")
             tig_config = TopologyConfig(
                 node_count=self.config.tig_node_count, target_density=self.config.tig_target_density
             )
             self.tig_fabric = TIGFabric(tig_config)
             await self.tig_fabric.initialize_async()  # Returns immediately, builds in background
-            print(f"  ✅ TIG Fabric initializing in background ({self.config.tig_node_count} nodes)")
-            print("     Service starting - TIG will be ready shortly")
+            logger.info(
+                f"  ✅ TIG Fabric initializing in background ({self.config.tig_node_count} nodes)"
+            )
+            logger.info("     Service starting - TIG will be ready shortly")
 
             # 2. TRACK 1: Initialize Social Cognition Components (ToM, Metacognition, PFC)
-            print("  ├─ Creating Social Cognition components (ToM, Metacognition, PFC)...")
+            logger.info("  ├─ Creating Social Cognition components (ToM, Metacognition, PFC)...")
 
             # Initialize ToM Engine (with in-memory DB for now, can add Redis later)
             self.tom_engine = ToMEngine(db_path=":memory:")
             await self.tom_engine.initialize()
-            print("    ✅ ToM Engine initialized")
+            logger.info("    ✅ ToM Engine initialized")
 
             # Initialize Metacognition Monitor
             self.metacog_monitor = MetacognitiveMonitor(window_size=100)
-            print("    ✅ Metacognition Monitor initialized")
+            logger.info("    ✅ Metacognition Monitor initialized")
 
             # Initialize MIP DecisionArbiter for ethical evaluation
             decision_arbiter = DecisionArbiter()
@@ -190,12 +205,12 @@ class ConsciousnessSystem:
             self.prefrontal_cortex = PrefrontalCortex(
                 tom_engine=self.tom_engine,
                 decision_arbiter=decision_arbiter,
-                metacognition_monitor=self.metacog_monitor
+                metacognition_monitor=self.metacog_monitor,
             )
-            print("  ✅ PrefrontalCortex initialized (social cognition enabled)")
+            logger.info("  ✅ PrefrontalCortex initialized (social cognition enabled)")
 
             # 3. Initialize ESGT Coordinator (with PFC integration)
-            print("  ├─ Creating ESGT Coordinator...")
+            logger.info("  ├─ Creating ESGT Coordinator...")
             triggers = TriggerConditions()
             triggers.min_salience = self.config.esgt_min_salience
             triggers.refractory_period_ms = self.config.esgt_refractory_period_ms
@@ -206,35 +221,37 @@ class ConsciousnessSystem:
                 tig_fabric=self.tig_fabric,
                 triggers=triggers,
                 coordinator_id="production-esgt",
-                prefrontal_cortex=self.prefrontal_cortex  # TRACK 1: Wire PFC to ESGT
+                prefrontal_cortex=self.prefrontal_cortex,  # TRACK 1: Wire PFC to ESGT
             )
             await self.esgt_coordinator.start()
-            print("  ✅ ESGT Coordinator started (with PFC integration)")
+            logger.info("  ✅ ESGT Coordinator started (with PFC integration)")
 
             # 4. Initialize Arousal Controller
-            print("  ├─ Creating Arousal Controller...")
+            logger.info("  ├─ Creating Arousal Controller...")
             arousal_config = ArousalConfig(
                 update_interval_ms=self.config.arousal_update_interval_ms,
                 baseline_arousal=self.config.arousal_baseline,
                 min_arousal=self.config.arousal_min,
                 max_arousal=self.config.arousal_max,
             )
-            self.arousal_controller = ArousalController(config=arousal_config, controller_id="production-arousal")
+            self.arousal_controller = ArousalController(
+                config=arousal_config, controller_id="production-arousal"
+            )
             await self.arousal_controller.start()
-            print("  ✅ Arousal Controller started")
+            logger.info("  ✅ Arousal Controller started")
 
             # 5. Initialize Safety Protocol (FASE VII)
             if self.config.safety_enabled:
-                print("  ├─ Creating Safety Protocol...")
+                logger.info("  ├─ Creating Safety Protocol...")
                 self.safety_protocol = ConsciousnessSafetyProtocol(
                     consciousness_system=self, thresholds=self.config.safety_thresholds
                 )
                 await self.safety_protocol.start_monitoring()
-                print("  ✅ Safety Protocol active (monitoring started)")
+                logger.info("  ✅ Safety Protocol active (monitoring started)")
 
             # 6. REACTIVE FABRIC: Initialize Data Orchestrator (Sprint 3)
             if self.config.reactive.enable_data_orchestration:
-                print("  ├─ Creating Reactive Fabric Orchestrator...")
+                logger.info("  ├─ Creating Reactive Fabric Orchestrator...")
                 self.orchestrator = DataOrchestrator(
                     consciousness_system=self,
                     collection_interval_ms=self.config.reactive.collection_interval_ms,
@@ -243,10 +260,12 @@ class ConsciousnessSystem:
                     decision_history_size=self.config.reactive.decision_history_size,
                 )
                 await self.orchestrator.start()
-                print(f"  ✅ Reactive Fabric active ({self.config.reactive.collection_interval_ms}ms interval)")
+                logger.info(
+                    f"  ✅ Reactive Fabric active ({self.config.reactive.collection_interval_ms}ms interval)"
+                )
 
             self._running = True
-            print("✅ Consciousness System fully operational")
+            logger.info("✅ Consciousness System fully operational")
 
         except Exception as e:
 
@@ -254,14 +273,14 @@ class ConsciousnessSystem:
             if self.config.reactive.enable_data_orchestration and self.orchestrator:
                 await self.orchestrator.start()
 
-            print("🧠 Consciousness System STARTED")
-            print("   - TIG Fabric: Initializing (background)")
-            print("   - ToM Engine: Active")
-            print("   - Metacognition: Active")
-            print("   - ESGT: Active")
+            logger.info("🧠 Consciousness System STARTED")
+            logger.info("   - TIG Fabric: Initializing (background)")
+            logger.info("   - ToM Engine: Active")
+            logger.info("   - Metacognition: Active")
+            logger.info("   - ESGT: Active")
 
         except Exception as e:
-            print(f"❌ Consciousness System start failed: {e}")
+            logger.info("❌ Consciousness System start failed: %s", e)
             self._running = False
             raise
 
@@ -280,42 +299,42 @@ class ConsciousnessSystem:
         ):
             return
 
-        print("👋 Stopping Consciousness System...")
+        logger.info("👋 Stopping Consciousness System...")
 
         try:
             # Stop in reverse order (Safety first to stop monitoring)
             if self.safety_protocol:
                 await self.safety_protocol.stop_monitoring()
-                print("  ✅ Safety Protocol stopped")
+                logger.info("  ✅ Safety Protocol stopped")
 
             # REACTIVE FABRIC: Stop orchestrator before components
             if self.orchestrator:
                 await self.orchestrator.stop()
-                print("  ✅ Reactive Fabric stopped")
+                logger.info("  ✅ Reactive Fabric stopped")
 
             if self.esgt_coordinator:
                 await self.esgt_coordinator.stop()
-                print("  ✅ ESGT Coordinator stopped")
+                logger.info("  ✅ ESGT Coordinator stopped")
 
             if self.arousal_controller:
                 await self.arousal_controller.stop()
-                print("  ✅ Arousal Controller stopped")
+                logger.info("  ✅ Arousal Controller stopped")
 
             if self.tig_fabric:
                 await self.tig_fabric.exit_esgt_mode()
                 await self.tig_fabric.stop()
-                print("  ✅ TIG Fabric stopped")
+                logger.info("  ✅ TIG Fabric stopped")
 
             # TRACK 1: Close ToM Engine
             if self.tom_engine:
                 await self.tom_engine.close()
-                print("  ✅ ToM Engine closed")
+                logger.info("  ✅ ToM Engine closed")
 
             self._running = False
-            print("✅ Consciousness System shut down")
+            logger.info("✅ Consciousness System shut down")
 
         except Exception as e:
-            print(f"⚠️  Error during shutdown: {e}")
+            logger.info("⚠️  Error during shutdown: %s", e)
 
     def get_system_dict(self) -> dict[str, Any]:
         """Get system components and state for Safety Protocol monitoring.
@@ -372,7 +391,9 @@ class ConsciousnessSystem:
         if self.safety_protocol:
             kill_switch_status = 1 if self.safety_protocol.kill_switch.is_triggered() else 0
             consciousness_kill_switch_active.set(kill_switch_status)
-            consciousness_violations_total.set(len(self.safety_protocol.threshold_monitor.get_violations()))
+            consciousness_violations_total.set(
+                len(self.safety_protocol.threshold_monitor.get_violations())
+            )
         else:
             consciousness_kill_switch_active.set(0)
             consciousness_violations_total.set(0)
@@ -438,7 +459,7 @@ class ConsciousnessSystem:
             True if shutdown executed, False if HITL overrode
         """
         if not self.config.safety_enabled or not self.safety_protocol:
-            print("⚠️  Safety protocol not enabled, performing normal shutdown")
+            logger.info("⚠️  Safety protocol not enabled, performing normal shutdown")
             await self.stop()
             return True
 
@@ -450,8 +471,7 @@ class ConsciousnessSystem:
 
         # KillSwitch.trigger is synchronous and returns bool
         return self.safety_protocol.kill_switch.trigger(
-            reason=shutdown_reason,
-            context={"original_reason": reason, "allow_hitl_override": True}
+            reason=shutdown_reason, context={"original_reason": reason, "allow_hitl_override": True}
         )
 
     def __repr__(self) -> str:

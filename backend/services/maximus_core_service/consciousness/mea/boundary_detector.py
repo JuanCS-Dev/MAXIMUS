@@ -106,4 +106,3 @@ class BoundaryDetector:
         cv = variability / mean_strength
 
         return max(0.0, min(1.0, 1.0 - cv))
-

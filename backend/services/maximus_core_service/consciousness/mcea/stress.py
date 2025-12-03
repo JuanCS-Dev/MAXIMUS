@@ -19,7 +19,12 @@ from typing import Any
 import numpy as np
 
 from consciousness.mcea.controller import ArousalController
-from consciousness.mcea.stress_models import StressLevel, StressResponse, StressTestConfig, StressType
+from consciousness.mcea.stress_models import (
+    StressLevel,
+    StressResponse,
+    StressTestConfig,
+    StressType,
+)
 from consciousness.mmei.monitor import AbstractNeeds
 
 
@@ -59,7 +64,9 @@ class StressMonitor:
         self.tests_passed: int = 0
 
     def register_stress_alert(
-        self, callback: Callable[[StressLevel], None | Coroutine[Any, Any, None]], threshold: StressLevel = StressLevel.SEVERE
+        self,
+        callback: Callable[[StressLevel], None | Coroutine[Any, Any, None]],
+        threshold: StressLevel = StressLevel.SEVERE,
     ) -> None:
         """Register callback invoked when stress exceeds threshold."""
         self._stress_alert_callbacks.append((callback, threshold))
@@ -72,7 +79,9 @@ class StressMonitor:
         self._baseline_arousal = self.arousal_controller.get_current_arousal().arousal
         self._running = True
         self._monitoring_task = asyncio.create_task(self._monitoring_loop())
-        print(f"📊 Stress Monitor {self.monitor_id} started (baseline arousal: {self._baseline_arousal:.2f})")
+        logger.info(
+            f"📊 Stress Monitor {self.monitor_id} started (baseline arousal: {self._baseline_arousal:.2f})"
+        )
 
     async def stop(self) -> None:
         """Stop monitoring."""
@@ -107,7 +116,7 @@ class StressMonitor:
                 await asyncio.sleep(1.0)
 
             except Exception as e:
-                print(f"⚠️  Stress monitoring error: {e}")
+                logger.info("⚠️  Stress monitoring error: %s", e)
                 await asyncio.sleep(1.0)
 
     def _assess_stress_level(self) -> StressLevel:
@@ -147,7 +156,7 @@ class StressMonitor:
                     else:
                         callback(stress_level)
                 except Exception as e:
-                    print(f"⚠️  Stress alert callback error: {e}")
+                    logger.info("⚠️  Stress alert callback error: %s", e)
 
     def _get_stress_severity(self, level: StressLevel) -> int:
         """Get numeric severity for comparison."""
@@ -171,13 +180,17 @@ class StressMonitor:
         if duration_seconds is None:
             duration_seconds = self.config.stress_duration_seconds
 
-        print(f"🧪 Starting stress test: {stress_type.value} at {stress_level.value} for {duration_seconds:.0f}s")
+        logger.info(
+            f"🧪 Starting stress test: {stress_type.value} at {stress_level.value} for {duration_seconds:.0f}s"
+        )
 
         initial_arousal = self.arousal_controller.get_current_arousal().arousal
         self._active_test = stress_type
         self._test_start_time = time.time()
 
-        response = self._create_initial_response(stress_type, stress_level, initial_arousal, duration_seconds)
+        response = self._create_initial_response(
+            stress_type, stress_level, initial_arousal, duration_seconds
+        )
 
         arousal_samples: list[float] = []
         stress_phase_arousal_samples: list[float] = []
@@ -195,13 +208,17 @@ class StressMonitor:
 
             if monitor_needs:
                 response.peak_rest_need = max(response.peak_rest_need, monitor_needs.rest_need)
-                response.peak_repair_need = max(response.peak_repair_need, monitor_needs.repair_need)
-                response.peak_efficiency_need = max(response.peak_efficiency_need, monitor_needs.efficiency_need)
+                response.peak_repair_need = max(
+                    response.peak_repair_need, monitor_needs.repair_need
+                )
+                response.peak_efficiency_need = max(
+                    response.peak_efficiency_need, monitor_needs.efficiency_need
+                )
 
             await asyncio.sleep(0.1)
 
         # RECOVERY PHASE
-        print("⏸️  Stress removed, monitoring recovery...")
+        logger.info("⏸️  Stress removed, monitoring recovery...")
         recovery_start = time.time()
         recovered = False
 
@@ -225,9 +242,13 @@ class StressMonitor:
         response.final_arousal = self.arousal_controller.get_current_arousal().arousal
 
         if len(arousal_samples) > 1:
-            response.arousal_stability_cv = float(np.std(arousal_samples) / np.mean(arousal_samples))
+            response.arousal_stability_cv = float(
+                np.std(arousal_samples) / np.mean(arousal_samples)
+            )
 
-        response.arousal_runaway_detected = self._detect_arousal_runaway(stress_phase_arousal_samples)
+        response.arousal_runaway_detected = self._detect_arousal_runaway(
+            stress_phase_arousal_samples
+        )
         response.goal_generation_failure = False
         response.coherence_collapse = False
 
@@ -240,12 +261,18 @@ class StressMonitor:
         if response.passed_stress_test():
             self.tests_passed += 1
 
-        print(f"✅ Test complete: Resilience {response.get_resilience_score():.1f}/100, {response.passed_stress_test()}")
+        logger.info(
+            f"✅ Test complete: Resilience {response.get_resilience_score():.1f}/100, {response.passed_stress_test()}"
+        )
 
         return response
 
     def _create_initial_response(
-        self, stress_type: StressType, stress_level: StressLevel, initial_arousal: float, duration_seconds: float
+        self,
+        stress_type: StressType,
+        stress_level: StressLevel,
+        initial_arousal: float,
+        duration_seconds: float,
     ) -> StressResponse:
         """Create initial StressResponse with default values."""
         return StressResponse(
@@ -302,14 +329,18 @@ class StressMonitor:
         if len(arousal_samples) < 10:
             return False
 
-        high_arousal_samples = [a for a in arousal_samples if a > self.config.arousal_runaway_threshold]
+        high_arousal_samples = [
+            a for a in arousal_samples if a > self.config.arousal_runaway_threshold
+        ]
         return (len(high_arousal_samples) / len(arousal_samples)) > 0.8
 
     def get_current_stress_level(self) -> StressLevel:
         """Get current passive stress level."""
         return self._current_stress_level
 
-    def get_stress_history(self, window_seconds: float | None = None) -> list[tuple[float, StressLevel]]:
+    def get_stress_history(
+        self, window_seconds: float | None = None
+    ) -> list[tuple[float, StressLevel]]:
         """Get stress level history."""
         if window_seconds is None:
             return self._stress_history.copy()

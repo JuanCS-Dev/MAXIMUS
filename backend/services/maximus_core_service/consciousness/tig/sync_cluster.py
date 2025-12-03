@@ -31,7 +31,9 @@ class PTPCluster:
         if self.grand_master_id is not None:
             raise ValueError(f"Grand master already exists: {self.grand_master_id}")
 
-        sync = self._synchronizer_class(node_id, role=ClockRole.GRAND_MASTER, target_jitter_ns=self.target_jitter_ns)
+        sync = self._synchronizer_class(
+            node_id, role=ClockRole.GRAND_MASTER, target_jitter_ns=self.target_jitter_ns
+        )
         await sync.start()
 
         self.synchronizers[node_id] = sync
@@ -41,7 +43,9 @@ class PTPCluster:
 
     async def add_slave(self, node_id: str) -> Any:
         """Add a slave node to the cluster."""
-        sync = self._synchronizer_class(node_id, role=ClockRole.SLAVE, target_jitter_ns=self.target_jitter_ns)
+        sync = self._synchronizer_class(
+            node_id, role=ClockRole.SLAVE, target_jitter_ns=self.target_jitter_ns
+        )
         await sync.start()
 
         self.synchronizers[node_id] = sync

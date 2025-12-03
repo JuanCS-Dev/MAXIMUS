@@ -148,7 +148,9 @@ class Layer4Tactical(PredictiveCodingLayerBase):
         # Initialize embeddings for new entities
         for entity_id in entities:
             if entity_id not in self._entity_embeddings:
-                self._entity_embeddings[entity_id] = np.random.randn(self.config.hidden_dim).astype(np.float32) * 0.1
+                self._entity_embeddings[entity_id] = (
+                    np.random.randn(self.config.hidden_dim).astype(np.float32) * 0.1
+                )
 
         return entities
 
@@ -186,13 +188,17 @@ class Layer4Tactical(PredictiveCodingLayerBase):
             else:
                 # Average neighbor embeddings (simplified message passing)
                 neighbor_embeddings = [
-                    self._entity_embeddings.get(n, np.zeros(self.config.hidden_dim, dtype=np.float32))
+                    self._entity_embeddings.get(
+                        n, np.zeros(self.config.hidden_dim, dtype=np.float32)
+                    )
                     for n in neighbors
                 ]
                 avg_neighbor = np.mean(neighbor_embeddings, axis=0)
 
                 # Update: mix self + neighbors
-                new_embeddings[entity_id] = 0.7 * self._entity_embeddings[entity_id] + 0.3 * avg_neighbor
+                new_embeddings[entity_id] = (
+                    0.7 * self._entity_embeddings[entity_id] + 0.3 * avg_neighbor
+                )
 
         # Update embeddings
         self._entity_embeddings.update(new_embeddings)

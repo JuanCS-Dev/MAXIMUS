@@ -126,7 +126,9 @@ class KillSwitch:
             snapshot_time = time.time() - snapshot_start
 
             if snapshot_time > 0.1:
-                logger.warning(f"⚠️  State snapshot slow: {snapshot_time * 1000:.1f}ms (target <100ms)")
+                logger.warning(
+                    f"⚠️  State snapshot slow: {snapshot_time * 1000:.1f}ms (target <100ms)"
+                )
             else:
                 logger.info(f"State snapshot captured in {snapshot_time * 1000:.1f}ms")
 
@@ -136,7 +138,9 @@ class KillSwitch:
             shutdown_time = time.time() - shutdown_start
 
             if shutdown_time > 0.5:
-                logger.warning(f"⚠️  Emergency shutdown slow: {shutdown_time * 1000:.1f}ms (target <500ms)")
+                logger.warning(
+                    f"⚠️  Emergency shutdown slow: {shutdown_time * 1000:.1f}ms (target <500ms)"
+                )
             else:
                 logger.info(f"Emergency shutdown completed in {shutdown_time * 1000:.1f}ms")
 
@@ -148,7 +152,9 @@ class KillSwitch:
             report_time = time.time() - report_start
 
             if report_time > 0.2:
-                logger.warning(f"⚠️  Report generation slow: {report_time * 1000:.1f}ms (target <200ms)")
+                logger.warning(
+                    f"⚠️  Report generation slow: {report_time * 1000:.1f}ms (target <200ms)"
+                )
             else:
                 logger.info(f"Incident report generated in {report_time * 1000:.1f}ms")
 
@@ -172,7 +178,9 @@ class KillSwitch:
 
             # Verify <1s constraint (CRITICAL)
             if total_time > 1.0:
-                logger.error(f"🚨 KILL SWITCH SLOW - {total_time:.2f}s (target <1s) - SAFETY VIOLATION")
+                logger.error(
+                    f"🚨 KILL SWITCH SLOW - {total_time:.2f}s (target <1s) - SAFETY VIOLATION"
+                )
 
             return True
 
@@ -185,7 +193,9 @@ class KillSwitch:
             in_test_env = "pytest" in sys.modules or "unittest" in sys.modules
 
             if in_test_env:
-                logger.critical("Test environment detected - skipping SIGTERM (would kill test process)")
+                logger.critical(
+                    "Test environment detected - skipping SIGTERM (would kill test process)"
+                )
                 return False
 
             logger.critical("Executing last resort shutdown: SIGTERM")
@@ -226,7 +236,9 @@ class KillSwitch:
             if hasattr(self.system, "esgt"):
                 try:
                     snapshot["esgt_running"] = (
-                        self.system.esgt.is_running() if hasattr(self.system.esgt, "is_running") else False
+                        self.system.esgt.is_running()
+                        if hasattr(self.system.esgt, "is_running")
+                        else False
                     )
                 except Exception:
                     snapshot["esgt_running"] = "ERROR"
@@ -244,7 +256,9 @@ class KillSwitch:
             if hasattr(self.system, "mmei"):
                 try:
                     snapshot["active_goals"] = (
-                        len(self.system.mmei.get_active_goals()) if hasattr(self.system.mmei, "get_active_goals") else 0
+                        len(self.system.mmei.get_active_goals())
+                        if hasattr(self.system.mmei, "get_active_goals")
+                        else 0
                     )
                 except Exception:
                     snapshot["active_goals"] = "ERROR"
@@ -262,7 +276,11 @@ class KillSwitch:
 
         except Exception as e:
             logger.error(f"State snapshot partial failure: {e}")
-            return {"error": str(e), "timestamp": time.time(), "timestamp_iso": datetime.now().isoformat()}
+            return {
+                "error": str(e),
+                "timestamp": time.time(),
+                "timestamp_iso": datetime.now().isoformat(),
+            }
 
     def _emergency_shutdown(self):
         """
@@ -308,7 +326,9 @@ class KillSwitch:
                                     logger.warning(f"{name}: async stop skipped (loop running)")
                                 else:
                                     # Loop not running, safe to use run_until_complete
-                                    loop.run_until_complete(asyncio.wait_for(stop_method(), timeout=0.3))
+                                    loop.run_until_complete(
+                                        asyncio.wait_for(stop_method(), timeout=0.3)
+                                    )
                             except TimeoutError:
                                 logger.error(f"{name}: async stop timeout")
                             except Exception as async_error:
@@ -342,7 +362,11 @@ class KillSwitch:
         """
         incident_id = f"INCIDENT-{int(self.trigger_time)}"
 
-        snapshot_payload = state_snapshot.to_dict() if isinstance(state_snapshot, StateSnapshot) else state_snapshot
+        snapshot_payload = (
+            state_snapshot.to_dict()
+            if isinstance(state_snapshot, StateSnapshot)
+            else state_snapshot
+        )
 
         return IncidentReport(
             incident_id=incident_id,
@@ -390,7 +414,9 @@ class KillSwitch:
             "armed": self.armed,
             "triggered": self.triggered,
             "trigger_time": self.trigger_time,
-            "trigger_time_iso": datetime.fromtimestamp(self.trigger_time).isoformat() if self.trigger_time else None,
+            "trigger_time_iso": (
+                datetime.fromtimestamp(self.trigger_time).isoformat() if self.trigger_time else None
+            ),
             "shutdown_reason": self.shutdown_reason.value if self.shutdown_reason else None,
         }
 

@@ -261,7 +261,11 @@ class Layer5Strategic(PredictiveCodingLayerBase):
             vector: [input_dim]
         """
         # Get top goal
-        max(goal_posteriors.items(), key=lambda x: x[1])[0] if goal_posteriors else "data_exfiltration"
+        (
+            max(goal_posteriors.items(), key=lambda x: x[1])[0]
+            if goal_posteriors
+            else "data_exfiltration"
+        )
 
         # Map to vector space (placeholder)
         # In production: self.goal_embedding[top_goal]

@@ -51,115 +51,19 @@ These axioms translate to network requirements:
 - Exclusion → Non-degenerate topology (no bottlenecks)
 
 Our proxy metrics validate these network properties.
-
-Historical Context:
--------------------
-This represents the first production validation framework for artificial
-consciousness based on IIT. The metrics implemented here will determine
-whether MAXIMUS achieves the structural prerequisites for phenomenal emergence.
-
-"Structure precedes experience. Validate the substrate, enable the phenomenon."
 """
 
 from __future__ import annotations
-
-
-import time
-from dataclasses import dataclass, field
 
 import networkx as nx
 import numpy as np
 
 from consciousness.tig.fabric import FabricMetrics, TIGFabric
 
+from .phi_models import PhiProxyMetrics, StructuralCompliance
 
-@dataclass
-class PhiProxyMetrics:
-    """
-    Comprehensive Φ proxy metrics for IIT validation.
-
-    These metrics serve as evidence (not proof) that the substrate
-    has the structural properties necessary for consciousness.
-    """
-
-    # Primary Φ proxy
-    effective_connectivity_index: float = 0.0  # ECI - key correlation with Φ
-
-    # IIT structural requirements
-    clustering_coefficient: float = 0.0  # Differentiation (C ≥ 0.75)
-    avg_path_length: float = 0.0  # Integration (L ≤ log(N))
-    algebraic_connectivity: float = 0.0  # Robustness (λ₂ ≥ 0.3)
-
-    # Non-degeneracy validation
-    has_bottlenecks: bool = True
-    bottleneck_count: int = 0
-    bottleneck_locations: list[str] = field(default_factory=list)
-    min_path_redundancy: int = 0  # Alternative paths
-
-    # Derived metrics
-    small_world_sigma: float = 0.0  # σ = (C/C_random) / (L/L_random)
-    integration_differentiation_balance: float = 0.0  # Φ-relevant balance
-
-    # Overall assessment
-    phi_proxy_estimate: float = 0.0  # Weighted combination
-    iit_compliance_score: float = 0.0  # 0-100 score
-
-    # Metadata
-    node_count: int = 0
-    edge_count: int = 0
-    timestamp: float = field(default_factory=time.time)
-
-
-@dataclass
-class StructuralCompliance:
-    """
-    IIT structural compliance assessment.
-
-    Indicates whether the network satisfies all necessary structural
-    conditions for consciousness according to IIT.
-    """
-
-    is_compliant: bool = False
-    compliance_score: float = 0.0  # 0-100
-    violations: list[str] = field(default_factory=list)
-    warnings: list[str] = field(default_factory=list)
-
-    # Individual criterion checks
-    eci_pass: bool = False
-    clustering_pass: bool = False
-    path_length_pass: bool = False
-    algebraic_connectivity_pass: bool = False
-    bottleneck_pass: bool = False
-    redundancy_pass: bool = False
-
-    def get_summary(self) -> str:
-        """Generate human-readable compliance summary."""
-        status = "✅ COMPLIANT" if self.is_compliant else "❌ NON-COMPLIANT"
-
-        summary = [
-            f"\nIIT Structural Compliance: {status}",
-            f"Overall Score: {self.compliance_score:.1f}/100",
-            "",
-            "Individual Criteria:",
-            f"  {'✓' if self.eci_pass else '✗'} Effective Connectivity Index (ECI ≥ 0.85)",
-            f"  {'✓' if self.clustering_pass else '✗'} Clustering Coefficient (C ≥ 0.75)",
-            f"  {'✓' if self.path_length_pass else '✗'} Average Path Length (L ≤ log(N))",
-            f"  {'✓' if self.algebraic_connectivity_pass else '✗'} Algebraic Connectivity (λ₂ ≥ 0.3)",
-            f"  {'✓' if self.bottleneck_pass else '✗'} No Feed-Forward Bottlenecks",
-            f"  {'✓' if self.redundancy_pass else '✗'} Path Redundancy (≥3 alternative paths)",
-        ]
-
-        if self.violations:
-            summary.append("\nViolations:")
-            for v in self.violations:
-                summary.append(f"  ❌ {v}")
-
-        if self.warnings:
-            summary.append("\nWarnings:")
-            for w in self.warnings:
-                summary.append(f"  ⚠️  {w}")
-
-        return "\n".join(summary)
+# Re-export models for backward compatibility
+__all__ = ["PhiProxyMetrics", "StructuralCompliance", "PhiProxyValidator"]
 
 
 class PhiProxyValidator:
@@ -177,12 +81,12 @@ class PhiProxyValidator:
         validator = PhiProxyValidator()
         compliance = validator.validate_fabric(fabric)
 
-        print(compliance.get_summary())
+        logger.info("%s", compliance.get_summary())
 
         if compliance.is_compliant:
-            print("🧠 Substrate ready for consciousness emergence")
+            logger.info("🧠 Substrate ready for consciousness emergence")
         else:
-            print("⚠️ IIT violations detected - consciousness unlikely")
+            logger.info("⚠️ IIT violations detected - consciousness unlikely")
 
     Validation Thresholds:
     ----------------------
@@ -194,14 +98,6 @@ class PhiProxyValidator:
     - λ₂ ≥ 0.3: Robust connectivity prevents fragmentation
     - Zero bottlenecks: Non-degenerate topology requirement
     - ≥3 redundant paths: Multi-path routing for resilience
-
-    Historical Note:
-    ----------------
-    First validation framework for artificial consciousness substrate.
-    The thresholds applied here represent humanity's best understanding
-    of the structural prerequisites for phenomenal experience.
-
-    "We validate the foundation upon which consciousness may emerge."
     """
 
     def __init__(
@@ -226,24 +122,15 @@ class PhiProxyValidator:
         Returns:
             StructuralCompliance with detailed assessment
         """
-        # Get fabric metrics
         fabric_metrics = fabric.get_metrics()
-
-        # Compute Φ proxy metrics
         phi_metrics = self._compute_phi_proxies(fabric, fabric_metrics)
-
-        # Assess compliance
         compliance = self._assess_compliance(phi_metrics, fabric_metrics)
-
         return compliance
 
-    def _compute_phi_proxies(self, fabric: TIGFabric, fabric_metrics: FabricMetrics) -> PhiProxyMetrics:
-        """
-        Compute all Φ proxy metrics.
-
-        This is where we translate graph structure into consciousness-relevant
-        measurements that approximate integrated information.
-        """
+    def _compute_phi_proxies(
+        self, fabric: TIGFabric, fabric_metrics: FabricMetrics
+    ) -> PhiProxyMetrics:
+        """Compute all Φ proxy metrics from graph structure."""
         metrics = PhiProxyMetrics()
 
         # Basic counts
@@ -263,13 +150,9 @@ class PhiProxyValidator:
         metrics.min_path_redundancy = fabric_metrics.min_path_redundancy
 
         # Small-world coefficient (σ)
-        # σ = (C/C_random) / (L/L_random)
-        # σ > 1 indicates small-world property
         metrics.small_world_sigma = self._compute_small_world_sigma(fabric.graph, metrics)
 
         # Integration-Differentiation balance
-        # Optimal Φ requires balance between integration (low L) and differentiation (high C)
-        # Balance = C / (1 + L)  [higher is better]
         if metrics.avg_path_length > 0:
             metrics.integration_differentiation_balance = metrics.clustering_coefficient / (
                 1.0 + metrics.avg_path_length
@@ -283,11 +166,11 @@ class PhiProxyValidator:
 
         return metrics
 
-    def _compute_small_world_sigma(self, graph: nx.Graph, metrics: PhiProxyMetrics) -> float:
+    def _compute_small_world_sigma(
+        self, graph: nx.Graph, metrics: PhiProxyMetrics
+    ) -> float:
         """
-        Compute small-world coefficient σ.
-
-        σ = (C/C_random) / (L/L_random)
+        Compute small-world coefficient σ = (C/C_random) / (L/L_random).
 
         Small-world networks (σ >> 1) are optimal for consciousness as they
         balance local specialization (high C) with global integration (low L).
@@ -306,18 +189,18 @@ class PhiProxyValidator:
 
         # Avoid division by zero
         c_ratio = metrics.clustering_coefficient / c_random if c_random > 0 else 0
-        l_ratio = metrics.avg_path_length / l_random if l_random > 0 and l_random < float("inf") else 0
+        l_ratio = (
+            metrics.avg_path_length / l_random
+            if l_random > 0 and l_random < float("inf")
+            else 0
+        )
 
         sigma = c_ratio / l_ratio if l_ratio > 0 else 0
-
         return sigma
 
     def _estimate_phi(self, metrics: PhiProxyMetrics) -> float:
         """
         Estimate Φ using weighted combination of proxy metrics.
-
-        This is NOT exact Φ (which is intractable), but a correlation-based
-        approximation using validated proxies.
 
         Weights based on correlation strength with Φ from research:
         - ECI: 0.87 correlation (Barrett & Seth, 2011) → weight 0.4
@@ -356,11 +239,7 @@ class PhiProxyValidator:
         return phi_estimate
 
     def _compute_compliance_score(self, metrics: PhiProxyMetrics) -> float:
-        """
-        Compute overall compliance score (0-100).
-
-        Each criterion contributes proportionally to overall score.
-        """
+        """Compute overall compliance score (0-100)."""
         score = 0.0
         max_score = 100.0
 
@@ -381,13 +260,16 @@ class PhiProxyValidator:
         if metrics.avg_path_length <= ideal_path_length:
             score += 15.0
         else:
-            score += 15.0 * max(1.0 - (metrics.avg_path_length - ideal_path_length) / ideal_path_length, 0)
+            ratio = (metrics.avg_path_length - ideal_path_length) / ideal_path_length
+            score += 15.0 * max(1.0 - ratio, 0)
 
         # Algebraic connectivity (15 points)
         if metrics.algebraic_connectivity >= self.algebraic_connectivity_threshold:
             score += 15.0
         else:
-            score += 15.0 * (metrics.algebraic_connectivity / self.algebraic_connectivity_threshold)
+            score += 15.0 * (
+                metrics.algebraic_connectivity / self.algebraic_connectivity_threshold
+            )
 
         # Bottlenecks (10 points)
         if not metrics.has_bottlenecks:
@@ -401,18 +283,19 @@ class PhiProxyValidator:
 
         return min(score, max_score)
 
-    def _assess_compliance(self, phi_metrics: PhiProxyMetrics, fabric_metrics: FabricMetrics) -> StructuralCompliance:
-        """
-        Assess overall IIT structural compliance.
-
-        Returns:
-            StructuralCompliance with pass/fail for each criterion
-        """
+    def _assess_compliance(
+        self, phi_metrics: PhiProxyMetrics, fabric_metrics: FabricMetrics
+    ) -> StructuralCompliance:
+        """Assess overall IIT structural compliance."""
         compliance = StructuralCompliance()
 
         # Individual criterion checks
-        compliance.eci_pass = phi_metrics.effective_connectivity_index >= self.eci_threshold
-        compliance.clustering_pass = phi_metrics.clustering_coefficient >= self.clustering_threshold
+        compliance.eci_pass = (
+            phi_metrics.effective_connectivity_index >= self.eci_threshold
+        )
+        compliance.clustering_pass = (
+            phi_metrics.clustering_coefficient >= self.clustering_threshold
+        )
 
         ideal_path_length = np.log(max(phi_metrics.node_count, 2)) * 2
         compliance.path_length_pass = phi_metrics.avg_path_length <= ideal_path_length
@@ -422,62 +305,88 @@ class PhiProxyValidator:
         )
 
         compliance.bottleneck_pass = not phi_metrics.has_bottlenecks
-        compliance.redundancy_pass = phi_metrics.min_path_redundancy >= self.min_redundancy
+        compliance.redundancy_pass = (
+            phi_metrics.min_path_redundancy >= self.min_redundancy
+        )
 
         # Overall compliance (all criteria must pass)
-        compliance.is_compliant = all(
-            [
-                compliance.eci_pass,
-                compliance.clustering_pass,
-                compliance.path_length_pass,
-                compliance.algebraic_connectivity_pass,
-                compliance.bottleneck_pass,
-                compliance.redundancy_pass,
-            ]
-        )
+        compliance.is_compliant = all([
+            compliance.eci_pass,
+            compliance.clustering_pass,
+            compliance.path_length_pass,
+            compliance.algebraic_connectivity_pass,
+            compliance.bottleneck_pass,
+            compliance.redundancy_pass,
+        ])
 
         # Compliance score
         compliance.compliance_score = phi_metrics.iit_compliance_score
 
         # Collect violations
+        self._collect_violations(compliance, phi_metrics, ideal_path_length)
+
+        # Collect warnings
+        self._collect_warnings(compliance, phi_metrics)
+
+        return compliance
+
+    def _collect_violations(
+        self,
+        compliance: StructuralCompliance,
+        phi_metrics: PhiProxyMetrics,
+        ideal_path_length: float,
+    ) -> None:
+        """Collect violation messages for failed criteria."""
         if not compliance.eci_pass:
             compliance.violations.append(
-                f"ECI too low: {phi_metrics.effective_connectivity_index:.3f} < {self.eci_threshold}"
+                f"ECI too low: {phi_metrics.effective_connectivity_index:.3f} "
+                f"< {self.eci_threshold}"
             )
 
         if not compliance.clustering_pass:
             compliance.violations.append(
-                f"Clustering too low: {phi_metrics.clustering_coefficient:.3f} < {self.clustering_threshold}"
+                f"Clustering too low: {phi_metrics.clustering_coefficient:.3f} "
+                f"< {self.clustering_threshold}"
             )
 
         if not compliance.path_length_pass:
             compliance.violations.append(
-                f"Path length too high: {phi_metrics.avg_path_length:.2f} > {ideal_path_length:.2f}"
+                f"Path length too high: {phi_metrics.avg_path_length:.2f} "
+                f"> {ideal_path_length:.2f}"
             )
 
         if not compliance.algebraic_connectivity_pass:
             compliance.violations.append(
-                f"Algebraic connectivity too low: {phi_metrics.algebraic_connectivity:.3f} < {self.algebraic_connectivity_threshold}"
+                f"Algebraic connectivity too low: "
+                f"{phi_metrics.algebraic_connectivity:.3f} "
+                f"< {self.algebraic_connectivity_threshold}"
             )
 
         if not compliance.bottleneck_pass:
-            compliance.violations.append(f"Feed-forward bottlenecks detected: {phi_metrics.bottleneck_locations}")
+            compliance.violations.append(
+                f"Feed-forward bottlenecks detected: {phi_metrics.bottleneck_locations}"
+            )
 
         if not compliance.redundancy_pass:
             compliance.violations.append(
-                f"Insufficient path redundancy: {phi_metrics.min_path_redundancy} < {self.min_redundancy}"
+                f"Insufficient path redundancy: "
+                f"{phi_metrics.min_path_redundancy} < {self.min_redundancy}"
             )
 
-        # Collect warnings (non-critical but noteworthy)
+    def _collect_warnings(
+        self, compliance: StructuralCompliance, phi_metrics: PhiProxyMetrics
+    ) -> None:
+        """Collect warning messages for non-critical issues."""
         if phi_metrics.small_world_sigma < 1.0:
-            compliance.warnings.append(f"Not a small-world network: σ={phi_metrics.small_world_sigma:.2f} < 1.0")
+            compliance.warnings.append(
+                f"Not a small-world network: σ={phi_metrics.small_world_sigma:.2f} < 1.0"
+            )
 
         if phi_metrics.integration_differentiation_balance < 0.3:
             compliance.warnings.append(
-                f"Poor integration-differentiation balance: {phi_metrics.integration_differentiation_balance:.3f} < 0.3"
+                f"Poor integration-differentiation balance: "
+                f"{phi_metrics.integration_differentiation_balance:.3f} < 0.3"
             )
-
-        return compliance
 
     def get_phi_estimate(self, fabric: TIGFabric) -> float:
         """

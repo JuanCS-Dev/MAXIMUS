@@ -51,9 +51,17 @@ from .reasoning_models import (
 
 __all__ = [
     "RecursiveReasoner",
-    "Belief", "BeliefType", "ContradictionType", "ResolutionStrategy",
-    "BeliefRevision", "ContradictionDetector", "Contradiction", "Resolution",
-    "ReasoningLevel", "ReasoningStep", "RecursiveReasoningResult",
+    "Belief",
+    "BeliefType",
+    "ContradictionType",
+    "ResolutionStrategy",
+    "BeliefRevision",
+    "ContradictionDetector",
+    "Contradiction",
+    "Resolution",
+    "ReasoningLevel",
+    "ReasoningStep",
+    "RecursiveReasoningResult",
 ]
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -195,7 +203,6 @@ class RecursiveReasoner:
         result.episodic_coherence = self._episodic_coherence
         return result
 
-
     async def _reason_at_level(
         self, belief: Belief, depth: int, context: Dict[str, Any]
     ) -> ReasoningLevel:
@@ -231,9 +238,7 @@ class RecursiveReasoner:
         # Calcular coerência do nível
         level_coherence = self._calculate_level_coherence(beliefs, steps)
 
-        return ReasoningLevel(
-            level=depth, beliefs=beliefs, coherence=level_coherence, steps=steps
-        )
+        return ReasoningLevel(level=depth, beliefs=beliefs, coherence=level_coherence, steps=steps)
 
     def _build_justification_chain(self, belief: Belief) -> List[Belief]:
         """Constrói cadeia de justificações para crença."""
@@ -280,9 +285,15 @@ class RecursiveReasoner:
     def _register_level_beliefs(self, level_result: ReasoningLevel) -> None:
         """Assegura que crenças derivadas sejam persistidas no grafo."""
         for belief in level_result.beliefs:
-            if belief not in self.belief_graph.beliefs:  # pragma: no cover - beliefs registered via reason_recursively line 673
-                justification = belief.justification if belief.justification else None  # pragma: no cover
-                self.belief_graph.add_belief(belief, justification=justification)  # pragma: no cover
+            if (
+                belief not in self.belief_graph.beliefs
+            ):  # pragma: no cover - beliefs registered via reason_recursively line 673
+                justification = (
+                    belief.justification if belief.justification else None
+                )  # pragma: no cover
+                self.belief_graph.add_belief(
+                    belief, justification=justification
+                )  # pragma: no cover
 
     @staticmethod
     def _contradiction_pair(contradiction: Contradiction) -> Tuple[UUID, UUID]:
@@ -302,7 +313,9 @@ class RecursiveReasoner:
         episodic_narrative = context.get("episodic_narrative")
         episodic_coherence = context.get("episodic_coherence")
 
-        from consciousness.mea.attention_schema import AttentionState  # local import to avoid heavy dependencies
+        from consciousness.mea.attention_schema import (
+            AttentionState,
+        )  # local import to avoid heavy dependencies
         from consciousness.mea.boundary_detector import BoundaryAssessment
         from consciousness.mea.self_model import IntrospectiveSummary
         from consciousness.episodic_memory import Episode
@@ -336,9 +349,7 @@ class RecursiveReasoner:
         if isinstance(boundary, BoundaryAssessment):
             self._mea_boundary = boundary
 
-            boundary_content = (
-                f"Ego boundary strength {boundary.strength:.2f} and stability {boundary.stability:.2f}"
-            )
+            boundary_content = f"Ego boundary strength {boundary.strength:.2f} and stability {boundary.stability:.2f}"
             boundary_belief = Belief(
                 content=boundary_content,
                 belief_type=BeliefType.FACTUAL,
@@ -429,9 +440,7 @@ class RecursiveReasoner:
         Returns:
             Resolution aplicada
         """
-        outcome = await self.belief_revision.revise_belief_graph(
-            self.belief_graph, contradiction
-        )
+        outcome = await self.belief_revision.revise_belief_graph(self.belief_graph, contradiction)
         return outcome.resolution
 
     def _calculate_coherence(self, levels: List[ReasoningLevel]) -> float:

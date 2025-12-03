@@ -94,7 +94,7 @@ class HealthManager:
                         await self._reintegrate_node(node_id)
 
                 except Exception as e:
-                    print(f"⚠️  Health monitoring error for {node_id}: {e}")
+                    logger.info("⚠️  Health monitoring error for %s: {e}", node_id)
                     # Continue monitoring other nodes despite errors
 
             await asyncio.sleep(1.0)  # Check every second
@@ -106,7 +106,7 @@ class HealthManager:
         FASE VII (Safety Hardening):
         Removes node from active topology and triggers repair.
         """
-        print(f"🔴 TIG: Isolating dead node {node_id}")
+        logger.info("🔴 TIG: Isolating dead node %s", node_id)
 
         # Mark as isolated
         self.node_health[node_id].isolated = True
@@ -124,7 +124,7 @@ class HealthManager:
         FASE VII (Safety Hardening):
         Brings node back online after recovery.
         """
-        print(f"✅ TIG: Reintegrating recovered node {node_id}")
+        logger.info("✅ TIG: Reintegrating recovered node %s", node_id)
 
         # Mark as active
         self.node_health[node_id].isolated = False
@@ -175,7 +175,7 @@ class HealthManager:
                     bypasses_created += 1
 
         if bypasses_created > 0:
-            print(f"  ✓ Created {bypasses_created} bypass connections")
+            logger.info("  ✓ Created %s bypass connections", bypasses_created)
 
     async def send_to_node(self, node_id: str, data: Any, timeout: float = 1.0) -> bool:
         """
@@ -223,11 +223,11 @@ class HealthManager:
             return True
 
         except TimeoutError:
-            print(f"⚠️  TIG: Send timeout to node {node_id}")
+            logger.info("⚠️  TIG: Send timeout to node %s", node_id)
             return self._handle_send_failure(node_id, "timeout")
 
         except Exception as e:
-            print(f"⚠️  TIG: Send error to node {node_id}: {e}")
+            logger.info("⚠️  TIG: Send error to node %s: {e}", node_id)
             return self._handle_send_failure(node_id, str(e))
 
     def _handle_send_failure(self, node_id: str, reason: str) -> bool:
@@ -246,7 +246,9 @@ class HealthManager:
                 breaker = self.circuit_breakers.get(node_id)
                 if breaker:
                     breaker.open()
-                    print(f"⚠️  TIG: Circuit breaker OPEN for node {node_id} ({health.failures} failures)")
+                    logger.info(
+                        f"⚠️  TIG: Circuit breaker OPEN for node {node_id} ({health.failures} failures)"
+                    )
 
         return False
 
@@ -265,7 +267,8 @@ class HealthManager:
 
         # Build active connectivity graph (exclude isolated nodes)
         active_nodes = [
-            node_id for node_id, health in self.node_health.items()
+            node_id
+            for node_id, health in self.node_health.items()
             if not health.isolated and node_id in self.fabric.nodes
         ]
 

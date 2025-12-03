@@ -20,7 +20,10 @@ from consciousness.esgt.spm.salience_detector_models import (
 
 __all__ = [
     "SalienceSPM",
-    "SalienceDetectorConfig", "SalienceEvent", "SalienceMode", "SalienceThresholds",
+    "SalienceDetectorConfig",
+    "SalienceEvent",
+    "SalienceMode",
+    "SalienceThresholds",
 ]
 
 
@@ -37,7 +40,9 @@ class SalienceSPM(SpecializedProcessingModule):
 
         self.config = config or SalienceDetectorConfig()
 
-        total_weight = self.config.novelty_weight + self.config.relevance_weight + self.config.urgency_weight
+        total_weight = (
+            self.config.novelty_weight + self.config.relevance_weight + self.config.urgency_weight
+        )
         if not (0.99 < total_weight < 1.01):
             raise ValueError(f"Salience weights must sum to 1.0, got {total_weight}")
 
@@ -90,7 +95,7 @@ class SalienceSPM(SpecializedProcessingModule):
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                print(f"[SalienceSPM {self.spm_id}] Monitoring error: {e}")
+                logger.info("[SalienceSPM %s] Monitoring error: {e}", self.spm_id)
                 await asyncio.sleep(interval_s)
 
     def evaluate_event(
@@ -106,7 +111,9 @@ class SalienceSPM(SpecializedProcessingModule):
         relevance = self._compute_relevance(content, context)
         urgency = self._get_current_urgency(source)
 
-        delta_weight = 1.0 - (self.config.novelty_weight + self.config.relevance_weight + self.config.urgency_weight)
+        delta_weight = 1.0 - (
+            self.config.novelty_weight + self.config.relevance_weight + self.config.urgency_weight
+        )
 
         salience = SalienceScore(
             novelty=novelty,
@@ -257,7 +264,7 @@ class SalienceSPM(SpecializedProcessingModule):
             try:
                 callback(event)
             except Exception as e:
-                print(f"[SalienceSPM {self.spm_id}] Callback error: {e}")
+                logger.info("[SalienceSPM %s] Callback error: {e}", self.spm_id)
 
     async def process(self) -> SPMOutput | None:
         """Process and generate output (required by base class)."""

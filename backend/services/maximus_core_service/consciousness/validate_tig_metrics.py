@@ -13,48 +13,50 @@ from tig.fabric import TIGFabric, TopologyConfig
 
 
 async def validate_tig_metrics():
-    print("=" * 60)
-    print("TIG METRICS VALIDATION - PAGANI 100%")
-    print("=" * 60)
+    logger.info("=" * 60)
+    logger.info("TIG METRICS VALIDATION - PAGANI 100%")
+    logger.info("=" * 60)
     print()
 
     # Initialize fabric with default config
     config = TopologyConfig(node_count=16, min_degree=6)
     fabric = TIGFabric(config)
 
-    print("Initializing TIG Fabric...")
+    logger.info("Initializing TIG Fabric...")
     await fabric.initialize()
 
     # Get metrics
     metrics = fabric.get_metrics()
 
     print()
-    print("📊 METRICS RESULTS:")
+    logger.info("📊 METRICS RESULTS:")
     print("-" * 60)
-    print(f"Clustering Coefficient: {metrics.avg_clustering_coefficient:.3f} (target: ≥0.70)")
-    print(f"ECI (Φ Proxy):          {metrics.effective_connectivity_index:.3f} (target: ≥0.85)")
-    print(f"Avg Path Length:        {metrics.avg_path_length:.2f} (target: ≤7)")
-    print(f"Algebraic Connectivity: {metrics.algebraic_connectivity:.3f} (target: ≥0.30)")
-    print(f"Bottlenecks:            {'YES ❌' if metrics.has_feed_forward_bottlenecks else 'NO ✅'}")
-    print(f"Graph Density:          {metrics.density:.3f}")
+    logger.info("Clustering Coefficient: %.3f (target: ≥0.70)", metrics.avg_clustering_coefficient)
+    logger.info("ECI (Φ Proxy):          %.3f (target: ≥0.85)", metrics.effective_connectivity_index)
+    logger.info("Avg Path Length:        %.2f (target: ≤7)", metrics.avg_path_length)
+    logger.info("Algebraic Connectivity: %.3f (target: ≥0.30)", metrics.algebraic_connectivity)
+    logger.info(
+        f"Bottlenecks:            {'YES ❌' if metrics.has_feed_forward_bottlenecks else 'NO ✅'}"
+    )
+    logger.info("Graph Density:          %.3f", metrics.density)
     print()
 
     # Validate IIT compliance
     is_compliant, violations = metrics.validate_iit_compliance()
 
-    print("🎯 IIT COMPLIANCE:")
+    logger.info("🎯 IIT COMPLIANCE:")
     print("-" * 60)
     if is_compliant:
-        print("✅ ALL CHECKS PASSED - IIT COMPLIANT")
+        logger.info("✅ ALL CHECKS PASSED - IIT COMPLIANT")
         print()
-        print("🏎️ PAGANI TARGET ACHIEVED!")
+        logger.info("🏎️ PAGANI TARGET ACHIEVED!")
         return 0
-    print("❌ IIT VIOLATIONS DETECTED:")
+    logger.info("❌ IIT VIOLATIONS DETECTED:")
     for v in violations:
-        print(f"   - {v}")
+        logger.info("   - %s", v)
     print()
-    print(f"Clustering: {'✅' if metrics.avg_clustering_coefficient >= 0.70 else '❌'}")
-    print(f"ECI:        {'✅' if metrics.effective_connectivity_index >= 0.85 else '❌'}")
+    logger.info("Clustering: %s", '✅' if metrics.avg_clustering_coefficient >= 0.70 else '❌')
+    logger.info("ECI:        %s", '✅' if metrics.effective_connectivity_index >= 0.85 else '❌')
     return 1
 
 

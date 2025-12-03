@@ -29,7 +29,11 @@ class AutonomousGoalGenerator:
     into actionable intentions (goals).
     """
 
-    def __init__(self, config: GoalGenerationConfig | None = None, generator_id: str = "mmei-goal-generator-primary") -> None:
+    def __init__(
+        self,
+        config: GoalGenerationConfig | None = None,
+        generator_id: str = "mmei-goal-generator-primary",
+    ) -> None:
         self.generator_id = generator_id
         self.config = config or GoalGenerationConfig()
 
@@ -63,31 +67,41 @@ class AutonomousGoalGenerator:
             self._last_generation["rest_need"] = time.time()
 
         # REPAIR NEED
-        if needs.repair_need >= self.config.repair_threshold and self._should_generate("repair_need"):
+        if needs.repair_need >= self.config.repair_threshold and self._should_generate(
+            "repair_need"
+        ):
             goal = self._create_repair_goal(needs.repair_need)
             new_goals.append(goal)
             self._last_generation["repair_need"] = time.time()
 
         # EFFICIENCY NEED
-        if needs.efficiency_need >= self.config.efficiency_threshold and self._should_generate("efficiency_need"):
+        if needs.efficiency_need >= self.config.efficiency_threshold and self._should_generate(
+            "efficiency_need"
+        ):
             goal = self._create_efficiency_goal(needs.efficiency_need)
             new_goals.append(goal)
             self._last_generation["efficiency_need"] = time.time()
 
         # CONNECTIVITY NEED
-        if needs.connectivity_need >= self.config.connectivity_threshold and self._should_generate("connectivity_need"):
+        if needs.connectivity_need >= self.config.connectivity_threshold and self._should_generate(
+            "connectivity_need"
+        ):
             goal = self._create_connectivity_goal(needs.connectivity_need)
             new_goals.append(goal)
             self._last_generation["connectivity_need"] = time.time()
 
         # CURIOSITY DRIVE
-        if needs.curiosity_drive >= self.config.curiosity_threshold and self._should_generate("curiosity_drive"):
+        if needs.curiosity_drive >= self.config.curiosity_threshold and self._should_generate(
+            "curiosity_drive"
+        ):
             goal = self._create_exploration_goal(needs.curiosity_drive)
             new_goals.append(goal)
             self._last_generation["curiosity_drive"] = time.time()
 
         # LEARNING DRIVE
-        if needs.learning_drive >= self.config.learning_threshold and self._should_generate("learning_drive"):
+        if needs.learning_drive >= self.config.learning_threshold and self._should_generate(
+            "learning_drive"
+        ):
             goal = self._create_learning_goal(needs.learning_drive)
             new_goals.append(goal)
             self._last_generation["learning_drive"] = time.time()
@@ -169,8 +183,14 @@ class AutonomousGoalGenerator:
             source_need="rest_need",
             need_value=need_value,
             target_need_value=self.config.rest_satisfied,
-            timeout_seconds=self.config.critical_timeout if priority == GoalPriority.CRITICAL else self.config.default_timeout,
-            metadata={"actions": ["reduce_thread_count", "defer_background_tasks", "enter_low_power_mode"]},
+            timeout_seconds=(
+                self.config.critical_timeout
+                if priority == GoalPriority.CRITICAL
+                else self.config.default_timeout
+            ),
+            metadata={
+                "actions": ["reduce_thread_count", "defer_background_tasks", "enter_low_power_mode"]
+            },
         )
 
     def _create_repair_goal(self, need_value: float) -> Goal:
@@ -200,7 +220,9 @@ class AutonomousGoalGenerator:
             need_value=need_value,
             target_need_value=self.config.efficiency_satisfied,
             timeout_seconds=self.config.default_timeout,
-            metadata={"actions": ["enable_thermal_throttling", "optimize_power_profile", "cache_warming"]},
+            metadata={
+                "actions": ["enable_thermal_throttling", "optimize_power_profile", "cache_warming"]
+            },
         )
 
     def _create_connectivity_goal(self, need_value: float) -> Goal:
@@ -215,7 +237,9 @@ class AutonomousGoalGenerator:
             need_value=need_value,
             target_need_value=self.config.connectivity_satisfied,
             timeout_seconds=self.config.critical_timeout,
-            metadata={"actions": ["check_network_health", "reconnect_dropped_links", "optimize_routing"]},
+            metadata={
+                "actions": ["check_network_health", "reconnect_dropped_links", "optimize_routing"]
+            },
         )
 
     def _create_exploration_goal(self, need_value: float) -> Goal:
@@ -252,7 +276,7 @@ class AutonomousGoalGenerator:
             try:
                 consumer(goal)
             except Exception as e:
-                print(f"⚠️  Goal consumer error: {e}")
+                logger.info("⚠️  Goal consumer error: %s", e)
 
     def get_active_goals(self, sort_by_priority: bool = True) -> list[Goal]:
         """Get all active goals."""
@@ -270,7 +294,11 @@ class AutonomousGoalGenerator:
 
     def get_statistics(self) -> dict[str, Any]:
         """Get goal generation statistics."""
-        satisfaction_rate = self.total_goals_satisfied / self.total_goals_generated if self.total_goals_generated > 0 else 0.0
+        satisfaction_rate = (
+            self.total_goals_satisfied / self.total_goals_generated
+            if self.total_goals_generated > 0
+            else 0.0
+        )
 
         return {
             "generator_id": self.generator_id,

@@ -66,7 +66,11 @@ class BridgeState:
 class BiomimeticSafetyBridge:
     """Integration layer connecting Neuromodulation + Predictive Coding with Safety Core."""
 
-    def __init__(self, config: BridgeConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None):
+    def __init__(
+        self,
+        config: BridgeConfig | None = None,
+        kill_switch_callback: Callable[[str], None] | None = None,
+    ):
         """Initialize biomimetic safety bridge.
 
         Args:
@@ -190,7 +194,10 @@ class BiomimeticSafetyBridge:
                 f"consecutive={self.consecutive_coordination_failures}"
             )
 
-            if self.consecutive_coordination_failures >= self.config.max_consecutive_coordination_failures:
+            if (
+                self.consecutive_coordination_failures
+                >= self.config.max_consecutive_coordination_failures
+            ):
                 self._open_aggregate_circuit_breaker("consecutive_timeouts")
 
             raise
@@ -199,9 +206,14 @@ class BiomimeticSafetyBridge:
             self.total_coordination_failures += 1
             self.consecutive_coordination_failures += 1
 
-            logger.error(f"⚠️ Coordination ERROR: {e} - consecutive={self.consecutive_coordination_failures}")
+            logger.error(
+                f"⚠️ Coordination ERROR: {e} - consecutive={self.consecutive_coordination_failures}"
+            )
 
-            if self.consecutive_coordination_failures >= self.config.max_consecutive_coordination_failures:
+            if (
+                self.consecutive_coordination_failures
+                >= self.config.max_consecutive_coordination_failures
+            ):
                 self._open_aggregate_circuit_breaker("consecutive_errors")
 
             raise
@@ -254,7 +266,9 @@ class BiomimeticSafetyBridge:
 
         # 4. Detect cross-system anomalies
         if result.get("predictive_coding_success") and result.get("neuromodulation_success"):
-            anomaly_detected = self._detect_cross_system_anomaly(prediction_errors, neuromod_results)
+            anomaly_detected = self._detect_cross_system_anomaly(
+                prediction_errors, neuromod_results
+            )
             if anomaly_detected:
                 self.cross_system_anomalies_detected += 1
                 result["cross_system_anomaly"] = True
@@ -262,7 +276,9 @@ class BiomimeticSafetyBridge:
 
         return result
 
-    def _generate_modulation_requests(self, prediction_errors: dict[str, float]) -> list[ModulationRequest]:
+    def _generate_modulation_requests(
+        self, prediction_errors: dict[str, float]
+    ) -> list[ModulationRequest]:
         """
         Generate neuromodulation requests based on prediction errors.
 
@@ -287,16 +303,22 @@ class BiomimeticSafetyBridge:
 
         # High error → arousal + learning
         if avg_error > 5.0:
-            requests.append(ModulationRequest("norepinephrine", delta=0.2, source="high_prediction_error"))
+            requests.append(
+                ModulationRequest("norepinephrine", delta=0.2, source="high_prediction_error")
+            )
             requests.append(ModulationRequest("dopamine", delta=0.15, source="learning_signal"))
 
         # Medium error → attention
         elif avg_error > 2.0:
-            requests.append(ModulationRequest("acetylcholine", delta=0.1, source="medium_prediction_error"))
+            requests.append(
+                ModulationRequest("acetylcholine", delta=0.1, source="medium_prediction_error")
+            )
 
         # Low error → confidence
         else:
-            requests.append(ModulationRequest("serotonin", delta=0.05, source="low_prediction_error"))
+            requests.append(
+                ModulationRequest("serotonin", delta=0.05, source="low_prediction_error")
+            )
 
         return requests
 
@@ -316,7 +338,9 @@ class BiomimeticSafetyBridge:
         # Anomaly 1: High prediction error + high neuromodulation conflict rate
         if prediction_errors:
             avg_error = sum(prediction_errors.values()) / len(prediction_errors)
-            conflict_rate = self.neuromodulation.conflicts_detected / max(1, self.neuromodulation.total_coordinations)
+            conflict_rate = self.neuromodulation.conflicts_detected / max(
+                1, self.neuromodulation.total_coordinations
+            )
 
             if (
                 avg_error > self.config.anomaly_threshold_prediction_error
@@ -328,7 +352,9 @@ class BiomimeticSafetyBridge:
         neuromod_breaker_count = sum(
             1 for mod in self.neuromodulation._modulators.values() if mod._circuit_breaker_open
         )
-        predictive_breaker_count = sum(1 for layer in self.predictive_coding._layers if layer._circuit_breaker_open)
+        predictive_breaker_count = sum(
+            1 for layer in self.predictive_coding._layers if layer._circuit_breaker_open
+        )
 
         if neuromod_breaker_count >= 2 and predictive_breaker_count >= 2:
             return f"Multiple breakers open: {neuromod_breaker_count} neuromod, {predictive_breaker_count} predictive"
@@ -339,7 +365,9 @@ class BiomimeticSafetyBridge:
         """Open aggregate circuit breaker and trigger kill switch."""
         self._aggregate_circuit_breaker_open = True
 
-        logger.critical(f"🔴 BiomimeticSafetyBridge AGGREGATE CIRCUIT BREAKER OPENED - reason: {reason}")
+        logger.critical(
+            f"🔴 BiomimeticSafetyBridge AGGREGATE CIRCUIT BREAKER OPENED - reason: {reason}"
+        )
 
         if self._kill_switch:
             self._kill_switch(f"BiomimeticSafetyBridge aggregate failure: {reason}")
@@ -357,7 +385,9 @@ class BiomimeticSafetyBridge:
     def get_state(self) -> BridgeState:
         """Get observable bridge state."""
         avg_coordination_time = (
-            sum(self._coordination_times) / len(self._coordination_times) if self._coordination_times else 0.0
+            sum(self._coordination_times) / len(self._coordination_times)
+            if self._coordination_times
+            else 0.0
         )
 
         return BridgeState(

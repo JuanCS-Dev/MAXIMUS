@@ -111,7 +111,9 @@ class NeuromodulationCoordinator:
     """
 
     def __init__(
-        self, config: CoordinatorConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None
+        self,
+        config: CoordinatorConfig | None = None,
+        kill_switch_callback: Callable[[str], None] | None = None,
     ):
         """Initialize neuromodulation coordinator.
 
@@ -170,9 +172,7 @@ class NeuromodulationCoordinator:
 
         # Validate request count
         if len(requests) > self.config.max_simultaneous_modulations:
-            error_msg = (
-                f"Too many simultaneous modulations: {len(requests)} > max {self.config.max_simultaneous_modulations}"
-            )
+            error_msg = f"Too many simultaneous modulations: {len(requests)} > max {self.config.max_simultaneous_modulations}"
             logger.error(f"🔴 {error_msg}")
             raise ValueError(error_msg)
 
@@ -267,11 +267,15 @@ class NeuromodulationCoordinator:
                 # Reduce magnitude
                 new_delta = req.delta * self.config.conflict_reduction_factor
 
-                logger.info(f"Conflict resolution: {req.modulator} delta {req.delta:.3f} → {new_delta:.3f}")
+                logger.info(
+                    f"Conflict resolution: {req.modulator} delta {req.delta:.3f} → {new_delta:.3f}"
+                )
 
                 resolved.append(
                     ModulationRequest(
-                        modulator=req.modulator, delta=new_delta, source=f"{req.source}_conflict_resolved"
+                        modulator=req.modulator,
+                        delta=new_delta,
+                        source=f"{req.source}_conflict_resolved",
                     )
                 )
             else:
@@ -334,7 +338,9 @@ class NeuromodulationCoordinator:
         for req in requests:
             modified.append(
                 ModulationRequest(
-                    modulator=req.modulator, delta=deltas[req.modulator], source=f"{req.source}_interacted"
+                    modulator=req.modulator,
+                    delta=deltas[req.modulator],
+                    source=f"{req.source}_interacted",
                 )
             )
 
@@ -388,7 +394,9 @@ class NeuromodulationCoordinator:
                 "neuromod_total_coordinations": self.total_coordinations,
                 "neuromod_conflicts_detected": self.conflicts_detected,
                 "neuromod_conflicts_resolved": self.conflicts_resolved,
-                "neuromod_conflict_rate": (self.conflicts_detected / max(1, self.total_coordinations)),
+                "neuromod_conflict_rate": (
+                    self.conflicts_detected / max(1, self.total_coordinations)
+                ),
                 "neuromod_aggregate_circuit_breaker_open": self._is_aggregate_circuit_breaker_open(),
             }
         )

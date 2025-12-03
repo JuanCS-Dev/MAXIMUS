@@ -401,41 +401,41 @@ class Profiler:
         Args:
             result: Profile result
         """
-        print("\n" + "=" * 80)
-        print("PROFILING REPORT")
-        print("=" * 80)
+        logger.info("=" * 80)
+        logger.info("PROFILING REPORT")
+        logger.info("=" * 80)
 
-        print("\nOverall:")
-        print(f"  Total time: {result.total_time_ms:.2f} ms")
-        print(f"  Avg time:   {result.avg_time_ms:.2f} ms")
+        logger.info("\nOverall:")
+        logger.info("  Total time: %.2f ms", result.total_time_ms)
+        logger.info("  Avg time:   %.2f ms", result.avg_time_ms)
 
         if result.peak_memory_mb:
-            print(f"  Peak memory: {result.peak_memory_mb:.2f} MB")
+            logger.info("  Peak memory: %.2f MB", result.peak_memory_mb)
 
         if result.layer_times:
-            print("\nLayer-wise Timing:")
-            print(f"  {'Layer':>30} {'Time (ms)':>15} {'% of Total':>15}")
-            print("  " + "-" * 60)
+            logger.info("\nLayer-wise Timing:")
+            logger.info("  %-30s %15s %15s", "Layer", "Time (ms)", "% of Total")
+            logger.info("  " + "-" * 60)
 
             total = result.total_time_ms
             for layer_name, layer_time in sorted(result.layer_times.items(), key=lambda x: x[1], reverse=True):
                 pct = (layer_time / total) * 100
-                print(f"  {layer_name:>30} {layer_time:>15.2f} {pct:>15.1f}%")
+                logger.info("  %-30s %15.2f %15.1f%%", layer_name, layer_time, pct)
 
         if result.bottlenecks:
-            print("\nBottlenecks Detected:")
+            logger.info("\nBottlenecks Detected:")
             for bottleneck in result.bottlenecks:
-                print(f"  ⚠ {bottleneck}")
+                logger.info("  ⚠ %s", bottleneck)
 
         if result.cpu_profile_path:
-            print(f"\nCPU Profile: {result.cpu_profile_path}")
-            print("  View with: python -m pstats <path>")
+            logger.info("\nCPU Profile: %s", result.cpu_profile_path)
+            logger.info("  View with: python -m pstats <path>")
 
         if result.gpu_profile_path:
-            print(f"\nGPU Profile: {result.gpu_profile_path}")
-            print("  View with: chrome://tracing")
+            logger.info("\nGPU Profile: %s", result.gpu_profile_path)
+            logger.info("  View with: chrome://tracing")
 
-        print("=" * 80)
+        logger.info("=" * 80)
 
 
 # =============================================================================

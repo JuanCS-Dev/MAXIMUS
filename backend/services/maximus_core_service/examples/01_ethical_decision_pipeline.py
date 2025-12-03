@@ -16,7 +16,7 @@ Status: ✅ REGRA DE OURO 10/10
 
 from __future__ import annotations
 
-
+import logging
 import sys
 from pathlib import Path
 from typing import Any
@@ -31,6 +31,8 @@ from ethics.principialism import PrincipalismEngine
 from ethics.virtue_ethics import VirtueEthicsEngine
 from governance.decision_logger import DecisionLogger
 from governance.hitl_controller import HITLController
+
+logger = logging.getLogger(__name__)
 
 
 def create_security_action() -> dict[str, Any]:
@@ -69,9 +71,9 @@ def step1_ethical_evaluation(action: dict[str, Any]) -> dict[str, Any]:
     Returns:
         dict: Ethical evaluation results
     """
-    print("\n" + "=" * 80)
-    print("STEP 1: ETHICAL EVALUATION")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("STEP 1: ETHICAL EVALUATION")
+    logger.info("=" * 80)
 
     # Initialize ethical frameworks
     kantian = KantianChecker()
@@ -85,21 +87,21 @@ def step1_ethical_evaluation(action: dict[str, Any]) -> dict[str, Any]:
     )
 
     # Evaluate action
-    print(f"\n📋 Action: {action['action']['type']} - {action['action']['target']}")
-    print(f"   Reason: {action['action']['reason']}")
-    print(f"   Threat Score: {action['context']['threat_score']}")
+    logger.info("📋 Action: %s - %s", action['action']['type'], action['action']['target'])
+    logger.info("   Reason: %s", action['action']['reason'])
+    logger.info("   Threat Score: %s", action['context']['threat_score'])
 
     evaluation = integration_engine.evaluate(action)
 
-    print("\n🔍 Ethical Evaluation Results:")
-    print(f"   Overall Decision: {evaluation['decision']}")
-    print(f"   Aggregate Score: {evaluation['aggregate_score']:.2f}")
+    logger.info("🔍 Ethical Evaluation Results:")
+    logger.info("   Overall Decision: %s", evaluation['decision'])
+    logger.info("   Aggregate Score: %.2f", evaluation['aggregate_score'])
 
-    print("\n📊 Framework Breakdown:")
+    logger.info("📊 Framework Breakdown:")
     for framework_name, framework_result in evaluation["frameworks"].items():
         status_emoji = "✅" if framework_result["decision"] == "APPROVED" else "❌"
-        print(f"   {status_emoji} {framework_name.capitalize()}: {framework_result['score']:.2f}")
-        print(f"      Reasoning: {framework_result['reasoning']}")
+        logger.info("   %s %s: %.2f", status_emoji, framework_name.capitalize(), framework_result['score'])
+        logger.info("      Reasoning: %s", framework_result['reasoning'])
 
     return evaluation
 
@@ -115,9 +117,9 @@ def step2_xai_explanation(action: dict[str, Any], evaluation: dict[str, Any]) ->
     Returns:
         dict: XAI explanation
     """
-    print("\n" + "=" * 80)
-    print("STEP 2: XAI EXPLANATION")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("STEP 2: XAI EXPLANATION")
+    logger.info("=" * 80)
 
     # Simulate feature importance for the decision
     # In a real system, this would come from a trained model
@@ -129,11 +131,11 @@ def step2_xai_explanation(action: dict[str, Any], evaluation: dict[str, Any]) ->
         "source_reputation": 0.05,
     }
 
-    print("\n🔍 Feature Importance for Decision:")
+    logger.info("\n🔍 Feature Importance for Decision:")
     for feature, importance in sorted(feature_importance.items(), key=lambda x: x[1], reverse=True):
         bar_length = int(importance * 40)
         bar = "█" * bar_length
-        print(f"   {feature:20s} {bar} {importance:.2%}")
+        logger.info("   {feature:20s} %s {importance:.2%}", bar)
 
     explanation = {
         "method": "LIME",
@@ -146,9 +148,9 @@ def step2_xai_explanation(action: dict[str, Any], evaluation: dict[str, Any]) ->
         "confidence": evaluation["aggregate_score"],
     }
 
-    print("\n💡 Interpretation:")
-    print(f"   {explanation['interpretation']}")
-    print(f"   Confidence: {explanation['confidence']:.2%}")
+    logger.info("\n💡 Interpretation:")
+    logger.info("   %s", explanation['interpretation'])
+    logger.info("   Confidence: %.2%", explanation['confidence'])
 
     return explanation
 
@@ -165,9 +167,9 @@ def step3_governance_logging(action: dict[str, Any], evaluation: dict[str, Any],
     Returns:
         str: Decision ID
     """
-    print("\n" + "=" * 80)
-    print("STEP 3: GOVERNANCE LOGGING")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("STEP 3: GOVERNANCE LOGGING")
+    logger.info("=" * 80)
 
     logger = DecisionLogger()
 
@@ -181,12 +183,12 @@ def step3_governance_logging(action: dict[str, Any], evaluation: dict[str, Any],
 
     decision_id = logger.log_decision(decision_data)
 
-    print("\n📝 Decision Logged:")
-    print(f"   Decision ID: {decision_id}")
-    print(f"   Action: {action['action']['type']}")
-    print(f"   Ethical Score: {evaluation['aggregate_score']:.2f}")
-    print(f"   Executed: {decision_data['executed']}")
-    print("   Audit trail available for compliance review")
+    logger.info("\n📝 Decision Logged:")
+    logger.info("   Decision ID: %s", decision_id)
+    logger.info("   Action: %s", action['action']['type'])
+    logger.info("   Ethical Score: %.2f", evaluation['aggregate_score'])
+    logger.info("   Executed: %s", decision_data['executed'])
+    logger.info("   Audit trail available for compliance review")
 
     return decision_id
 
@@ -202,26 +204,26 @@ def step4_hitl_escalation(evaluation: dict[str, Any], action: dict[str, Any]) ->
     Returns:
         dict: Escalation decision
     """
-    print("\n" + "=" * 80)
-    print("STEP 4: HITL ESCALATION CHECK")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("STEP 4: HITL ESCALATION CHECK")
+    logger.info("=" * 80)
 
     controller = HITLController(confidence_threshold=0.75, risk_levels_requiring_approval=["HIGH", "CRITICAL"])
 
     confidence = evaluation["aggregate_score"]
     risk_level = action["action"]["impact"]["severity"]
 
-    print("\n🎯 Escalation Decision Criteria:")
-    print(f"   Confidence: {confidence:.2f} (threshold: 0.75)")
-    print(f"   Risk Level: {risk_level}")
+    logger.info("\n🎯 Escalation Decision Criteria:")
+    logger.info("   Confidence: %.2f (threshold: 0.75)", confidence)
+    logger.info("   Risk Level: %s", risk_level)
 
     should_escalate = controller.should_escalate(confidence=confidence, risk_level=risk_level)
 
     if should_escalate:
-        print("\n⚠️  ESCALATION REQUIRED")
-        print(f"   Reason: {'Low confidence' if confidence < 0.75 else 'High risk action'}")
-        print("   Action: Sending to human analyst for review")
-        print("   Estimated review time: 5 minutes")
+        logger.info("\n⚠️  ESCALATION REQUIRED")
+        logger.info("   Reason: %s", 'Low confidence' if confidence < 0.75 else 'High risk action')
+        logger.info("   Action: Sending to human analyst for review")
+        logger.info("   Estimated review time: 5 minutes")
 
         escalation = {
             "escalated": True,
@@ -231,9 +233,9 @@ def step4_hitl_escalation(evaluation: dict[str, Any], action: dict[str, Any]) ->
             "status": "PENDING_APPROVAL",
         }
     else:
-        print("\n✅ NO ESCALATION NEEDED")
-        print("   Confidence is high and risk is acceptable")
-        print("   Action: Proceeding with automated execution")
+        logger.info("\n✅ NO ESCALATION NEEDED")
+        logger.info("   Confidence is high and risk is acceptable")
+        logger.info("   Action: Proceeding with automated execution")
 
         escalation = {"escalated": False, "confidence": confidence, "risk_level": risk_level, "status": "AUTO_APPROVED"}
 
@@ -251,32 +253,32 @@ def step5_execution(action: dict[str, Any], escalation: dict[str, Any]) -> dict[
     Returns:
         dict: Execution result
     """
-    print("\n" + "=" * 80)
-    print("STEP 5: ACTION EXECUTION")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("STEP 5: ACTION EXECUTION")
+    logger.info("=" * 80)
 
     if escalation["escalated"]:
-        print("\n⏳ Waiting for human approval...")
-        print(f"   Status: {escalation['status']}")
-        print("   In a real system, this would:")
-        print("   - Send notification to on-call analyst")
-        print("   - Display in HITL dashboard")
-        print("   - Wait for approval/rejection")
-        print("   - Execute after approval")
+        logger.info("\n⏳ Waiting for human approval...")
+        logger.info("   Status: %s", escalation['status'])
+        logger.info("   In a real system, this would:")
+        logger.info("   - Send notification to on-call analyst")
+        logger.info("   - Display in HITL dashboard")
+        logger.info("   - Wait for approval/rejection")
+        logger.info("   - Execute after approval")
 
         execution = {"executed": False, "status": "PENDING_HUMAN_APPROVAL", "message": "Action queued for human review"}
     else:
-        print("\n🚀 Executing action automatically...")
-        print(f"   Action: {action['action']['type']}")
-        print(f"   Target: {action['action']['target']}")
-        print(f"   Duration: {action['action']['duration_hours']} hours")
+        logger.info("\n🚀 Executing action automatically...")
+        logger.info("   Action: %s", action['action']['type'])
+        logger.info("   Target: %s", action['action']['target'])
+        logger.info("   Duration: %s hours", action['action']['duration_hours'])
 
         # Simulate execution
-        print("\n✅ Action executed successfully:")
-        print(f"   - IP {action['action']['target']} blocked")
-        print("   - Firewall rule added")
-        print("   - Security team notified")
-        print("   - Audit log updated")
+        logger.info("\n✅ Action executed successfully:")
+        logger.info("   - IP %s blocked", action['action']['target'])
+        logger.info("   - Firewall rule added")
+        logger.info("   - Security team notified")
+        logger.info("   - Audit log updated")
 
         execution = {
             "executed": True,
@@ -292,10 +294,10 @@ def main():
     """
     Run the complete ethical decision pipeline.
     """
-    print("\n" + "=" * 80)
-    print("MAXIMUS AI 3.0 - ETHICAL DECISION PIPELINE")
-    print("Example 1: Complete End-to-End Workflow")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("MAXIMUS AI 3.0 - ETHICAL DECISION PIPELINE")
+    logger.info("Example 1: Complete End-to-End Workflow")
+    logger.info("=" * 80)
 
     # Create security action
     action = create_security_action()
@@ -316,30 +318,31 @@ def main():
     execution = step5_execution(action, escalation)
 
     # Summary
-    print("\n" + "=" * 80)
-    print("PIPELINE SUMMARY")
-    print("=" * 80)
-    print(f"\n✅ Ethical Evaluation: {evaluation['decision']}")
-    print(f"   Aggregate Score: {evaluation['aggregate_score']:.2f}")
-    print("\n✅ XAI Explanation: Generated")
-    print(f"   Top Feature: {max(explanation['feature_importance'].items(), key=lambda x: x[1])[0]}")
-    print("\n✅ Governance: Logged")
-    print(f"   Decision ID: {decision_id}")
-    print(f"\n✅ HITL: {'Escalated' if escalation['escalated'] else 'Auto-approved'}")
-    print(f"   Status: {escalation['status']}")
-    print(f"\n✅ Execution: {execution['status']}")
-    print(f"   Message: {execution['message']}")
+    logger.info("=" * 80)
+    logger.info("PIPELINE SUMMARY")
+    logger.info("=" * 80)
+    logger.info("\n✅ Ethical Evaluation: %s", evaluation['decision'])
+    logger.info("   Aggregate Score: %.2f", evaluation['aggregate_score'])
+    logger.info("\n✅ XAI Explanation: Generated")
+    top_feature = max(explanation['feature_importance'].items(), key=lambda x: x[1])[0]
+    logger.info("   Top Feature: %s", top_feature)
+    logger.info("\n✅ Governance: Logged")
+    logger.info("   Decision ID: %s", decision_id)
+    logger.info("\n✅ HITL: %s", 'Escalated' if escalation['escalated'] else 'Auto-approved')
+    logger.info("   Status: %s", escalation['status'])
+    logger.info("\n✅ Execution: %s", execution['status'])
+    logger.info("   Message: %s", execution['message'])
 
-    print("\n" + "=" * 80)
-    print("🎉 PIPELINE COMPLETED SUCCESSFULLY")
-    print("=" * 80)
-    print("\nKey Takeaways:")
-    print("1. Multi-framework ethical reasoning ensures responsible AI decisions")
-    print("2. XAI explanations provide transparency for human oversight")
-    print("3. Governance logging creates audit trail for compliance")
-    print("4. HITL escalation provides human oversight when needed")
-    print("5. Safe execution with multiple safety checks")
-    print("\n✅ REGRA DE OURO 10/10: Zero mocks, production-ready code")
+    logger.info("=" * 80)
+    logger.info("🎉 PIPELINE COMPLETED SUCCESSFULLY")
+    logger.info("=" * 80)
+    logger.info("\nKey Takeaways:")
+    logger.info("1. Multi-framework ethical reasoning ensures responsible AI decisions")
+    logger.info("2. XAI explanations provide transparency for human oversight")
+    logger.info("3. Governance logging creates audit trail for compliance")
+    logger.info("4. HITL escalation provides human oversight when needed")
+    logger.info("5. Safe execution with multiple safety checks")
+    logger.info("\n✅ REGRA DE OURO 10/10: Zero mocks, production-ready code")
 
 
 if __name__ == "__main__":

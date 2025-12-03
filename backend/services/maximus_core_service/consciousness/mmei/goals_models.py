@@ -11,6 +11,7 @@ from typing import Any
 
 class GoalType(Enum):
     """Classification of goal types."""
+
     # Homeostatic (deficit-reduction)
     REST = "rest"  # Reduce computational load
     REPAIR = "repair"  # Fix errors, restore integrity
@@ -24,6 +25,7 @@ class GoalType(Enum):
 
 class GoalPriority(Enum):
     """Goal priority levels."""
+
     BACKGROUND = 0  # Optional, non-urgent
     LOW = 1  # Should do eventually
     MODERATE = 2  # Should do soon

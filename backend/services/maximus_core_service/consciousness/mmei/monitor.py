@@ -25,8 +25,15 @@ from consciousness.mmei.rate_limiter import RateLimiter  # Re-export for backwar
 
 __all__ = [
     "InternalStateMonitor",
-    "AbstractNeeds", "Goal", "InteroceptionConfig", "NeedUrgency", "PhysicalMetrics",
-    "GOAL_DEDUP_WINDOW_SECONDS", "MAX_ACTIVE_GOALS", "MAX_GOALS_PER_MINUTE", "RateLimiter",
+    "AbstractNeeds",
+    "Goal",
+    "InteroceptionConfig",
+    "NeedUrgency",
+    "PhysicalMetrics",
+    "GOAL_DEDUP_WINDOW_SECONDS",
+    "MAX_ACTIVE_GOALS",
+    "MAX_GOALS_PER_MINUTE",
+    "RateLimiter",
 ]
 
 
@@ -74,11 +81,11 @@ class InternalStateMonitor:
 
         # Get current needs
         needs = monitor.get_current_needs()
-        print(f"Most urgent: {needs.get_most_urgent()}")
+        logger.info("Most urgent: %s", needs.get_most_urgent())
 
         # Register callback for critical needs
         async def handle_critical(needs: AbstractNeeds):
-            print(f"CRITICAL: {needs.get_critical_needs()}")
+            logger.info("CRITICAL: %s", needs.get_critical_needs())
 
         monitor.register_need_callback(handle_critical, threshold=0.80)
 
@@ -90,7 +97,9 @@ class InternalStateMonitor:
     "Consciousness is not just in the head - it is in the body."
     """
 
-    def __init__(self, config: InteroceptionConfig | None = None, monitor_id: str = "mmei-monitor-primary"):
+    def __init__(
+        self, config: InteroceptionConfig | None = None, monitor_id: str = "mmei-monitor-primary"
+    ):
         self.monitor_id = monitor_id
         self.config = config or InteroceptionConfig()
 
@@ -107,7 +116,9 @@ class InternalStateMonitor:
         self._current_needs: AbstractNeeds | None = None
 
         # Metrics collection
-        self._metrics_collector: Callable[[], PhysicalMetrics | Coroutine[Any, Any, PhysicalMetrics]] | None = None
+        self._metrics_collector: (
+            Callable[[], PhysicalMetrics | Coroutine[Any, Any, PhysicalMetrics]] | None
+        ) = None
 
         # Callbacks
         self._need_callbacks: list[tuple[Callable, float]] = []  # (callback, threshold)
@@ -123,7 +134,9 @@ class InternalStateMonitor:
         # FASE VII (Safety Hardening): Goal management & overflow protection
         self.goal_manager = GoalManager()
 
-    def set_metrics_collector(self, collector: Callable[[], PhysicalMetrics | Coroutine[Any, Any, PhysicalMetrics]]) -> None:
+    def set_metrics_collector(
+        self, collector: Callable[[], PhysicalMetrics | Coroutine[Any, Any, PhysicalMetrics]]
+    ) -> None:
         """
         Set the metrics collection function.
 
@@ -135,7 +148,11 @@ class InternalStateMonitor:
         """
         self._metrics_collector = collector
 
-    def register_need_callback(self, callback: Callable[[AbstractNeeds], None | Coroutine[Any, Any, None]], threshold: float = 0.80) -> None:
+    def register_need_callback(
+        self,
+        callback: Callable[[AbstractNeeds], None | Coroutine[Any, Any, None]],
+        threshold: float = 0.80,
+    ) -> None:
         """
         Register callback invoked when any need exceeds threshold.
 
@@ -156,7 +173,7 @@ class InternalStateMonitor:
         self._running = True
         self._monitoring_task = asyncio.create_task(self._monitoring_loop())
 
-        print(f"🧠 MMEI Monitor {self.monitor_id} started (interoception active)")
+        logger.info("🧠 MMEI Monitor %s started (interoception active)", self.monitor_id)
 
     async def stop(self) -> None:
         """Stop monitoring."""
@@ -169,7 +186,7 @@ class InternalStateMonitor:
                 # Task cancelled
                 return
 
-        print(f"🛑 MMEI Monitor {self.monitor_id} stopped")
+        logger.info("🛑 MMEI Monitor %s stopped", self.monitor_id)
 
     async def _monitoring_loop(self) -> None:
         """
@@ -217,7 +234,7 @@ class InternalStateMonitor:
 
             except Exception as e:
                 self.failed_collections += 1
-                print(f"⚠️  MMEI collection error: {e}")
+                logger.info("⚠️  MMEI collection error: %s", e)
                 await asyncio.sleep(interval)
 
     async def _collect_metrics(self) -> PhysicalMetrics | None:
@@ -239,7 +256,7 @@ class InternalStateMonitor:
 
         except Exception as e:
             self.failed_collections += 1
-            print(f"⚠️  Metrics collection failed: {e}")
+            logger.info("⚠️  Metrics collection failed: %s", e)
             return None
 
     def _compute_needs(self, metrics: PhysicalMetrics) -> AbstractNeeds:
@@ -279,7 +296,7 @@ class InternalStateMonitor:
                     self.callback_invocations += 1
 
                 except Exception as e:
-                    print(f"⚠️  Need callback error: {e}")
+                    logger.info("⚠️  Need callback error: %s", e)
 
     def get_current_needs(self) -> AbstractNeeds | None:
         """Get most recent computed needs."""

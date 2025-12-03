@@ -139,8 +139,7 @@ class DataOrchestrator:
         should_trigger = total_salience >= self.salience_threshold
 
         triggering_events = [
-            e for e in events
-            if e.novelty >= 0.7 or e.relevance >= 0.8 or e.urgency >= 0.8
+            e for e in events if e.novelty >= 0.7 or e.relevance >= 0.8 or e.urgency >= 0.8
         ]
 
         reason = self._generate_decision_reason(
@@ -172,9 +171,7 @@ class DataOrchestrator:
 
         return decision
 
-    def _calculate_novelty(
-        self, metrics: SystemMetrics, events: List[ConsciousnessEvent]
-    ) -> float:
+    def _calculate_novelty(self, metrics: SystemMetrics, events: List[ConsciousnessEvent]) -> float:
         """Calculate novelty component of salience (0-1)."""
         novelty = 0.5
 
@@ -219,9 +216,7 @@ class DataOrchestrator:
 
         return min(1.0, relevance)
 
-    def _calculate_urgency(
-        self, metrics: SystemMetrics, events: List[ConsciousnessEvent]
-    ) -> float:
+    def _calculate_urgency(self, metrics: SystemMetrics, events: List[ConsciousnessEvent]) -> float:
         """Calculate urgency component of salience (0-1)."""
         urgency = 0.3
 
@@ -254,7 +249,9 @@ class DataOrchestrator:
 
         if triggering_events:
             event_types = set(e.event_type.value for e in triggering_events)
-            reasons.append(f"{len(triggering_events)} high-salience events ({', '.join(event_types)})")
+            reasons.append(
+                f"{len(triggering_events)} high-salience events ({', '.join(event_types)})"
+            )
 
         if metrics.safety_violations > 0:
             reasons.append(f"{metrics.safety_violations} safety violations")

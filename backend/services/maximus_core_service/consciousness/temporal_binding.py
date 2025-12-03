@@ -57,8 +57,7 @@ class TemporalBinder:
         if len(episodes) < 2:
             return 1.0
         transitions = [
-            (prev.focus_target, nxt.focus_target)
-            for prev, nxt in zip(episodes, episodes[1:])
+            (prev.focus_target, nxt.focus_target) for prev, nxt in zip(episodes, episodes[1:])
         ]
         stable = sum(
             1

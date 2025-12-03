@@ -42,9 +42,7 @@ class BeliefGraph:
         self.timestamp_index: Dict[datetime, Set[Belief]] = defaultdict(set)
         self.context_index: Dict[str, Set[Belief]] = defaultdict(set)
 
-    def add_belief(
-        self, belief: Belief, justification: Optional[List[Belief]] = None
-    ) -> None:
+    def add_belief(self, belief: Belief, justification: Optional[List[Belief]] = None) -> None:
         """
         Adiciona crença ao grafo.
 
@@ -138,7 +136,9 @@ class BeliefGraph:
             while queue:
                 current, path = queue.pop(0)
 
-                if current.id in visited:  # pragma: no cover - BFS deduplication for diamond patterns in justification graphs
+                if (
+                    current.id in visited
+                ):  # pragma: no cover - BFS deduplication for diamond patterns in justification graphs
                     continue
                 visited.add(current.id)
 
@@ -156,7 +156,7 @@ class BeliefGraph:
                                 contradiction_type=ContradictionType.TRANSITIVE,
                                 severity=0.6,  # Menos severa que direta
                                 suggested_resolution=ResolutionStrategy.WEAKEN_BOTH,
-                                explanation=f"Transitive contradiction: {' → '.join(b.content[:30] for b in new_path)}"
+                                explanation=f"Transitive contradiction: {' → '.join(b.content[:30] for b in new_path)}",
                             )
                         )
                     else:
@@ -219,7 +219,7 @@ class BeliefGraph:
 
             beliefs_list = list(beliefs_with_context)
             for i, belief_a in enumerate(beliefs_list):
-                for belief_b in beliefs_list[i + 1:]:
+                for belief_b in beliefs_list[i + 1 :]:
                     # Se são negações mas compartilham contexto
                     if belief_a.is_negation_of(belief_b):
                         # Verificar se contextos são realmente diferentes
@@ -233,7 +233,7 @@ class BeliefGraph:
                                     contradiction_type=ContradictionType.CONTEXTUAL,
                                     severity=0.5,
                                     suggested_resolution=ResolutionStrategy.CONTEXTUALIZE,
-                                    explanation=f"Contextual contradiction in context '{key}': differing contexts {context_diff}"
+                                    explanation=f"Contextual contradiction in context '{key}': differing contexts {context_diff}",
                                 )
                             )
 
@@ -266,7 +266,9 @@ class BeliefGraph:
             if belief in self.beliefs:
                 self.beliefs.remove(belief)
             self.beliefs.add(new_belief)
-            logger.info(f"Weakened belief: {belief.content} (conf: {belief.confidence} → {new_belief.confidence})")
+            logger.info(
+                f"Weakened belief: {belief.content} (conf: {belief.confidence} → {new_belief.confidence})"
+            )
 
         elif resolution.strategy == ResolutionStrategy.TEMPORIZE:
             # Marcar como crença passada (adicionar ao contexto)

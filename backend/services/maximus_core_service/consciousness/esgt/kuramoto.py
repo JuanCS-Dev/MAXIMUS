@@ -45,7 +45,11 @@ class KuramotoOscillator:
         self.frequency_history: list[float] = [self.frequency]
 
     def _compute_phase_velocity(
-        self, current_phase: float, neighbor_phases: dict[str, float], coupling_weights: dict[str, float], N: int
+        self,
+        current_phase: float,
+        neighbor_phases: dict[str, float],
+        coupling_weights: dict[str, float],
+        N: int,
     ) -> float:
         """Compute phase velocity: dθᵢ/dt = ωᵢ + (K/N)Σⱼ wⱼ sin(θⱼ - θᵢ)"""
         phase_velocity = 2 * np.pi * self.frequency
@@ -63,7 +67,11 @@ class KuramotoOscillator:
         return phase_velocity
 
     def update(
-        self, neighbor_phases: dict[str, float], coupling_weights: dict[str, float], dt: float = 0.005, N: int | None = None
+        self,
+        neighbor_phases: dict[str, float],
+        coupling_weights: dict[str, float],
+        dt: float = 0.005,
+        N: int | None = None,
     ) -> float:
         """Update oscillator phase based on Kuramoto dynamics."""
         self.state = OscillatorState.COUPLING
@@ -75,18 +83,28 @@ class KuramotoOscillator:
 
         if self.config.integration_method == "rk4":
             k1 = dt * self._compute_phase_velocity(self.phase, neighbor_phases, coupling_weights, N)
-            k2 = dt * self._compute_phase_velocity(self.phase + 0.5 * k1, neighbor_phases, coupling_weights, N)
-            k3 = dt * self._compute_phase_velocity(self.phase + 0.5 * k2, neighbor_phases, coupling_weights, N)
-            k4 = dt * self._compute_phase_velocity(self.phase + k3, neighbor_phases, coupling_weights, N)
+            k2 = dt * self._compute_phase_velocity(
+                self.phase + 0.5 * k1, neighbor_phases, coupling_weights, N
+            )
+            k3 = dt * self._compute_phase_velocity(
+                self.phase + 0.5 * k2, neighbor_phases, coupling_weights, N
+            )
+            k4 = dt * self._compute_phase_velocity(
+                self.phase + k3, neighbor_phases, coupling_weights, N
+            )
             self.phase += (k1 + 2 * k2 + 2 * k3 + k4) / 6.0 + noise * dt
         else:
-            phase_velocity = self._compute_phase_velocity(self.phase, neighbor_phases, coupling_weights, N)
+            phase_velocity = self._compute_phase_velocity(
+                self.phase, neighbor_phases, coupling_weights, N
+            )
             self.phase += (phase_velocity + noise) * dt
 
         self.phase = self.phase % (2 * np.pi)
 
         self.phase_history.append(self.phase)
-        current_velocity = self._compute_phase_velocity(self.phase, neighbor_phases, coupling_weights, N)
+        current_velocity = self._compute_phase_velocity(
+            self.phase, neighbor_phases, coupling_weights, N
+        )
         self.frequency_history.append(current_velocity / (2 * np.pi))
 
         if len(self.phase_history) > 1000:
@@ -146,7 +164,10 @@ class KuramotoNetwork:
         self._coherence_cache = None
 
     def _compute_network_derivatives(
-        self, phases: dict[str, float], topology: dict[str, list[str]], coupling_weights: dict[tuple[str, str], float] | None
+        self,
+        phases: dict[str, float],
+        topology: dict[str, list[str]],
+        coupling_weights: dict[tuple[str, str], float] | None,
     ) -> dict[str, float]:
         """Compute phase velocities for all oscillators."""
         N = len(self.oscillators)
@@ -164,12 +185,17 @@ class KuramotoNetwork:
             else:
                 weights = {n: 1.0 for n in neighbors}
 
-            velocities[node_id] = osc._compute_phase_velocity(phases[node_id], neighbor_phases, weights, N)
+            velocities[node_id] = osc._compute_phase_velocity(
+                phases[node_id], neighbor_phases, weights, N
+            )
 
         return velocities
 
     def update_network(
-        self, topology: dict[str, list[str]], coupling_weights: dict[tuple[str, str], float] | None = None, dt: float = 0.005
+        self,
+        topology: dict[str, list[str]],
+        coupling_weights: dict[tuple[str, str], float] | None = None,
+        dt: float = 0.005,
     ) -> None:
         """Update all oscillators in parallel based on network topology."""
         current_phases = {node_id: osc.get_phase() for node_id, osc in self.oscillators.items()}
@@ -178,25 +204,35 @@ class KuramotoNetwork:
         integration_method = next(iter(self.oscillators.values())).config.integration_method
 
         if integration_method == "rk4":
-            velocities_k1 = self._compute_network_derivatives(current_phases, topology, coupling_weights)
+            velocities_k1 = self._compute_network_derivatives(
+                current_phases, topology, coupling_weights
+            )
             k1 = {node_id: dt * vel for node_id, vel in velocities_k1.items()}
 
-            phases_k2 = {node_id: current_phases[node_id] + 0.5 * k1[node_id] for node_id in current_phases}
+            phases_k2 = {
+                node_id: current_phases[node_id] + 0.5 * k1[node_id] for node_id in current_phases
+            }
             velocities_k2 = self._compute_network_derivatives(phases_k2, topology, coupling_weights)
             k2 = {node_id: dt * vel for node_id, vel in velocities_k2.items()}
 
-            phases_k3 = {node_id: current_phases[node_id] + 0.5 * k2[node_id] for node_id in current_phases}
+            phases_k3 = {
+                node_id: current_phases[node_id] + 0.5 * k2[node_id] for node_id in current_phases
+            }
             velocities_k3 = self._compute_network_derivatives(phases_k3, topology, coupling_weights)
             k3 = {node_id: dt * vel for node_id, vel in velocities_k3.items()}
 
-            phases_k4 = {node_id: current_phases[node_id] + k3[node_id] for node_id in current_phases}
+            phases_k4 = {
+                node_id: current_phases[node_id] + k3[node_id] for node_id in current_phases
+            }
             velocities_k4 = self._compute_network_derivatives(phases_k4, topology, coupling_weights)
             k4 = {node_id: dt * vel for node_id, vel in velocities_k4.items()}
 
             for node_id, osc in self.oscillators.items():
                 noise = np.random.normal(0, osc.config.phase_noise)
                 new_phase = (
-                    current_phases[node_id] + (k1[node_id] + 2 * k2[node_id] + 2 * k3[node_id] + k4[node_id]) / 6.0 + noise * dt
+                    current_phases[node_id]
+                    + (k1[node_id] + 2 * k2[node_id] + 2 * k3[node_id] + k4[node_id]) / 6.0
+                    + noise * dt
                 )
                 osc.phase = new_phase % (2 * np.pi)
                 osc.phase_history.append(osc.phase)
@@ -264,7 +300,11 @@ class KuramotoNetwork:
         return 0.0
 
     async def synchronize(
-        self, topology: dict[str, list[str]], duration_ms: float = 200.0, target_coherence: float = 0.70, dt: float = 0.005
+        self,
+        topology: dict[str, list[str]],
+        duration_ms: float = 200.0,
+        target_coherence: float = 0.70,
+        dt: float = 0.005,
     ) -> SynchronizationDynamics:
         """Run synchronization protocol for specified duration."""
         start_time = time.time()

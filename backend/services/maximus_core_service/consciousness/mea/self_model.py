@@ -103,14 +103,18 @@ class SelfModel:
         """Return the current identity vector used for self/other distinction."""
         return self._identity_vector
 
-    def _update_identity_vector(self, attention_state: AttentionState) -> Tuple[float, float, float]:
+    def _update_identity_vector(
+        self, attention_state: AttentionState
+    ) -> Tuple[float, float, float]:
         """
         Update internal identity representation based on attention modality distribution.
         """
         modalities = attention_state.modality_weights
         proprio = modalities.get("proprioceptive", 0.0)
         extero = sum(
-            weight for modality, weight in modalities.items() if modality not in {"proprioceptive", "interoceptive"}
+            weight
+            for modality, weight in modalities.items()
+            if modality not in {"proprioceptive", "interoceptive"}
         )
         intero = modalities.get("interoceptive", 0.0)
 
@@ -120,4 +124,3 @@ class SelfModel:
             float(extero),
             float(intero),
         )
-

@@ -41,17 +41,19 @@ class TopologyConfig:
     enable_small_world_rewiring: bool = True
     rewiring_probability: float = 0.58  # CONSERVATIVE: Realistic density with IIT targets
 
-    def __init__(self,
-                 node_count: int = 16,
-                 num_nodes: int | None = None,  # Alias for compatibility
-                 min_degree: int = 5,
-                 avg_degree: int | None = None,  # Alias for min_degree
-                 target_density: float = 0.20,
-                 gamma: float = 2.5,
-                 clustering_target: float = 0.75,
-                 enable_small_world_rewiring: bool = True,
-                 rewiring_probability: float = 0.58,
-                 rewire_probability: float | None = None):  # Alias for rewiring_probability
+    def __init__(
+        self,
+        node_count: int = 16,
+        num_nodes: int | None = None,  # Alias for compatibility
+        min_degree: int = 5,
+        avg_degree: int | None = None,  # Alias for min_degree
+        target_density: float = 0.20,
+        gamma: float = 2.5,
+        clustering_target: float = 0.75,
+        enable_small_world_rewiring: bool = True,
+        rewiring_probability: float = 0.58,
+        rewire_probability: float | None = None,
+    ):  # Alias for rewiring_probability
         # Support both node_count and num_nodes (alias)
         if num_nodes is not None:
             node_count = num_nodes

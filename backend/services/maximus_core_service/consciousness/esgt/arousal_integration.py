@@ -228,7 +228,7 @@ class ESGTArousalBridge:
             except asyncio.CancelledError:
                 break
             except Exception as e:
-                print(f"[ESGTArousalBridge {self.bridge_id}] Modulation error: {e}")
+                logger.info("[ESGTArousalBridge %s] Modulation error: {e}", self.bridge_id)
                 await asyncio.sleep(interval_s)
 
     def _compute_threshold(self, arousal_state: ArousalState) -> float:

@@ -60,7 +60,9 @@ class NorepinephrineModulator(NeuromodulatorBase):
     """
 
     def __init__(
-        self, config: ModulatorConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None
+        self,
+        config: ModulatorConfig | None = None,
+        kill_switch_callback: Callable[[str], None] | None = None,
     ):
         """Initialize norepinephrine modulator with biological defaults.
 

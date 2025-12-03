@@ -60,7 +60,9 @@ class AcetylcholineModulator(NeuromodulatorBase):
     """
 
     def __init__(
-        self, config: ModulatorConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None
+        self,
+        config: ModulatorConfig | None = None,
+        kill_switch_callback: Callable[[str], None] | None = None,
     ):
         """Initialize acetylcholine modulator with biological defaults.
 

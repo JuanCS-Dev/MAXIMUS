@@ -70,9 +70,11 @@ class EpisodicMemory:
             episode_id=str(uuid4()),
             timestamp=datetime.utcnow(),
             focus_target=attention_state.focus_target,
-            salience=attention_state.salience_order[0][1]
-            if attention_state.salience_order
-            else attention_state.confidence,
+            salience=(
+                attention_state.salience_order[0][1]
+                if attention_state.salience_order
+                else attention_state.confidence
+            ),
             confidence=summary.confidence,
             narrative=summary.narrative,
             metadata={
@@ -119,7 +121,9 @@ class EpisodicMemory:
             return 0.0
         episodes = self.latest(len(focuses))
         matches = sum(
-            1 for episode, expected in zip(episodes, focuses) if expected.lower() in episode.focus_target.lower()
+            1
+            for episode, expected in zip(episodes, focuses)
+            if expected.lower() in episode.focus_target.lower()
         )
         return matches / len(focuses)
 
@@ -127,8 +131,7 @@ class EpisodicMemory:
         """Validate that timestamps are strictly non-decreasing in recent window."""
         episodes = self.latest(window)
         return all(
-            earlier.timestamp <= later.timestamp
-            for earlier, later in zip(episodes, episodes[1:])
+            earlier.timestamp <= later.timestamp for earlier, later in zip(episodes, episodes[1:])
         )
 
     def coherence_score(self, window: int = 20) -> float:

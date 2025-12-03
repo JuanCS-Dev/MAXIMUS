@@ -459,37 +459,37 @@ class ModelEvaluator:
         Args:
             metrics: Evaluation metrics
         """
-        print("\n" + "=" * 80)
-        print("MODEL EVALUATION REPORT")
-        print("=" * 80)
+        logger.info("=" * 80)
+        logger.info("MODEL EVALUATION REPORT")
+        logger.info("=" * 80)
 
-        print("\nOverall Metrics:")
-        print(f"  Accuracy:  {metrics.accuracy:.4f}")
-        print(f"  Precision: {metrics.precision:.4f}")
-        print(f"  Recall:    {metrics.recall:.4f}")
-        print(f"  F1 Score:  {metrics.f1_score:.4f}")
+        logger.info("\nOverall Metrics:")
+        logger.info("  Accuracy:  %.4f", metrics.accuracy)
+        logger.info("  Precision: %.4f", metrics.precision)
+        logger.info("  Recall:    %.4f", metrics.recall)
+        logger.info("  F1 Score:  %.4f", metrics.f1_score)
 
         if metrics.roc_auc:
-            print(f"  ROC-AUC:   {metrics.roc_auc:.4f}")
+            logger.info("  ROC-AUC:   %.4f", metrics.roc_auc)
         if metrics.pr_auc:
-            print(f"  PR-AUC:    {metrics.pr_auc:.4f}")
+            logger.info("  PR-AUC:    %.4f", metrics.pr_auc)
 
         if metrics.per_class_metrics:
-            print("\nPer-Class Metrics:")
+            logger.info("\nPer-Class Metrics:")
             for class_id, class_metrics in metrics.per_class_metrics.items():
                 class_name = self.class_names[class_id] if self.class_names else f"Class {class_id}"
-                print(f"  {class_name}:")
-                print(f"    Precision: {class_metrics['precision']:.4f}")
-                print(f"    Recall:    {class_metrics['recall']:.4f}")
-                print(f"    F1 Score:  {class_metrics['f1_score']:.4f}")
-                print(f"    Support:   {class_metrics['support']}")
+                logger.info("  %s:", class_name)
+                logger.info("    Precision: %.4f", class_metrics['precision'])
+                logger.info("    Recall:    %.4f", class_metrics['recall'])
+                logger.info("    F1 Score:  %.4f", class_metrics['f1_score'])
+                logger.info("    Support:   %s", class_metrics['support'])
 
         if metrics.avg_inference_time_ms:
-            print("\nPerformance:")
-            print(f"  Avg Inference Time: {metrics.avg_inference_time_ms:.2f} ms")
-            print(f"  Throughput:         {metrics.throughput_samples_per_sec:.0f} samples/sec")
+            logger.info("\nPerformance:")
+            logger.info("  Avg Inference Time: %.2f ms", metrics.avg_inference_time_ms)
+            logger.info("  Throughput:         %.0f samples/sec", metrics.throughput_samples_per_sec)
 
-        print("=" * 80)
+        logger.info("=" * 80)
 
     def save_report(self, metrics: EvaluationMetrics, output_path: Path):
         """Save evaluation report to JSON.

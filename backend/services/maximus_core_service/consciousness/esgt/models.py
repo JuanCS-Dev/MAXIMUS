@@ -93,7 +93,9 @@ class TriggerConditions:
         """Check if salience exceeds threshold."""
         return score.compute_total() >= self.min_salience
 
-    def check_resources(self, tig_latency_ms: float, available_nodes: int, cpu_capacity: float) -> bool:
+    def check_resources(
+        self, tig_latency_ms: float, available_nodes: int, cpu_capacity: float
+    ) -> bool:
         """Check if computational resources are adequate."""
         return (
             tig_latency_ms <= self.max_tig_latency_ms

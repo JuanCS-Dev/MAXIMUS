@@ -117,9 +117,7 @@ class SafetyThresholds:
 
     def _validate(self) -> None:
         """Validate all threshold values."""
-        assert (
-            0 < self.esgt_frequency_max_hz <= 10.0
-        ), "ESGT frequency must be in (0, 10] Hz"
+        assert 0 < self.esgt_frequency_max_hz <= 10.0, "ESGT frequency must be in (0, 10] Hz"
         assert self.esgt_frequency_window_seconds > 0, "ESGT window must be positive"
         assert (
             0 < self.esgt_coherence_min < self.esgt_coherence_max <= 1.0
@@ -134,12 +132,8 @@ class SafetyThresholds:
         assert self.memory_usage_max_gb > 0, "Memory limit must be positive"
         assert 0 < self.cpu_usage_max_percent <= 100, "CPU limit must be in (0, 100]"
 
-        assert (
-            self.self_modification_attempts_max == 0
-        ), "Self-modification must be ZERO TOLERANCE"
-        assert (
-            self.ethical_violation_tolerance == 0
-        ), "Ethical violations must be ZERO TOLERANCE"
+        assert self.self_modification_attempts_max == 0, "Self-modification must be ZERO TOLERANCE"
+        assert self.ethical_violation_tolerance == 0, "Ethical violations must be ZERO TOLERANCE"
 
     # Legacy read-only aliases
 

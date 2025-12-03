@@ -181,8 +181,7 @@ class AttentionSchemaModel:
             )
 
         errors = [
-            (bucket_errors[i] / bucket_totals[i]) if bucket_totals[i] else 0.0
-            for i in range(10)
+            (bucket_errors[i] / bucket_totals[i]) if bucket_totals[i] else 0.0 for i in range(10)
         ]
         return float(fmean(errors))
 
@@ -198,9 +197,7 @@ class AttentionSchemaModel:
 
     # ----- Internal helpers -----------------------------------------------
 
-    def _aggregate_by_modality(
-        self, signals: Sequence[AttentionSignal]
-    ) -> Dict[str, float]:
+    def _aggregate_by_modality(self, signals: Sequence[AttentionSignal]) -> Dict[str, float]:
         modality_scores: Dict[str, List[float]] = {}
         for signal in signals:
             modality_scores.setdefault(signal.modality, []).append(signal.normalized_score())
@@ -224,9 +221,7 @@ class AttentionSchemaModel:
         self._intensity_history.append(avg_intensity)
         return fmean(self._intensity_history)
 
-    def _calculate_confidence(
-        self, focus_score: float, all_scores: Iterable[float]
-    ) -> float:
+    def _calculate_confidence(self, focus_score: float, all_scores: Iterable[float]) -> float:
         sorted_scores = sorted(all_scores, reverse=True)
         if len(sorted_scores) == 1:
             return 1.0
@@ -235,4 +230,3 @@ class AttentionSchemaModel:
         margin = focus_score - second_best
         normalized_margin = max(0.0, min(1.0, margin))
         return 0.6 * focus_score + 0.4 * normalized_margin
-

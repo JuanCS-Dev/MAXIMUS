@@ -68,10 +68,16 @@ class ModulatorConfig:
     def __post_init__(self):
         """Validate configuration - fail fast if invalid."""
         assert 0.0 <= self.baseline <= 1.0, f"Baseline {self.baseline} must be in [0, 1]"
-        assert self.min_level < self.max_level, f"Min {self.min_level} must be < max {self.max_level}"
+        assert (
+            self.min_level < self.max_level
+        ), f"Min {self.min_level} must be < max {self.max_level}"
         assert 0.0 < self.decay_rate <= 1.0, f"Decay rate {self.decay_rate} must be in (0, 1]"
-        assert 0.0 < self.smoothing_factor <= 1.0, f"Smoothing {self.smoothing_factor} must be in (0, 1]"
-        assert 0.0 < self.desensitization_threshold <= 1.0, "Desentization threshold must be in (0, 1]"
+        assert (
+            0.0 < self.smoothing_factor <= 1.0
+        ), f"Smoothing {self.smoothing_factor} must be in (0, 1]"
+        assert (
+            0.0 < self.desensitization_threshold <= 1.0
+        ), "Desentization threshold must be in (0, 1]"
         assert 0.0 < self.desensitization_factor <= 1.0, "Desensitization factor must be in (0, 1]"
         assert 0.0 < self.max_change_per_step <= 1.0, "Max change per step must be in (0, 1]"
 
@@ -145,7 +151,9 @@ class DopamineModulator:
     MAX_CONSECUTIVE_ANOMALIES = 5  # Consecutive bound violations before opening
 
     def __init__(
-        self, config: ModulatorConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None
+        self,
+        config: ModulatorConfig | None = None,
+        kill_switch_callback: Callable[[str], None] | None = None,
     ):
         """Initialize dopamine modulator.
 
@@ -230,7 +238,9 @@ class DopamineModulator:
         """
         # Circuit breaker check (CRITICAL)
         if self._circuit_breaker_open:
-            error_msg = f"DopamineModulator circuit breaker OPEN - modulation rejected (source={source})"
+            error_msg = (
+                f"DopamineModulator circuit breaker OPEN - modulation rejected (source={source})"
+            )
             logger.error(f"🔴 {error_msg}")
 
             if self._kill_switch:
@@ -277,9 +287,7 @@ class DopamineModulator:
 
             if self._consecutive_anomalies >= self.MAX_CONSECUTIVE_ANOMALIES:
                 self._circuit_breaker_open = True
-                error_msg = (
-                    f"Dopamine circuit breaker OPENED - {self._consecutive_anomalies} consecutive bound violations"
-                )
+                error_msg = f"Dopamine circuit breaker OPENED - {self._consecutive_anomalies} consecutive bound violations"
                 logger.error(f"🔴 {error_msg}")
 
                 if self._kill_switch:
@@ -383,7 +391,9 @@ class DopamineModulator:
             "dopamine_circuit_breaker_open": self._circuit_breaker_open,
             "dopamine_total_modulations": self._total_modulations,
             "dopamine_bounded_corrections": self._bounded_corrections,
-            "dopamine_bound_hit_rate": (self._bounded_corrections / max(1, self._total_modulations)),
+            "dopamine_bound_hit_rate": (
+                self._bounded_corrections / max(1, self._total_modulations)
+            ),
             "dopamine_desensitization_events": self._desensitization_events,
             "dopamine_consecutive_anomalies": self._consecutive_anomalies,
         }

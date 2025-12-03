@@ -63,7 +63,9 @@ class PredictionValidator:
         observations: Sequence[str],
     ) -> float:
         matches = sum(
-            1 for prediction, actual in zip(predictions, observations) if prediction.focus_target == actual
+            1
+            for prediction, actual in zip(predictions, observations)
+            if prediction.focus_target == actual
         )
         return matches / len(predictions)
 
@@ -83,8 +85,7 @@ class PredictionValidator:
             )
 
         errors = [
-            (bucket_errors[i] / bucket_totals[i]) if bucket_totals[i] else 0.0
-            for i in range(10)
+            (bucket_errors[i] / bucket_totals[i]) if bucket_totals[i] else 0.0 for i in range(10)
         ]
         return sum(errors) / len(errors)
 
@@ -98,4 +99,3 @@ class PredictionValidator:
             if prev.focus_target != curr.focus_target
         )
         return switches / (len(predictions) - 1)
-

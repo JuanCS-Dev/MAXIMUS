@@ -14,12 +14,12 @@ from .core import Episode, EpisodicMemory, windowed_temporal_accuracy
 
 __all__ = [
     # Primary API
-    'Episode',
-    'EpisodicMemory',
-    'windowed_temporal_accuracy',
+    "Episode",
+    "EpisodicMemory",
+    "windowed_temporal_accuracy",
     # Legacy API
-    'Event',
-    'EventType',
-    'Salience',
-    'EpisodicBuffer',
+    "Event",
+    "EventType",
+    "Salience",
+    "EpisodicBuffer",
 ]

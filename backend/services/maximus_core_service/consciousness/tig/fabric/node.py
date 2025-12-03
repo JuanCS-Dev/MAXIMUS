@@ -110,7 +110,9 @@ class TIGNode:
 
         return successful
 
-    async def _send_to_neighbor(self, neighbor_id: str, message: dict[str, Any], priority: int) -> bool:
+    async def _send_to_neighbor(
+        self, neighbor_id: str, message: dict[str, Any], priority: int
+    ) -> bool:
         """Internal method to send message to specific neighbor."""
         # In production, this would use actual network protocols
         # For now, we simulate with direct queue insertion

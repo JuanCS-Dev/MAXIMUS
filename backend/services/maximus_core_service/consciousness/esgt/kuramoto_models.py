@@ -11,6 +11,7 @@ import numpy as np
 
 class OscillatorState(Enum):
     """State of an oscillator during synchronization."""
+
     IDLE = "idle"
     COUPLING = "coupling"
     SYNCHRONIZED = "synchronized"
@@ -20,6 +21,7 @@ class OscillatorState(Enum):
 @dataclass
 class OscillatorConfig:
     """Configuration for a Kuramoto oscillator."""
+
     natural_frequency: float = 40.0  # Hz (gamma-band analog)
     coupling_strength: float = 20.0  # K parameter
     phase_noise: float = 0.001  # Additive phase noise

@@ -81,15 +81,15 @@ class PrefrontalCortex:
         )
 
         if response.action:
-            print(f"Compassionate action: {response.action}")
-            print(f"Confidence: {response.confidence:.2f}")
+            logger.info("Compassionate action: %s", response.action)
+            logger.info("Confidence: %.2f", response.confidence)
     """
 
     def __init__(
         self,
         tom_engine: ToMEngine,
         decision_arbiter: Optional[DecisionArbiter] = None,
-        metacognition_monitor: Optional[Any] = None
+        metacognition_monitor: Optional[Any] = None,
     ):
         """Initialize Prefrontal Cortex.
 
@@ -115,10 +115,7 @@ class PrefrontalCortex:
         )
 
     async def process_social_signal(
-        self,
-        user_id: str,
-        context: Dict[str, Any],
-        signal_type: str = "message"
+        self, user_id: str, context: Dict[str, Any], signal_type: str = "message"
     ) -> CompassionateResponse:
         """
         Process social signal through full pipeline.
@@ -139,6 +136,7 @@ class PrefrontalCortex:
             CompassionateResponse with action (if approved) and metadata
         """
         import time
+
         start_time = time.time()
 
         self.total_signals_processed += 1
@@ -163,7 +161,7 @@ class PrefrontalCortex:
                     reasoning="No intervention needed - agent state is neutral",
                     tom_prediction=tom_prediction,
                     mip_verdict=None,
-                    processing_time_ms=processing_time
+                    processing_time_ms=processing_time,
                 )
 
             self.total_actions_generated += 1
@@ -175,7 +173,9 @@ class PrefrontalCortex:
 
             mip_verdict = {
                 "approved": approved,
-                "reasoning": "Low-cost compassionate action" if approved else "Requires human review"
+                "reasoning": (
+                    "Low-cost compassionate action" if approved else "Requires human review"
+                ),
             }
 
             if approved:
@@ -192,7 +192,7 @@ class PrefrontalCortex:
                 reasoning=str(mip_verdict["reasoning"]),
                 tom_prediction=tom_prediction,
                 mip_verdict=mip_verdict,
-                processing_time_ms=processing_time
+                processing_time_ms=processing_time,
             )
 
             logger.info(
@@ -214,14 +214,10 @@ class PrefrontalCortex:
                 reasoning=f"Processing error: {str(e)}",
                 tom_prediction=None,
                 mip_verdict=None,
-                processing_time_ms=processing_time
+                processing_time_ms=processing_time,
             )
 
-    async def _infer_mental_state(
-        self,
-        user_id: str,
-        context: Dict[str, Any]
-    ) -> Dict[str, Any]:
+    async def _infer_mental_state(self, user_id: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """
         Infer agent mental state using ToM Engine.
 
@@ -253,7 +249,7 @@ class PrefrontalCortex:
             await self.tom.infer_belief(
                 agent_id=user_id,
                 belief_key="can_solve_alone",
-                observed_value=0.3  # Low confidence in self-solving
+                observed_value=0.3,  # Low confidence in self-solving
             )
 
         # Get current beliefs
@@ -264,14 +260,11 @@ class PrefrontalCortex:
             "distress_level": distress_score,
             "beliefs": beliefs,
             "needs_help": distress_score >= 0.5,  # >= for boundary case
-            "context": context
+            "context": context,
         }
 
     def _generate_action(
-        self,
-        user_id: str,
-        tom_prediction: Dict[str, Any],
-        context: Dict[str, Any]
+        self, user_id: str, tom_prediction: Dict[str, Any], context: Dict[str, Any]
     ) -> Optional[str]:
         """
         Generate compassionate action based on mental state.
@@ -298,11 +291,7 @@ class PrefrontalCortex:
         else:
             return f"acknowledge_concern_from_{user_id}"
 
-    def _simple_ethical_check(
-        self,
-        action: str,
-        context: Dict[str, Any]
-    ) -> bool:
+    def _simple_ethical_check(self, action: str, context: Dict[str, Any]) -> bool:
         """
         Simplified ethical approval (MVP).
 
@@ -328,9 +317,7 @@ class PrefrontalCortex:
         return True
 
     def _calculate_confidence(
-        self,
-        tom_prediction: Optional[Dict[str, Any]],
-        mip_verdict: Optional[Dict[str, Any]]
+        self, tom_prediction: Optional[Dict[str, Any]], mip_verdict: Optional[Dict[str, Any]]
     ) -> float:
         """
         Calculate overall confidence in response.
@@ -355,9 +342,7 @@ class PrefrontalCortex:
         if beliefs:
             # Average confidence across all beliefs
             confidences = [
-                b.get("confidence", 0.5)
-                for b in beliefs.values()
-                if isinstance(b, dict)
+                b.get("confidence", 0.5) for b in beliefs.values() if isinstance(b, dict)
             ]
             tom_confidence = sum(confidences) / len(confidences) if confidences else 0.5
         else:
@@ -398,7 +383,7 @@ class PrefrontalCortex:
                 else 0.0
             ),
             "tom_engine_status": "initialized" if self.tom._initialized else "not_initialized",
-            "metacognition": "enabled" if self.metacog else "disabled"
+            "metacognition": "enabled" if self.metacog else "disabled",
         }
 
     def __repr__(self) -> str:

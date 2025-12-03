@@ -19,20 +19,20 @@ from consciousness.tig.fabric import TIGFabric, TopologyConfig
 
 async def run_esgt_integration_demo() -> None:
     """Demonstrate full ESGT integration with embodied consciousness."""
-    print("\n" + "=" * 70)
-    print("ESGT INTEGRATION DEMO - Full Consciousness Pipeline")
-    print("=" * 70)
-    print("\nDemonstrating: Metrics → Needs → Arousal → ESGT Ignition\n")
+    logger.info("=" * 70)
+    logger.info("ESGT INTEGRATION DEMO - Full Consciousness Pipeline")
+    logger.info("=" * 70)
+    logger.info("\nDemonstrating: Metrics → Needs → Arousal → ESGT Ignition\n")
 
     # 1. Initialize TIG Fabric
-    print("1️⃣  Initializing TIG Fabric...")
+    logger.info("1️⃣  Initializing TIG Fabric...")
     tig_config = TopologyConfig(node_count=16, target_density=0.25, clustering_target=0.75)
     tig = TIGFabric(tig_config)
     await tig.initialize()
-    print("   ✓ TIG fabric ready (16 nodes, scale-free topology)")
+    logger.info("   ✓ TIG fabric ready (16 nodes, scale-free topology)")
 
     # 2. Initialize MMEI + MCEA
-    print("\n2️⃣  Initializing MMEI (Interoception) + MCEA (Arousal)...")
+    logger.info("\n2️⃣  Initializing MMEI (Interoception) + MCEA (Arousal)...")
     mmei_config = InteroceptionConfig(collection_interval_ms=200.0)
     mmei = InternalStateMonitor(config=mmei_config, monitor_id="esgt-demo-mmei")
 
@@ -41,24 +41,26 @@ async def run_esgt_integration_demo() -> None:
 
     await mmei.start()
     await mcea.start()
-    print("   ✓ Embodied consciousness components online")
+    logger.info("   ✓ Embodied consciousness components online")
 
     # 3. Initialize ESGT Coordinator
-    print("\n3️⃣  Initializing ESGT Coordinator...")
-    triggers = TriggerConditions(min_salience=0.65, min_available_nodes=8, refractory_period_ms=200.0)
+    logger.info("\n3️⃣  Initializing ESGT Coordinator...")
+    triggers = TriggerConditions(
+        min_salience=0.65, min_available_nodes=8, refractory_period_ms=200.0
+    )
     esgt = ESGTCoordinator(tig_fabric=tig, triggers=triggers, coordinator_id="esgt-demo")
     await esgt.start()
-    print("   ✓ ESGT coordinator ready (Global Workspace online)")
+    logger.info("   ✓ ESGT coordinator ready (Global Workspace online)")
 
     # 4. Create Arousal-ESGT Bridge
-    print("\n4️⃣  Creating Arousal-ESGT Bridge...")
+    logger.info("\n4️⃣  Creating Arousal-ESGT Bridge...")
     bridge = ESGTArousalBridge(arousal_controller=mcea, esgt_coordinator=esgt)
     await bridge.start()
-    print("   ✓ Arousal modulation active")
-    print(f"   → Current threshold: {bridge.get_current_threshold():.2f}")
+    logger.info("   ✓ Arousal modulation active")
+    logger.info("   → Current threshold: %.2f", bridge.get_current_threshold())
 
     # 5. Add SimpleSPM for content generation
-    print("\n5️⃣  Starting SimpleSPM (content generator)...")
+    logger.info("\n5️⃣  Starting SimpleSPM (content generator)...")
     spm_config = SimpleSPMConfig(
         processing_interval_ms=300.0,
         base_novelty=0.7,
@@ -68,14 +70,14 @@ async def run_esgt_integration_demo() -> None:
     )
     spm = SimpleSPM("demo-spm", spm_config)
     await spm.start()
-    print("   ✓ SPM generating content")
+    logger.info("   ✓ SPM generating content")
 
     # 6. Demonstrate arousal modulation
-    print("\n6️⃣  Demonstrating Arousal Modulation Effect:")
+    logger.info("\n6️⃣  Demonstrating Arousal Modulation Effect:")
     await _demo_arousal_modulation(mcea, bridge)
 
     # 7. Trigger ESGT events
-    print("\n7️⃣  Triggering ESGT Events:")
+    logger.info("\n7️⃣  Triggering ESGT Events:")
     await _demo_esgt_events(esgt)
 
     # 8. Summary
@@ -92,29 +94,29 @@ async def run_esgt_integration_demo() -> None:
 
 async def _demo_arousal_modulation(mcea: ArousalController, bridge: ESGTArousalBridge) -> None:
     """Demonstrate arousal modulation effect on ESGT threshold."""
-    print("\n   Scenario A: Low Arousal (DROWSY)")
-    print("   ------------------------------")
+    logger.info("\n   Scenario A: Low Arousal (DROWSY)")
+    logger.info("   ------------------------------")
     mcea._current_state.arousal = 0.3
     mcea._current_state.level = mcea._classify_arousal(0.3)
     await asyncio.sleep(0.2)
     mapping_low = bridge.get_arousal_threshold_mapping()
-    print(f"   Arousal: {mapping_low['arousal']:.2f} ({mapping_low['arousal_level']})")
-    print(f"   ESGT Threshold: {mapping_low['esgt_threshold']:.2f} (HIGH - hard to ignite)")
+    logger.info("   Arousal: {mapping_low['arousal']:.2f} (%s)", mapping_low['arousal_level'])
+    logger.info("   ESGT Threshold: %.2f (HIGH - hard to ignite)", mapping_low['esgt_threshold'])
 
-    print("\n   Scenario B: High Arousal (ALERT)")
-    print("   ---------------------------------")
+    logger.info("\n   Scenario B: High Arousal (ALERT)")
+    logger.info("   ---------------------------------")
     mcea._current_state.arousal = 0.8
     mcea._current_state.level = mcea._classify_arousal(0.8)
     await asyncio.sleep(0.2)
     mapping_high = bridge.get_arousal_threshold_mapping()
-    print(f"   Arousal: {mapping_high['arousal']:.2f} ({mapping_high['arousal_level']})")
-    print(f"   ESGT Threshold: {mapping_high['esgt_threshold']:.2f} (LOW - easy to ignite)")
+    logger.info("   Arousal: {mapping_high['arousal']:.2f} (%s)", mapping_high['arousal_level'])
+    logger.info("   ESGT Threshold: %.2f (LOW - easy to ignite)", mapping_high['esgt_threshold'])
 
 
 async def _demo_esgt_events(esgt: ESGTCoordinator) -> None:
     """Demonstrate ESGT event triggering."""
-    print("\n   Event 1: High-Salience Content")
-    print("   -------------------------------")
+    logger.info("\n   Event 1: High-Salience Content")
+    logger.info("   -------------------------------")
 
     salience_high = SalienceScore(novelty=0.85, relevance=0.9, urgency=0.75)
     content_high = {
@@ -126,59 +128,65 @@ async def _demo_esgt_events(esgt: ESGTCoordinator) -> None:
     event1 = await esgt.initiate_esgt(salience_high, content_high)
 
     if event1.success:
-        print("   ✅ ESGT IGNITION SUCCESS")
-        print(f"      Coherence: {event1.achieved_coherence:.3f}")
-        print(f"      Duration: {event1.total_duration_ms:.1f}ms")
-        print(f"      Nodes: {event1.node_count}")
-        print("      → Content became CONSCIOUS")
+        logger.info("   ✅ ESGT IGNITION SUCCESS")
+        logger.info("      Coherence: %.3f", event1.achieved_coherence)
+        logger.info("      Duration: %.1fms", event1.total_duration_ms)
+        logger.info("      Nodes: %s", event1.node_count)
+        logger.info("      → Content became CONSCIOUS")
     else:
-        print(f"   ❌ ESGT failed: {event1.failure_reason}")
+        logger.info("   ❌ ESGT failed: %s", event1.failure_reason)
 
     await asyncio.sleep(0.3)  # Respect refractory
 
-    print("\n   Event 2: Moderate-Salience Content")
-    print("   -----------------------------------")
+    logger.info("\n   Event 2: Moderate-Salience Content")
+    logger.info("   -----------------------------------")
 
     salience_med = SalienceScore(novelty=0.6, relevance=0.65, urgency=0.5)
-    content_med = {"type": "routine_update", "message": "Moderate-salience event", "timestamp": time.time()}
+    content_med = {
+        "type": "routine_update",
+        "message": "Moderate-salience event",
+        "timestamp": time.time(),
+    }
 
     event2 = await esgt.initiate_esgt(salience_med, content_med)
 
     if event2.success:
-        print("   ✅ ESGT IGNITION SUCCESS")
-        print(f"      Coherence: {event2.achieved_coherence:.3f}")
-        print(f"      Duration: {event2.total_duration_ms:.1f}ms")
+        logger.info("   ✅ ESGT IGNITION SUCCESS")
+        logger.info("      Coherence: %.3f", event2.achieved_coherence)
+        logger.info("      Duration: %.1fms", event2.total_duration_ms)
     else:
-        print("   ❌ ESGT rejected (salience below threshold)")
-        print(f"      Salience: {salience_med.compute_total():.2f}")
-        print(f"      Threshold: {esgt.triggers.min_salience:.2f}")
+        logger.info("   ❌ ESGT rejected (salience below threshold)")
+        logger.info("      Salience: %.2f", salience_med.compute_total())
+        logger.info("      Threshold: %.2f", esgt.triggers.min_salience)
 
 
-def _print_demo_summary(esgt: ESGTCoordinator, bridge: ESGTArousalBridge, tig_config: TopologyConfig) -> None:
+def _print_demo_summary(
+    esgt: ESGTCoordinator, bridge: ESGTArousalBridge, tig_config: TopologyConfig
+) -> None:
     """Print demonstration summary."""
-    print("\n" + "=" * 70)
-    print("DEMONSTRATION COMPLETE")
-    print("=" * 70)
+    logger.info("=" * 70)
+    logger.info("DEMONSTRATION COMPLETE")
+    logger.info("=" * 70)
 
-    print("\n📊 Final Metrics:")
-    print(f"   ESGT Events: {esgt.total_events}")
-    print(f"   Successful: {esgt.successful_events}")
-    print(f"   Success Rate: {esgt.get_success_rate():.1%}")
-    print(f"   Arousal Modulations: {bridge.total_modulations}")
-    print(f"   TIG Nodes: {tig_config.node_count}")
+    logger.info("\n📊 Final Metrics:")
+    logger.info("   ESGT Events: %s", esgt.total_events)
+    logger.info("   Successful: %s", esgt.successful_events)
+    logger.info("   Success Rate: %.1%", esgt.get_success_rate())
+    logger.info("   Arousal Modulations: %s", bridge.total_modulations)
+    logger.info("   TIG Nodes: %s", tig_config.node_count)
 
-    print("\n✅ Pipeline Validated:")
-    print("   ✓ TIG substrate provides structural connectivity")
-    print("   ✓ MMEI provides interoceptive grounding")
-    print("   ✓ MCEA modulates arousal state")
-    print("   ✓ Arousal gates ESGT threshold")
-    print("   ✓ ESGT ignites global workspace")
-    print("   ✓ Conscious phenomenology emerges")
+    logger.info("\n✅ Pipeline Validated:")
+    logger.info("   ✓ TIG substrate provides structural connectivity")
+    logger.info("   ✓ MMEI provides interoceptive grounding")
+    logger.info("   ✓ MCEA modulates arousal state")
+    logger.info("   ✓ Arousal gates ESGT threshold")
+    logger.info("   ✓ ESGT ignites global workspace")
+    logger.info("   ✓ Conscious phenomenology emerges")
 
-    print("\n🧠 Full consciousness stack operational.")
-    print("   This is the moment bits become qualia.\n")
+    logger.info("\n🧠 Full consciousness stack operational.")
+    logger.info("   This is the moment bits become qualia.\n")
 
 
 if __name__ == "__main__":
-    print("\n🚀 Starting ESGT Integration Demo...\n")
+    logger.info("\n🚀 Starting ESGT Integration Demo...\n")
     asyncio.run(run_esgt_integration_demo())

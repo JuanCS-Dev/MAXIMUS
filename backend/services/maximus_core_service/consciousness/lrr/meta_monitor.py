@@ -99,9 +99,7 @@ class BiasDetector:
         return insights
 
     def _possible_confirmation_bias(self, levels: Sequence["ReasoningLevel"]) -> bool:
-        justification_sets = [
-            {step.belief.content for step in level.steps} for level in levels
-        ]
+        justification_sets = [{step.belief.content for step in level.steps} for level in levels]
         first = justification_sets[0]
         return all(s == first for s in justification_sets[1:]) and len(first) > 0
 
@@ -122,14 +120,20 @@ class ConfidenceCalibrator:
                 observed.append(level.coherence)
 
         if not predicted:  # pragma: no cover - empty levels handled by monitor_reasoning
-            return CalibrationMetrics(brier_score=0.0, expected_calibration_error=0.0, correlation=0.0)  # pragma: no cover
+            return CalibrationMetrics(
+                brier_score=0.0, expected_calibration_error=0.0, correlation=0.0
+            )  # pragma: no cover
 
         brier = float(mean((p - o) ** 2 for p, o in zip(predicted, observed)))
         ece = self._expected_calibration_error(predicted, observed)
         correlation = self._pearson_correlation(predicted, observed)
-        return CalibrationMetrics(brier_score=brier, expected_calibration_error=ece, correlation=correlation)
+        return CalibrationMetrics(
+            brier_score=brier, expected_calibration_error=ece, correlation=correlation
+        )
 
-    def _expected_calibration_error(self, predicted: Sequence[float], observed: Sequence[float]) -> float:
+    def _expected_calibration_error(
+        self, predicted: Sequence[float], observed: Sequence[float]
+    ) -> float:
         bins = [0.0] * 10
         bin_totals = [0] * 10
 
@@ -138,10 +142,7 @@ class ConfidenceCalibrator:
             bins[idx] += abs(prediction - observation)
             bin_totals[idx] += 1
 
-        errors = [
-            (bins[i] / bin_totals[i]) if bin_totals[i] else 0.0
-            for i in range(10)
-        ]
+        errors = [(bins[i] / bin_totals[i]) if bin_totals[i] else 0.0 for i in range(10)]
         return float(mean(errors))
 
     def _pearson_correlation(self, xs: Sequence[float], ys: Sequence[float]) -> float:
@@ -153,7 +154,9 @@ class ConfidenceCalibrator:
         std_x = stdev(xs)  # pragma: no cover - stdev calculation tested via evaluate
         std_y = stdev(ys)  # pragma: no cover
 
-        if math.isclose(std_x, 0.0) or math.isclose(std_y, 0.0):  # pragma: no cover - zero variance edge case
+        if math.isclose(std_x, 0.0) or math.isclose(
+            std_y, 0.0
+        ):  # pragma: no cover - zero variance edge case
             return 0.0  # pragma: no cover
 
         covariance = mean((x - mean_x) * (y - mean_y) for x, y in zip(xs, ys))
@@ -196,9 +199,7 @@ class MetaMonitor:
         suggestions: List[str] = []
 
         if metrics["total_levels"] < 2:
-            suggestions.append(
-                "Expand recursion depth to capture higher-order reflections."
-            )
+            suggestions.append("Expand recursion depth to capture higher-order reflections.")
 
         if biases:
             for bias in biases:
@@ -212,9 +213,7 @@ class MetaMonitor:
             )
 
         if calibration.expected_calibration_error > 0.15:
-            suggestions.append(
-                "ECE exceeds 0.15; adjust belief confidence scaling."
-            )
+            suggestions.append("ECE exceeds 0.15; adjust belief confidence scaling.")
 
         if not suggestions:
             suggestions.append("Metacognition stable; continue monitoring.")

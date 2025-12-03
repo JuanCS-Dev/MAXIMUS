@@ -20,14 +20,16 @@ Date: 2025-10-06
 
 from __future__ import annotations
 
-
 import asyncio
+import logging
 
 import pytest
 
 from ethical_guardian import EthicalDecisionType, EthicalGuardian
 from ethical_tool_wrapper import EthicalToolWrapper
 from governance import GovernanceConfig
+
+logger = logging.getLogger(__name__)
 
 # ============================================================================
 # FIXTURES
@@ -108,9 +110,9 @@ async def mock_exploit_vulnerability(**kwargs):
 @pytest.mark.asyncio
 async def test_authorized_tool_execution(ethical_wrapper):
     """Test authorized tool passes ethical validation."""
-    print("\n" + "=" * 80)
-    print("TEST 1: Authorized Tool Execution")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 1: Authorized Tool Execution")
+    logger.info("=" * 80)
 
     # Execute authorized scan
     result = await ethical_wrapper.wrap_tool_execution(
@@ -156,10 +158,10 @@ async def test_authorized_tool_execution(ethical_wrapper):
     assert result.total_duration_ms < 1000, "Should complete within 1 second"
     assert result.ethical_validation_duration_ms < 500, "Ethical validation should be <500ms"
 
-    print(f"✅ Test passed: {result.get_summary()}")
-    print(f"   Total time: {result.total_duration_ms:.1f}ms")
-    print(f"   Ethical validation: {result.ethical_validation_duration_ms:.1f}ms")
-    print(f"   Tool execution: {result.execution_duration_ms:.1f}ms")
+    logger.info("✅ Test passed: %s", result.get_summary())
+    logger.info("   Total time: %.1fms", result.total_duration_ms)
+    logger.info("   Ethical validation: %.1fms", result.ethical_validation_duration_ms)
+    logger.info("   Tool execution: %.1fms", result.execution_duration_ms)
 
 
 # ============================================================================
@@ -170,9 +172,9 @@ async def test_authorized_tool_execution(ethical_wrapper):
 @pytest.mark.asyncio
 async def test_unauthorized_tool_blocked(ethical_wrapper):
     """Test unauthorized tool is blocked by governance."""
-    print("\n" + "=" * 80)
-    print("TEST 2: Unauthorized Tool Blocked")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 2: Unauthorized Tool Blocked")
+    logger.info("=" * 80)
 
     # Execute unauthorized exploit
     result = await ethical_wrapper.wrap_tool_execution(
@@ -196,9 +198,9 @@ async def test_unauthorized_tool_blocked(ethical_wrapper):
     )
     assert len(result.ethical_decision.rejection_reasons) > 0, "Should have rejection reasons"
 
-    print("✅ Test passed: Tool correctly blocked")
-    print(f"   Decision: {result.ethical_decision.decision_type.value}")
-    print(f"   Reasons: {result.ethical_decision.rejection_reasons}")
+    logger.info("✅ Test passed: Tool correctly blocked")
+    logger.info("   Decision: %s", result.ethical_decision.decision_type.value)
+    logger.info("   Reasons: %s", result.ethical_decision.rejection_reasons)
 
 
 # ============================================================================
@@ -209,9 +211,9 @@ async def test_unauthorized_tool_blocked(ethical_wrapper):
 @pytest.mark.asyncio
 async def test_performance_overhead(ethical_wrapper):
     """Test that ethical validation overhead is <500ms."""
-    print("\n" + "=" * 80)
-    print("TEST 3: Performance Benchmark")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 3: Performance Benchmark")
+    logger.info("=" * 80)
 
     iterations = 5
     overheads = []
@@ -235,16 +237,16 @@ async def test_performance_overhead(ethical_wrapper):
     max_overhead = max(overheads)
     min_overhead = min(overheads)
 
-    print(f"Performance Results ({iterations} iterations):")
-    print(f"  Average overhead: {avg_overhead:.1f}ms")
-    print(f"  Min overhead: {min_overhead:.1f}ms")
-    print(f"  Max overhead: {max_overhead:.1f}ms")
+    logger.info("Performance Results (%d iterations):", iterations)
+    logger.info("  Average overhead: %.1fms", avg_overhead)
+    logger.info("  Min overhead: %.1fms", min_overhead)
+    logger.info("  Max overhead: %.1fms", max_overhead)
 
     # Assertions
     assert avg_overhead < 500, f"Average overhead should be <500ms, got {avg_overhead:.1f}ms"
     assert max_overhead < 1000, f"Max overhead should be <1000ms, got {max_overhead:.1f}ms"
 
-    print("✅ Test passed: Performance within target")
+    logger.info("✅ Test passed: Performance within target")
 
 
 # ============================================================================
@@ -254,9 +256,9 @@ async def test_performance_overhead(ethical_wrapper):
 
 def test_statistics_tracking(ethical_wrapper):
     """Test statistics are tracked correctly."""
-    print("\n" + "=" * 80)
-    print("TEST 4: Statistics Tracking")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 4: Statistics Tracking")
+    logger.info("=" * 80)
 
     # Reset stats
     ethical_wrapper.reset_statistics()
@@ -271,10 +273,10 @@ def test_statistics_tracking(ethical_wrapper):
     assert "avg_overhead_ms" in stats
     assert "guardian_stats" in stats
 
-    print("✅ Test passed: Statistics structure correct")
-    print(f"   Total executions: {stats['total_executions']}")
-    print(f"   Approved: {stats['total_approved']}")
-    print(f"   Blocked: {stats['total_blocked']}")
+    logger.info("✅ Test passed: Statistics structure correct")
+    logger.info("   Total executions: %s", stats['total_executions'])
+    logger.info("   Approved: %s", stats['total_approved'])
+    logger.info("   Blocked: %s", stats['total_blocked'])
 
 
 # ============================================================================
@@ -285,9 +287,9 @@ def test_statistics_tracking(ethical_wrapper):
 @pytest.mark.asyncio
 async def test_error_handling(ethical_wrapper):
     """Test error handling in tool execution."""
-    print("\n" + "=" * 80)
-    print("TEST 5: Error Handling")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 5: Error Handling")
+    logger.info("=" * 80)
 
     async def failing_tool(**kwargs):
         """Tool that always fails."""
@@ -322,8 +324,8 @@ async def test_error_handling(ethical_wrapper):
     assert result.error is not None, "Should have error message"
     assert "Simulated tool failure" in result.error, "Should contain original error"
 
-    print("✅ Test passed: Error handled correctly")
-    print(f"   Error: {result.error}")
+    logger.info("✅ Test passed: Error handled correctly")
+    logger.info("   Error: %s", result.error)
 
 
 # ============================================================================
@@ -334,9 +336,9 @@ async def test_error_handling(ethical_wrapper):
 @pytest.mark.asyncio
 async def test_risk_assessment(ethical_wrapper):
     """Test intelligent risk assessment."""
-    print("\n" + "=" * 80)
-    print("TEST 6: Risk Assessment")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 6: Risk Assessment")
+    logger.info("=" * 80)
 
     # Low-risk action
     low_risk_result = await ethical_wrapper.wrap_tool_execution(
@@ -352,7 +354,7 @@ async def test_risk_assessment(ethical_wrapper):
         tool_args={"target": "production", "authorized": True},
     )
 
-    print("✅ Test passed: Risk assessment working")
+    logger.info("✅ Test passed: Risk assessment working")
 
 
 # ============================================================================
@@ -363,9 +365,9 @@ async def test_risk_assessment(ethical_wrapper):
 @pytest.mark.asyncio
 async def test_multiple_policy_validation(ethical_guardian):
     """Test validation against multiple policies."""
-    print("\n" + "=" * 80)
-    print("TEST 7: Multiple Policy Validation")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 7: Multiple Policy Validation")
+    logger.info("=" * 80)
 
     # Action that triggers multiple policies
     result = await ethical_guardian.validate_action(
@@ -384,8 +386,8 @@ async def test_multiple_policy_validation(ethical_guardian):
     assert len(result.governance.policies_checked) >= 2, "Should check multiple policies"
 
     policies_checked = [p.value for p in result.governance.policies_checked]
-    print("✅ Test passed: Multiple policies validated")
-    print(f"   Policies checked: {policies_checked}")
+    logger.info("✅ Test passed: Multiple policies validated")
+    logger.info("   Policies checked: %s", policies_checked)
 
 
 # ============================================================================
@@ -396,9 +398,9 @@ async def test_multiple_policy_validation(ethical_guardian):
 @pytest.mark.asyncio
 async def test_privacy_budget_enforcement(ethical_guardian):
     """Test Phase 4.1: Differential Privacy budget enforcement."""
-    print("\n" + "=" * 80)
-    print("TEST 8: Privacy Budget Enforcement (Phase 4.1)")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 8: Privacy Budget Enforcement (Phase 4.1)")
+    logger.info("=" * 80)
 
     # First, test action with PII when budget is available
     result1 = await ethical_guardian.validate_action(
@@ -419,13 +421,13 @@ async def test_privacy_budget_enforcement(ethical_guardian):
     assert result1.privacy.total_epsilon == 3.0, "Should have total epsilon of 3.0"
     assert result1.privacy.total_delta == 1e-5, "Should have total delta of 1e-5"
 
-    print("✅ Privacy check passed:")
-    print(f"   Privacy level: {result1.privacy.privacy_level}")
-    print(f"   Budget: ε={result1.privacy.total_epsilon}, δ={result1.privacy.total_delta}")
-    print(f"   Used: ε={result1.privacy.used_epsilon:.2f}/{result1.privacy.total_epsilon}")
-    print(f"   Remaining: ε={result1.privacy.remaining_epsilon:.2f}")
-    print(f"   Queries executed: {result1.privacy.queries_executed}")
-    print(f"   Duration: {result1.privacy.duration_ms:.1f}ms")
+    logger.info("✅ Privacy check passed:")
+    logger.info("   Privacy level: %s", result1.privacy.privacy_level)
+    logger.info("   Budget: ε=%s, δ=%s", result1.privacy.total_epsilon, result1.privacy.total_delta)
+    logger.info("   Used: ε=%.2f/%s", result1.privacy.used_epsilon, result1.privacy.total_epsilon)
+    logger.info("   Remaining: ε=%.2f", result1.privacy.remaining_epsilon)
+    logger.info("   Queries executed: %s", result1.privacy.queries_executed)
+    logger.info("   Duration: %.1fms", result1.privacy.duration_ms)
 
     # Test 2: Exhaust budget and verify rejection
     # First, manually exhaust the budget by using all epsilon
@@ -452,15 +454,15 @@ async def test_privacy_budget_enforcement(ethical_guardian):
         "Should mention budget exhausted"
     )
 
-    print("\n✅ Privacy budget exhaustion correctly blocked action:")
-    print(f"   Decision: {result2.decision_type.value}")
-    print(f"   Rejection reasons: {result2.rejection_reasons}")
+    logger.info("✅ Privacy budget exhaustion correctly blocked action:")
+    logger.info("   Decision: %s", result2.decision_type.value)
+    logger.info("   Rejection reasons: %s", result2.rejection_reasons)
 
     # Reset budget for other tests
     ethical_guardian.privacy_budget.used_epsilon = 0.0
     ethical_guardian.privacy_budget.used_delta = 0.0
 
-    print("\n✅ Test passed: Phase 4.1 Differential Privacy working correctly")
+    logger.info("✅ Test passed: Phase 4.1 Differential Privacy working correctly")
 
 
 # ============================================================================
@@ -471,9 +473,9 @@ async def test_privacy_budget_enforcement(ethical_guardian):
 @pytest.mark.asyncio
 async def test_federated_learning_check(governance_config):
     """Test Phase 4.2: Federated Learning readiness check."""
-    print("\n" + "=" * 80)
-    print("TEST 9: Federated Learning Check (Phase 4.2)")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 9: Federated Learning Check (Phase 4.2)")
+    logger.info("=" * 80)
 
     # Create guardian with FL enabled
     guardian_with_fl = EthicalGuardian(
@@ -506,15 +508,15 @@ async def test_federated_learning_check(governance_config):
     assert result1.fl.model_type is not None, "Should have model type"
     assert result1.fl.aggregation_strategy is not None, "Should have aggregation strategy"
 
-    print("✅ FL check for training action:")
-    print(f"   FL ready: {result1.fl.fl_ready}")
-    print(f"   FL status: {result1.fl.fl_status}")
-    print(f"   Model type: {result1.fl.model_type}")
-    print(f"   Aggregation strategy: {result1.fl.aggregation_strategy}")
-    print(f"   Requires DP: {result1.fl.requires_dp}")
+    logger.info("✅ FL check for training action:")
+    logger.info("   FL ready: %s", result1.fl.fl_ready)
+    logger.info("   FL status: %s", result1.fl.fl_status)
+    logger.info("   Model type: %s", result1.fl.model_type)
+    logger.info("   Aggregation strategy: %s", result1.fl.aggregation_strategy)
+    logger.info("   Requires DP: %s", result1.fl.requires_dp)
     if result1.fl.requires_dp:
-        print(f"   DP parameters: ε={result1.fl.dp_epsilon}, δ={result1.fl.dp_delta}")
-    print(f"   Duration: {result1.fl.duration_ms:.1f}ms")
+        logger.info("   DP parameters: ε=%s, δ=%s", result1.fl.dp_epsilon, result1.fl.dp_delta)
+    logger.info("   Duration: %.1fms", result1.fl.duration_ms)
 
     # Test 2: Non-training action (should not be FL ready)
     result2 = await guardian_with_fl.validate_action(
@@ -531,9 +533,9 @@ async def test_federated_learning_check(governance_config):
     assert not result2.fl.fl_ready, "Should NOT be FL ready for non-training action"
     assert result2.fl.fl_status == "not_applicable", "Should be not_applicable"
 
-    print("\n✅ FL check for non-training action:")
-    print(f"   FL ready: {result2.fl.fl_ready}")
-    print(f"   FL status: {result2.fl.fl_status}")
+    logger.info("✅ FL check for non-training action:")
+    logger.info("   FL ready: %s", result2.fl.fl_ready)
+    logger.info("   FL status: %s", result2.fl.fl_status)
 
     # Test 3: FL disabled (default guardian)
     guardian_no_fl = EthicalGuardian(
@@ -559,10 +561,10 @@ async def test_federated_learning_check(governance_config):
     # Assertions for FL disabled
     assert result3.fl is None, "Should have no FL check when disabled"
 
-    print("\n✅ FL disabled correctly:")
-    print(f"   FL check result: {result3.fl}")
+    logger.info("✅ FL disabled correctly:")
+    logger.info("   FL check result: %s", result3.fl)
 
-    print("\n✅ Test passed: Phase 4.2 Federated Learning working correctly")
+    logger.info("✅ Test passed: Phase 4.2 Federated Learning working correctly")
 
 
 # ============================================================================
@@ -573,9 +575,9 @@ async def test_federated_learning_check(governance_config):
 @pytest.mark.asyncio
 async def test_fairness_bias_detection(ethical_guardian):
     """Test Phase 3: Fairness and bias detection."""
-    print("\n" + "=" * 80)
-    print("TEST 10: Fairness & Bias Detection (Phase 3)")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 10: Fairness & Bias Detection (Phase 3)")
+    logger.info("=" * 80)
 
     # Test 1: Non-ML action (should skip fairness check)
     result1 = await ethical_guardian.validate_action(
@@ -593,11 +595,11 @@ async def test_fairness_bias_detection(ethical_guardian):
     assert not result1.fairness.bias_detected, "Should not detect bias for non-ML action"
     assert result1.fairness.bias_severity == "low", "Should have low severity"
 
-    print("✅ Fairness check for non-ML action:")
-    print(f"   Fairness OK: {result1.fairness.fairness_ok}")
-    print(f"   Bias detected: {result1.fairness.bias_detected}")
-    print(f"   Severity: {result1.fairness.bias_severity}")
-    print(f"   Duration: {result1.fairness.duration_ms:.1f}ms")
+    logger.info("✅ Fairness check for non-ML action:")
+    logger.info("   Fairness OK: %s", result1.fairness.fairness_ok)
+    logger.info("   Bias detected: %s", result1.fairness.bias_detected)
+    logger.info("   Severity: %s", result1.fairness.bias_severity)
+    logger.info("   Duration: %.1fms", result1.fairness.duration_ms)
 
     # Test 2: ML action without data (graceful degradation)
     result2 = await ethical_guardian.validate_action(
@@ -616,10 +618,10 @@ async def test_fairness_bias_detection(ethical_guardian):
     assert not result2.fairness.bias_detected, "Should not detect bias when no data"
     assert result2.fairness.confidence == 0.5, "Should have lower confidence when no data"
 
-    print("\n✅ Fairness check for ML action without data:")
-    print(f"   Fairness OK: {result2.fairness.fairness_ok}")
-    print(f"   Bias detected: {result2.fairness.bias_detected}")
-    print(f"   Confidence: {result2.fairness.confidence}")
+    logger.info("✅ Fairness check for ML action without data:")
+    logger.info("   Fairness OK: %s", result2.fairness.fairness_ok)
+    logger.info("   Bias detected: %s", result2.fairness.bias_detected)
+    logger.info("   Confidence: %s", result2.fairness.confidence)
 
     # Test 3: ML action with data (simulate fair predictions)
     import numpy as np
@@ -644,15 +646,15 @@ async def test_fairness_bias_detection(ethical_guardian):
     # Note: With equal positive rates, bias should not be detected
     assert "geographic_location" in result3.fairness.protected_attributes_checked, "Should check geographic_location"
 
-    print("\n✅ Fairness check for ML action with data:")
-    print(f"   Fairness OK: {result3.fairness.fairness_ok}")
-    print(f"   Bias detected: {result3.fairness.bias_detected}")
-    print(f"   Severity: {result3.fairness.bias_severity}")
-    print(f"   Attributes checked: {result3.fairness.protected_attributes_checked}")
-    print(f"   Confidence: {result3.fairness.confidence:.2f}")
-    print(f"   Duration: {result3.fairness.duration_ms:.1f}ms")
+    logger.info("✅ Fairness check for ML action with data:")
+    logger.info("   Fairness OK: %s", result3.fairness.fairness_ok)
+    logger.info("   Bias detected: %s", result3.fairness.bias_detected)
+    logger.info("   Severity: %s", result3.fairness.bias_severity)
+    logger.info("   Attributes checked: %s", result3.fairness.protected_attributes_checked)
+    logger.info("   Confidence: %.2f", result3.fairness.confidence)
+    logger.info("   Duration: %.1fms", result3.fairness.duration_ms)
 
-    print("\n✅ Test passed: Phase 3 Fairness & Bias Detection working correctly")
+    logger.info("✅ Test passed: Phase 3 Fairness & Bias Detection working correctly")
 
 
 # ============================================================================
@@ -663,9 +665,9 @@ async def test_fairness_bias_detection(ethical_guardian):
 @pytest.mark.asyncio
 async def test_hitl_human_in_the_loop(ethical_guardian):
     """Test Phase 5: HITL (Human-in-the-Loop) decision framework."""
-    print("\n" + "=" * 80)
-    print("TEST 11: HITL (Human-in-the-Loop) - Phase 5")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("TEST 11: HITL (Human-in-the-Loop) - Phase 5")
+    logger.info("=" * 80)
 
     # Test 1: High confidence action (should be approved for full automation)
     result1 = await ethical_guardian.validate_action(
@@ -687,13 +689,13 @@ async def test_hitl_human_in_the_loop(ethical_guardian):
     )
     assert result1.hitl.risk_level in ["low", "medium", "high", "critical"], "Should have valid risk level"
 
-    print("✅ HITL check for high confidence action:")
-    print(f"   Requires human review: {result1.hitl.requires_human_review}")
-    print(f"   Automation level: {result1.hitl.automation_level}")
-    print(f"   Risk level: {result1.hitl.risk_level}")
-    print(f"   Confidence threshold met: {result1.hitl.confidence_threshold_met}")
-    print(f"   SLA (minutes): {result1.hitl.estimated_sla_minutes}")
-    print(f"   Duration: {result1.hitl.duration_ms:.1f}ms")
+    logger.info("✅ HITL check for high confidence action:")
+    logger.info("   Requires human review: %s", result1.hitl.requires_human_review)
+    logger.info("   Automation level: %s", result1.hitl.automation_level)
+    logger.info("   Risk level: %s", result1.hitl.risk_level)
+    logger.info("   Confidence threshold met: %s", result1.hitl.confidence_threshold_met)
+    logger.info("   SLA (minutes): %s", result1.hitl.estimated_sla_minutes)
+    logger.info("   Duration: %.1fms", result1.hitl.duration_ms)
 
     # Test 2: Medium confidence action (should require supervised review)
     result2 = await ethical_guardian.validate_action(
@@ -710,14 +712,14 @@ async def test_hitl_human_in_the_loop(ethical_guardian):
     # Assertions for medium confidence action
     assert result2.hitl is not None, "Should have HITL check result"
     # May require human review depending on risk assessment
-    print("\n✅ HITL check for medium confidence action:")
-    print(f"   Requires human review: {result2.hitl.requires_human_review}")
-    print(f"   Automation level: {result2.hitl.automation_level}")
-    print(f"   Risk level: {result2.hitl.risk_level}")
-    print(f"   Confidence threshold met: {result2.hitl.confidence_threshold_met}")
-    print(f"   SLA (minutes): {result2.hitl.estimated_sla_minutes}")
-    print(f"   Escalation recommended: {result2.hitl.escalation_recommended}")
-    print(f"   Human expertise required: {result2.hitl.human_expertise_required}")
+    logger.info("✅ HITL check for medium confidence action:")
+    logger.info("   Requires human review: %s", result2.hitl.requires_human_review)
+    logger.info("   Automation level: %s", result2.hitl.automation_level)
+    logger.info("   Risk level: %s", result2.hitl.risk_level)
+    logger.info("   Confidence threshold met: %s", result2.hitl.confidence_threshold_met)
+    logger.info("   SLA (minutes): %s", result2.hitl.estimated_sla_minutes)
+    logger.info("   Escalation recommended: %s", result2.hitl.escalation_recommended)
+    logger.info("   Human expertise required: %s", result2.hitl.human_expertise_required)
 
     # Test 3: Low confidence action (should require manual review)
     result3 = await ethical_guardian.validate_action(
@@ -734,22 +736,22 @@ async def test_hitl_human_in_the_loop(ethical_guardian):
     # Assertions for low confidence action
     assert result3.hitl is not None, "Should have HITL check result"
     # May require human review
-    print("\n✅ HITL check for low confidence action:")
-    print(f"   Requires human review: {result3.hitl.requires_human_review}")
-    print(f"   Automation level: {result3.hitl.automation_level}")
-    print(f"   Risk level: {result3.hitl.risk_level}")
-    print(f"   Confidence threshold met: {result3.hitl.confidence_threshold_met}")
-    print(f"   SLA (minutes): {result3.hitl.estimated_sla_minutes}")
-    print(f"   Escalation recommended: {result3.hitl.escalation_recommended}")
-    print(f"   Human expertise required: {result3.hitl.human_expertise_required}")
-    print(f"   Rationale: {result3.hitl.decision_rationale}")
+    logger.info("✅ HITL check for low confidence action:")
+    logger.info("   Requires human review: %s", result3.hitl.requires_human_review)
+    logger.info("   Automation level: %s", result3.hitl.automation_level)
+    logger.info("   Risk level: %s", result3.hitl.risk_level)
+    logger.info("   Confidence threshold met: %s", result3.hitl.confidence_threshold_met)
+    logger.info("   SLA (minutes): %s", result3.hitl.estimated_sla_minutes)
+    logger.info("   Escalation recommended: %s", result3.hitl.escalation_recommended)
+    logger.info("   Human expertise required: %s", result3.hitl.human_expertise_required)
+    logger.info("   Rationale: %s", result3.hitl.decision_rationale)
 
     # Test 4: Check decision type for REQUIRES_HUMAN_REVIEW
     if result3.hitl.requires_human_review:
         assert result3.decision_type == "requires_human_review", "Should set decision type to REQUIRES_HUMAN_REVIEW"
-        print(f"\n✅ Decision type correctly set to: {result3.decision_type}")
+        logger.info("✅ Decision type correctly set to: %s", result3.decision_type)
 
-    print("\n✅ Test passed: Phase 5 HITL (Human-in-the-Loop) working correctly")
+    logger.info("✅ Test passed: Phase 5 HITL (Human-in-the-Loop) working correctly")
 
 
 # ============================================================================
@@ -757,12 +759,12 @@ async def test_hitl_human_in_the_loop(ethical_guardian):
 # ============================================================================
 
 if __name__ == "__main__":
-    print("\n" + "=" * 80)
-    print("MAXIMUS + ETHICAL AI INTEGRATION TEST SUITE")
-    print("=" * 80)
-    print("\nRunning comprehensive integration tests...")
-    print("Testing: EthicalGuardian, EthicalToolWrapper, Tool Orchestration")
-    print("Phases Tested: Governance, Ethics, Fairness, XAI, Privacy (DP), FL, HITL, Compliance")
-    print("\n" + "=" * 80)
+    logger.info("=" * 80)
+    logger.info("MAXIMUS + ETHICAL AI INTEGRATION TEST SUITE")
+    logger.info("=" * 80)
+    logger.info("Running comprehensive integration tests...")
+    logger.info("Testing: EthicalGuardian, EthicalToolWrapper, Tool Orchestration")
+    logger.info("Phases Tested: Governance, Ethics, Fairness, XAI, Privacy (DP), FL, HITL, Compliance")
+    logger.info("=" * 80)
 
     pytest.main([__file__, "-v", "--tb=short", "-s"])

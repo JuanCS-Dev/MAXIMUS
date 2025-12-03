@@ -11,6 +11,7 @@ from enum import Enum
 
 class ArousalLevel(Enum):
     """Classification of arousal states."""
+
     SLEEP = "sleep"  # 0.0-0.2: Minimal/no consciousness
     DROWSY = "drowsy"  # 0.2-0.4: Reduced awareness
     RELAXED = "relaxed"  # 0.4-0.6: Normal baseline

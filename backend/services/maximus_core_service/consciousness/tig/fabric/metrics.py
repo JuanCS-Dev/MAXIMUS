@@ -81,13 +81,19 @@ class FabricMetrics:
             violations.append(f"Clustering too low: {self.avg_clustering_coefficient:.3f} < 0.75")
 
         if self.avg_path_length > np.log(self.node_count) * 2:
-            violations.append(f"Path length too high: {self.avg_path_length:.2f} > {np.log(self.node_count) * 2:.2f}")
+            violations.append(
+                f"Path length too high: {self.avg_path_length:.2f} > {np.log(self.node_count) * 2:.2f}"
+            )
 
         if self.algebraic_connectivity < 0.3:
-            violations.append(f"Algebraic connectivity too low: {self.algebraic_connectivity:.3f} < 0.3")
+            violations.append(
+                f"Algebraic connectivity too low: {self.algebraic_connectivity:.3f} < 0.3"
+            )
 
         if self.has_feed_forward_bottlenecks:
-            violations.append(f"Feed-forward bottlenecks detected at: {', '.join(self.bottleneck_locations)}")
+            violations.append(
+                f"Feed-forward bottlenecks detected at: {', '.join(self.bottleneck_locations)}"
+            )
 
         if self.min_path_redundancy < 3:
             violations.append(f"Insufficient path redundancy: {self.min_path_redundancy} < 3")

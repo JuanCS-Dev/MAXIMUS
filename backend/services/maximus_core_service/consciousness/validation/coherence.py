@@ -172,10 +172,10 @@ class CoherenceValidator:
         metrics = validator.compute_metrics(esgt_event)
         compliance = validator.validate_gwd(metrics)
 
-        print(compliance.get_summary())
+        logger.info("%s", compliance.get_summary())
 
         if compliance.is_compliant:
-            print("🧠 Event achieved conscious-level dynamics")
+            logger.info("🧠 Event achieved conscious-level dynamics")
 
     Validation Thresholds:
     ----------------------
@@ -236,7 +236,9 @@ class CoherenceValidator:
             metrics.final_coherence = float(coherences[-1]) if len(coherences) > 0 else 0.0
             metrics.coherence_std = float(np.std(coherences))
             metrics.coherence_cv = (
-                metrics.coherence_std / metrics.mean_coherence if metrics.mean_coherence > 0 else float("inf")
+                metrics.coherence_std / metrics.mean_coherence
+                if metrics.mean_coherence > 0
+                else float("inf")
             )
             metrics.coherence_samples = len(coherences)
         else:
@@ -254,7 +256,9 @@ class CoherenceValidator:
         metrics.participating_nodes = event.node_count
         # Total nodes would come from TIG fabric (simulated here)
         metrics.total_nodes = max(event.node_count, 16)  # Minimum estimate
-        metrics.broadcast_coverage = event.node_count / metrics.total_nodes if metrics.total_nodes > 0 else 0.0
+        metrics.broadcast_coverage = (
+            event.node_count / metrics.total_nodes if metrics.total_nodes > 0 else 0.0
+        )
 
         # Quality classification
         metrics.quality = self._classify_quality(metrics.mean_coherence)
@@ -300,7 +304,9 @@ class CoherenceValidator:
             )
 
         # Duration check
-        compliance.duration_pass = self.min_duration <= metrics.total_duration_ms <= self.max_duration
+        compliance.duration_pass = (
+            self.min_duration <= metrics.total_duration_ms <= self.max_duration
+        )
         if not compliance.duration_pass:
             if metrics.total_duration_ms < self.min_duration:
                 compliance.violations.append(
@@ -335,10 +341,14 @@ class CoherenceValidator:
 
         # Additional warnings
         if metrics.peak_coherence < 0.80:
-            compliance.warnings.append(f"Peak coherence moderate: {metrics.peak_coherence:.3f} < 0.80")
+            compliance.warnings.append(
+                f"Peak coherence moderate: {metrics.peak_coherence:.3f} < 0.80"
+            )
 
         if metrics.time_to_coherence_ms and metrics.time_to_coherence_ms > 30:
-            compliance.warnings.append(f"Slow synchronization: {metrics.time_to_coherence_ms:.1f}ms to reach threshold")
+            compliance.warnings.append(
+                f"Slow synchronization: {metrics.time_to_coherence_ms:.1f}ms to reach threshold"
+            )
 
         return compliance
 
@@ -384,7 +394,9 @@ class CoherenceValidator:
             score += 20.0
         else:
             # Penalty for exceeding threshold
-            score += 20.0 * max(1.0 - (initiation_latency - self.latency_threshold) / self.latency_threshold, 0)
+            score += 20.0 * max(
+                1.0 - (initiation_latency - self.latency_threshold) / self.latency_threshold, 0
+            )
 
         # Coverage (20 points)
         if metrics.broadcast_coverage >= self.coverage_threshold:

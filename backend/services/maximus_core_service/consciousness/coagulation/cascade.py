@@ -43,6 +43,7 @@ logger = logging.getLogger(__name__)
 
 class CascadePhase(Enum):
     """Coagulation cascade phases."""
+
     IDLE = "idle"
     INITIATION = "initiation"  # Threat detection
     AMPLIFICATION = "amplification"  # Thrombin feedback
@@ -53,6 +54,7 @@ class CascadePhase(Enum):
 
 class CascadePathway(Enum):
     """Coagulation pathways."""
+
     INTRINSIC = "intrinsic"  # Internal (MMEI)
     EXTRINSIC = "extrinsic"  # External (ESGT)
     COMMON = "common"  # Final pathway
@@ -65,6 +67,7 @@ class ThreatSignal:
 
     Biological analog: Tissue factor exposure / collagen exposure.
     """
+
     threat_id: str
     severity: float  # [0-1] 0=minor, 1=critical
     source: str  # "mmei", "esgt", "immune_tools"
@@ -84,6 +87,7 @@ class CoagulationResponse:
 
     Biological analog: Fibrin clot formation.
     """
+
     response_id: str
     phase: CascadePhase
     amplification_factor: float  # Thrombin-like amplification
@@ -105,6 +109,7 @@ class CascadeState:
 
     Tracks: Phase, amplification, active threats, consolidated memories.
     """
+
     phase: CascadePhase = CascadePhase.IDLE
     amplification_factor: float = 1.0  # Starts at 1.0 (no amplification)
     active_threats: list[ThreatSignal] = field(default_factory=list)
@@ -155,10 +160,7 @@ class CoagulationCascade:
         logger.info("🩸 Coagulation Cascade initialized")
 
     def trigger_cascade(
-        self,
-        threat: ThreatSignal,
-        mmei_repair_need: float = 0.0,
-        esgt_salience: float = 0.0
+        self, threat: ThreatSignal, mmei_repair_need: float = 0.0, esgt_salience: float = 0.0
     ) -> CoagulationResponse:
         """
         Trigger coagulation cascade in response to threat.
@@ -232,10 +234,7 @@ class CoagulationCascade:
         return response
 
     def _activate_pathways(
-        self,
-        threat: ThreatSignal,
-        mmei_repair_need: float,
-        esgt_salience: float
+        self, threat: ThreatSignal, mmei_repair_need: float, esgt_salience: float
     ) -> None:
         """
         Activate intrinsic and/or extrinsic pathways.
@@ -246,16 +245,20 @@ class CoagulationCascade:
         - Common: Both pathways converge (activates both based on inputs)
         """
         # Intrinsic pathway (internal threat detection)
-        if (threat.pathway == CascadePathway.INTRINSIC or
-            threat.pathway == CascadePathway.COMMON or
-            threat.source == "mmei"):
+        if (
+            threat.pathway == CascadePathway.INTRINSIC
+            or threat.pathway == CascadePathway.COMMON
+            or threat.source == "mmei"
+        ):
             self.state.intrinsic_activation = min(1.0, mmei_repair_need * threat.severity)
             logger.debug(f"  Intrinsic pathway activated: {self.state.intrinsic_activation:.2f}")
 
         # Extrinsic pathway (external threat signals)
-        if (threat.pathway == CascadePathway.EXTRINSIC or
-            threat.pathway == CascadePathway.COMMON or
-            threat.source == "esgt"):
+        if (
+            threat.pathway == CascadePathway.EXTRINSIC
+            or threat.pathway == CascadePathway.COMMON
+            or threat.source == "esgt"
+        ):
             self.state.extrinsic_activation = min(1.0, esgt_salience * threat.severity)
             logger.debug(f"  Extrinsic pathway activated: {self.state.extrinsic_activation:.2f}")
 
@@ -274,22 +277,16 @@ class CoagulationCascade:
         """
         # Thrombin level = sum of pathway activations
         self.state.thrombin_level = (
-            self.state.intrinsic_activation +
-            self.state.extrinsic_activation
+            self.state.intrinsic_activation + self.state.extrinsic_activation
         ) / 2.0
 
         # Amplification: exponential with thrombin feedback
         # Formula: A(t) = A(0) * e^(k*thrombin)
         # Simplified: A = 1 + (thrombin * rate)^2
-        amplification = 1.0 + (
-            self.state.thrombin_level * self.THROMBIN_AMPLIFICATION_RATE
-        ) ** 2
+        amplification = 1.0 + (self.state.thrombin_level * self.THROMBIN_AMPLIFICATION_RATE) ** 2
 
         # FASE VII: Cap amplification (prevent runaway)
-        self.state.amplification_factor = min(
-            amplification,
-            self.state.max_amplification
-        )
+        self.state.amplification_factor = min(amplification, self.state.max_amplification)
 
         logger.debug(
             f"  Thrombin amplification: {self.state.thrombin_level:.2f} → "
@@ -311,10 +308,7 @@ class CoagulationCascade:
         # In production, would use similarity/correlation analysis
         num_errors_to_cluster = int(self.state.amplification_factor * 2)
 
-        errors_clustered = [
-            f"{threat.threat_id}-error-{i}"
-            for i in range(num_errors_to_cluster)
-        ]
+        errors_clustered = [f"{threat.threat_id}-error-{i}" for i in range(num_errors_to_cluster)]
 
         logger.debug(f"  Cascade propagated: {len(errors_clustered)} errors clustered")
 
@@ -333,21 +327,21 @@ class CoagulationCascade:
         """
         # Fibrin formation rate based on thrombin level
         self.state.fibrin_formation = min(
-            1.0,
-            self.state.thrombin_level * self.FIBRIN_FORMATION_RATE
+            1.0, self.state.thrombin_level * self.FIBRIN_FORMATION_RATE
         )
 
         # Consolidation strength = fibrin * amplification
         consolidation_strength = min(
-            1.0,
-            self.state.fibrin_formation * (self.state.amplification_factor / 10.0)
+            1.0, self.state.fibrin_formation * (self.state.amplification_factor / 10.0)
         )
 
         # Record consolidated memory
         if consolidation_strength >= 0.7:
             memory_id = f"memory-{threat.threat_id}"
             self.state.consolidated_memories.append(memory_id)
-            logger.debug(f"  Memory consolidated: {memory_id} (strength={consolidation_strength:.2f})")
+            logger.debug(
+                f"  Memory consolidated: {memory_id} (strength={consolidation_strength:.2f})"
+            )
 
         return consolidation_strength
 
@@ -371,7 +365,7 @@ class CoagulationCascade:
         # FASE VII: Bounds enforcement
         self.state.anticoagulation_level = max(
             self.state.min_anticoagulation,
-            min(self.state.anticoagulation_level, self.state.max_anticoagulation)
+            min(self.state.anticoagulation_level, self.state.max_anticoagulation),
         )
 
         logger.debug(f"  Anticoagulation regulated: {self.state.anticoagulation_level:.2f}")

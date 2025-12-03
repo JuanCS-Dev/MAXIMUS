@@ -298,7 +298,11 @@ class EventCollector:
                         event = ConsciousnessEvent(
                             event_id=f"safety-{violation.violation_id}",
                             event_type=EventType.SAFETY_VIOLATION,
-                            severity=EventSeverity.CRITICAL if violation.severity.value == "CRITICAL" else EventSeverity.HIGH,
+                            severity=(
+                                EventSeverity.CRITICAL
+                                if violation.severity.value == "CRITICAL"
+                                else EventSeverity.HIGH
+                            ),
                             timestamp=violation.timestamp.timestamp(),
                             source="Safety Protocol",
                             data={
@@ -341,7 +345,11 @@ class EventCollector:
                         source="Arousal Controller",
                         data={
                             "arousal_level": arousal_state.arousal,
-                            "classification": arousal_state.level.value if hasattr(arousal_state.level, 'value') else str(arousal_state.level),
+                            "classification": (
+                                arousal_state.level.value
+                                if hasattr(arousal_state.level, "value")
+                                else str(arousal_state.level)
+                            ),
                             "stress": arousal_state.stress_contribution,
                             "need": arousal_state.need_contribution,
                         },

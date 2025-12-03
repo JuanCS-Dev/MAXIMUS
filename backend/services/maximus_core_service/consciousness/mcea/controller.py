@@ -83,7 +83,9 @@ class ArousalController:
         else:
             return ArousalLevel.PANIC
 
-    def register_arousal_callback(self, callback: Callable[[ArousalState], None | Coroutine[Any, Any, None]]) -> None:
+    def register_arousal_callback(
+        self, callback: Callable[[ArousalState], None | Coroutine[Any, Any, None]]
+    ) -> None:
         """Register callback invoked on arousal state changes."""
         self._arousal_callbacks.append(callback)
 
@@ -93,7 +95,7 @@ class ArousalController:
             return
         self._running = True
         self._update_task = asyncio.create_task(self._update_loop())
-        print(f"🌅 MCEA Arousal Controller {self.controller_id} started (MPE active)")
+        logger.info("🌅 MCEA Arousal Controller %s started (MPE active)", self.controller_id)
 
     async def stop(self) -> None:
         """Stop controller."""
@@ -115,7 +117,7 @@ class ArousalController:
                 self.total_updates += 1
                 await asyncio.sleep(interval)
             except Exception as e:
-                print(f"⚠️  Arousal update error: {e}")
+                logger.info("⚠️  Arousal update error: %s", e)
                 await asyncio.sleep(interval)
 
     async def _update_arousal(self, dt: float) -> None:
@@ -163,7 +165,9 @@ class ArousalController:
             circadian_contribution=circadian_contrib,
             esgt_salience_threshold=self._current_state.compute_effective_threshold(),
         )
-        self._current_state.esgt_salience_threshold = self._current_state.compute_effective_threshold()
+        self._current_state.esgt_salience_threshold = (
+            self._current_state.compute_effective_threshold()
+        )
 
         if self._current_state.level != old_level:
             duration = time.time() - self._level_transition_time
@@ -217,7 +221,7 @@ class ArousalController:
                 else:
                     callback(self._current_state)
             except Exception as e:
-                print(f"⚠️  Callback error: {e}")
+                logger.info("⚠️  Callback error: %s", e)
 
     def get_current_arousal(self) -> ArousalState:
         """Get current arousal state."""
@@ -312,7 +316,7 @@ class ArousalController:
                 duration = time.time() - self.arousal_saturation_start
                 if duration >= AROUSAL_SATURATION_THRESHOLD_SECONDS:
                     self.saturation_events += 1
-                    print(f"⚠️  MCEA SATURATION: Arousal stuck at {arousal:.2f} for {duration:.1f}s")
+                    logger.info("⚠️  MCEA SATURATION: Arousal stuck at %.2f for {duration:.1f}s", arousal)
                     self.arousal_saturation_start = time.time()
         else:
             self.arousal_saturation_start = None
@@ -324,7 +328,7 @@ class ArousalController:
         stddev = float(np.std(self.arousal_history))
         if stddev > AROUSAL_OSCILLATION_THRESHOLD:
             self.oscillation_events += 1
-            print(f"⚠️  MCEA OSCILLATION: variance={stddev:.3f}")
+            logger.info("⚠️  MCEA OSCILLATION: variance=%.3f", stddev)
 
     def get_health_metrics(self) -> dict[str, any]:
         """Get MCEA health metrics for Safety Core integration."""
