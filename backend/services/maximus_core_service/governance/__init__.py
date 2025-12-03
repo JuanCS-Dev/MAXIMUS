@@ -1,98 +1,67 @@
 """
-Governance Module for VÉRTICE Platform
+Governance Module - Ethical Governance Framework.
 
-Phase 0: Foundation & Governance
+Core data structures for the VÉRTICE Platform's ethical governance framework,
+including Ethics Review Board (ERB), policy management, and audit infrastructure.
 
-Provides comprehensive governance framework including:
-- Ethics Review Board (ERB) management
-- 5 core ethical policies
-- Policy enforcement engine
-- PostgreSQL audit infrastructure
-- Whistleblower protection
+This module provides the foundation for Phase 0: Foundation & Governance.
 
 Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
+Refactored: 2025-12-03
 """
 
 from __future__ import annotations
 
+# Configuration
+from .config import GovernanceConfig
 
-__version__ = "1.0.0"
-__author__ = "VÉRTICE Platform Team"
-
-# Base data structures
-# Audit infrastructure
-from .audit_infrastructure import AuditLogger
-from .base import (
-    # Audit structures
-    AuditLog,
-    # Enums
+# Enums
+from .enums import (
     AuditLogLevel,
     DecisionType,
-    # ERB structures
-    ERBDecision,
-    ERBMeeting,
-    ERBMember,
     ERBMemberRole,
     GovernanceAction,
-    # Config
-    GovernanceConfig,
-    # Results
-    GovernanceResult,
-    # Policy structures
-    Policy,
-    PolicyEnforcementResult,
     PolicySeverity,
     PolicyType,
-    PolicyViolation,
-    WhistleblowerReport,
 )
 
-# ERB management
-from .ethics_review_board import ERBManager
+# ERB models
+from .erb import ERBDecision, ERBMeeting, ERBMember
 
-# Policies
-from .policies import (
-    PolicyRegistry,
-    create_data_privacy_policy,
-    create_ethical_use_policy,
-    create_incident_response_policy,
-    create_red_teaming_policy,
-    create_whistleblower_policy,
-)
+# Policy models
+from .policy import Policy, PolicyEnforcementResult, PolicyViolation
 
-# Policy enforcement
-from .policy_engine import PolicyEngine
+# Audit models
+from .audit import AuditLog
+
+# Whistleblower models
+from .whistleblower import WhistleblowerReport
+
+# Results
+from .results import GovernanceResult
 
 __all__ = [
-    # Enums
-    "AuditLogLevel",
-    "DecisionType",
-    "ERBMemberRole",
-    "GovernanceAction",
-    "PolicySeverity",
-    "PolicyType",
-    # Config
+    # Configuration
     "GovernanceConfig",
+    # Enums
+    "PolicyType",
+    "PolicySeverity",
+    "ERBMemberRole",
+    "DecisionType",
+    "AuditLogLevel",
+    "GovernanceAction",
     # ERB
-    "ERBDecision",
-    "ERBManager",
-    "ERBMeeting",
     "ERBMember",
-    # Policies
+    "ERBMeeting",
+    "ERBDecision",
+    # Policy
     "Policy",
-    "PolicyEnforcementResult",
-    "PolicyEngine",
-    "PolicyRegistry",
     "PolicyViolation",
-    "create_data_privacy_policy",
-    "create_ethical_use_policy",
-    "create_incident_response_policy",
-    "create_red_teaming_policy",
-    "create_whistleblower_policy",
+    "PolicyEnforcementResult",
     # Audit
     "AuditLog",
-    "AuditLogger",
+    # Whistleblower
     "WhistleblowerReport",
     # Results
     "GovernanceResult",
