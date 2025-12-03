@@ -13,7 +13,7 @@ import logging
 
 from workflows.attack_surface_adw import AttackSurfaceWorkflow
 from workflows.credential_intel_adw import CredentialIntelWorkflow
-from workflows.target_profiling_adw import TargetProfilingWorkflow
+from workflows.target_profiling import TargetProfilingWorkflow
 
 logger = logging.getLogger(__name__)
 

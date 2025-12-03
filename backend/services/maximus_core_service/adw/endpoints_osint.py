@@ -21,7 +21,7 @@ from workflows.credential_intel_adw import (
     CredentialIntelWorkflow,
     CredentialTarget,
 )
-from workflows.target_profiling_adw import (
+from workflows.target_profiling import (
     ProfileTarget,
     TargetProfilingWorkflow,
 )
