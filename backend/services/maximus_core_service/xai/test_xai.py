@@ -13,7 +13,7 @@ from .base import DetailLevel, ExplanationCache, ExplanationResult, ExplanationT
 from .counterfactual import CounterfactualGenerator
 from .engine import ExplanationEngine
 from .feature_tracker import FeatureImportanceTracker
-from .lime_cybersec import CyberSecLIME
+from .lime import CyberSecLIME
 from .shap_cybersec import CyberSecSHAP
 
 # ============================================================================

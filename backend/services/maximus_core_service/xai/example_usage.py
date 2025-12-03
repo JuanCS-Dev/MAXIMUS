@@ -14,7 +14,7 @@ import numpy as np
 from .base import DetailLevel, ExplanationType
 from .counterfactual import CounterfactualGenerator
 from .engine import ExplanationEngine
-from .lime_cybersec import CyberSecLIME
+from .lime import CyberSecLIME
 from .shap_cybersec import CyberSecSHAP
 
 # ============================================================================
