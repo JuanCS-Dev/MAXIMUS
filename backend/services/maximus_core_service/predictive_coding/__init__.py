@@ -76,6 +76,9 @@ Components:
 ==========
 """
 
+from __future__ import annotations
+
+
 from .hpc_network import HierarchicalPredictiveCodingNetwork
 from .layer1_sensory import EventVAE, SensoryLayer
 from .layer2_behavioral import BehavioralGNN, BehavioralLayer, EventGraph

@@ -12,6 +12,9 @@ Authors: Claude Code + Juan
 Date: 2025-10-15
 """
 
+from __future__ import annotations
+
+
 import pytest
 import time
 from datetime import datetime

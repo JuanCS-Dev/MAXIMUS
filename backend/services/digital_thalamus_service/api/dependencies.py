@@ -5,10 +5,13 @@ Digital Thalamus Service - API Dependencies
 Dependency injection for FastAPI endpoints.
 """
 
-from ..config import Settings, get_settings
-from ..core.router import RequestRouter
-from ..core.validator import RequestValidator
-from ..utils.logging_config import get_logger, setup_logging
+from __future__ import annotations
+
+
+from config import Settings, get_settings
+from core.router import RequestRouter
+from core.validator import RequestValidator
+from utils.logging_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 

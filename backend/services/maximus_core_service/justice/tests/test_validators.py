@@ -6,6 +6,9 @@ Tests cover:
 - Composite validator aggregation
 """
 
+from __future__ import annotations
+
+
 import pytest
 from services.maximus_core_service.justice.validators import (
     ConstitutionalValidator,

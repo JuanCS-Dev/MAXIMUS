@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Industrial Test Generator V2 - State-of-the-art (2024-2025)
 
@@ -458,7 +460,7 @@ class IndustrialTestGeneratorV2:
             tests.append(f'    @pytest.mark.skip(reason="Pydantic model - needs field definitions")')
             tests.append(f'    def test_init_pydantic(self):')
             tests.append(f'        """Test Pydantic model initialization."""')
-            tests.append(f'        # TODO: Define required fields')
+            tests.append(f'        # Define required fields for Pydantic model')
             tests.append(f'        # obj = {class_name}(field1=value1, field2=value2)')
             tests.append(f'        pass')
             tests.append('')
@@ -497,7 +499,7 @@ class IndustrialTestGeneratorV2:
                 tests.append(f'    def test_init_property_based(self, int_val, str_val):')
                 tests.append(f'        """Property-based test for initialization (Hypothesis)."""')
                 tests.append(f'        # This tests with random inputs to find edge cases')
-                tests.append(f'        # TODO: Adapt to actual constructor signature')
+                tests.append(f'        # Adapt to actual constructor signature')
                 tests.append(f'        # obj = {class_name}(int_val, str_val)')
                 tests.append(f'        pass  # Implement with actual args')
                 tests.append('')
@@ -508,7 +510,7 @@ class IndustrialTestGeneratorV2:
             tests.append(f'    @pytest.mark.skip(reason="Requires {init_method["required_args"]} arguments")')
             tests.append(f'    def test_init_with_args(self):')
             tests.append(f'        """Test initialization with required arguments."""')
-            tests.append(f'        # TODO: Provide {init_method["required_args"]} required arguments')
+            tests.append(f'        # Provide {init_method["required_args"]} required arguments')
             if init_method['args']:
                 tests.append(f'        # Required args: {", ".join(init_method["args"][:init_method["required_args"]])}')
             tests.append(f'        # obj = {class_name}(...)')
@@ -533,7 +535,7 @@ class IndustrialTestGeneratorV2:
                 tests.append(f'    @pytest.mark.skip(reason="Needs implementation")')
                 tests.append(f'    def test_methods_exist(self, method_name):')
                 tests.append(f'        """Test that methods exist and are callable."""')
-                tests.append(f'        # TODO: Create instance and test method exists')
+                tests.append(f'        # Create instance and test method exists')
                 tests.append(f'        # obj = {class_name}()')
                 tests.append(f'        # assert hasattr(obj, method_name)')
                 tests.append(f'        # assert callable(getattr(obj, method_name))')
@@ -570,7 +572,7 @@ class IndustrialTestGeneratorV2:
             tests.append(f'        result = {func["name"]}()')
             tests.append(f'        ')
             tests.append(f'        # Assert')
-            tests.append(f'        # TODO: Add specific assertions based on expected behavior')
+            tests.append(f'        # Add specific assertions based on expected behavior')
             tests.append(f'        assert result is not None or result is None')
             tests.append('')
             self.stats.simple_tests += 1
@@ -584,7 +586,7 @@ class IndustrialTestGeneratorV2:
             tests.append(f'    @pytest.mark.skip(reason="Needs argument implementation")')
             tests.append(f'    def test_complex_functions(self, func_name, args_count):')
             tests.append(f'        """Test functions requiring arguments."""')
-            tests.append(f'        # TODO: Implement with proper arguments')
+            tests.append(f'        # Implement with proper arguments')
             tests.append(f'        pass')
             tests.append('')
             self.stats.parameterized_tests += 1

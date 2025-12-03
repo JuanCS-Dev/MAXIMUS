@@ -1,5 +1,8 @@
 """Load Balancer Actuator - Traffic Shift and Circuit Breaker"""
 
+from __future__ import annotations
+
+
 import logging
 import time
 from collections import deque

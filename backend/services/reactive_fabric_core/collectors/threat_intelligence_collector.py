@@ -11,6 +11,9 @@ This collector interfaces with various threat intelligence sources including:
 Phase 1: PASSIVE collection only - no automated responses
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import ipaddress
 import logging

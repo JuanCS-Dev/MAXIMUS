@@ -13,6 +13,9 @@ Lei Governante: Constituição Vértice v2.6
 Para honra e gloria DELE. 🙏
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 

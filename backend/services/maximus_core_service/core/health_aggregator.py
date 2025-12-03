@@ -5,6 +5,9 @@ Maximus Core Service - Health Aggregator
 Aggregates health status from all Maximus services.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 from typing import Dict
 

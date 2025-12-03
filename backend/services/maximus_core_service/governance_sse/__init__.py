@@ -22,6 +22,9 @@ Date: 2025-10-06
 Quality: REGRA DE OURO compliant (zero mocks, zero placeholders, zero incomplete code)
 """
 
+from __future__ import annotations
+
+
 from .api_routes import create_governance_api
 from .event_broadcaster import BroadcastOptions, EventBroadcaster
 from .sse_server import GovernanceSSEServer, SSEEvent, decision_to_sse_data

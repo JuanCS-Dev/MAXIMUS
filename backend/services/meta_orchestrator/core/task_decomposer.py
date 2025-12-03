@@ -11,6 +11,8 @@ Based on research:
 - Gemini 3 Pro multi-step reasoning
 """
 
+from __future__ import annotations
+
 from typing import List, Dict, Any, Optional, cast
 from dataclasses import dataclass
 import json

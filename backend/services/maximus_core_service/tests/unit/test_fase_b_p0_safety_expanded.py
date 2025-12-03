@@ -10,6 +10,9 @@ Substantive functional tests - Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS! P0 SAFETY COVERAGE EXPANSION! 🔥
 """
 
+from __future__ import annotations
+
+
 import pytest
 from pathlib import Path
 

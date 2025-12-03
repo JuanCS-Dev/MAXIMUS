@@ -20,6 +20,9 @@ Date: 2025-10-08
 Status: DOUTRINA VÉRTICE v2.0 COMPLIANT
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 
 import pytest
@@ -595,7 +598,7 @@ class TestMetaMonitorEdgeCases:
 
     def test_bias_detector_no_confirmation_bias(self):
         """Test bias detection when no confirmation bias is present."""
-        from .recursive_reasoner import ReasoningLevel, ReasoningStep
+        from consciousness.lrr.reasoning_models import ReasoningLevel, ReasoningStep
         monitor = MetaMonitor()
         levels = [
             ReasoningLevel(level=0, beliefs=[Belief(content="A")], steps=[ReasoningStep(belief=Belief(content="A"), meta_level=0)]),
@@ -614,7 +617,7 @@ class TestMetaMonitorEdgeCases:
         """Test recommendation generation with no detected issues."""
         monitor = MetaMonitor()
         metrics = {"total_levels": 3}
-        from .meta_monitor import CalibrationMetrics
+        from consciousness.lrr.meta_monitor import CalibrationMetrics
         calibration = CalibrationMetrics(brier_score=0.1, expected_calibration_error=0.1, correlation=0.8)
         recommendations = monitor._generate_recommendations(metrics, [], calibration)
         assert recommendations == ["Metacognition stable; continue monitoring."]
@@ -875,7 +878,7 @@ class TestIntrospectionEdgeCases:
 
     def test_summarise_justification_no_steps(self):
         """Test justification summary for a level with no steps."""
-        from .recursive_reasoner import ReasoningLevel
+        from consciousness.lrr.reasoning_models import ReasoningLevel
         engine = IntrospectionEngine()
         level = ReasoningLevel(level=0, beliefs=[], steps=[])
         summary = engine.belief_explainer.summarise_justification(level)
@@ -883,7 +886,7 @@ class TestIntrospectionEdgeCases:
 
     def test_introspect_level_no_beliefs(self):
         """Test introspection for a level with no beliefs."""
-        from .recursive_reasoner import ReasoningLevel
+        from consciousness.lrr.reasoning_models import ReasoningLevel
         engine = IntrospectionEngine()
         level = ReasoningLevel(level=1, beliefs=[], steps=[])
         fragment = engine._introspect_level(level)

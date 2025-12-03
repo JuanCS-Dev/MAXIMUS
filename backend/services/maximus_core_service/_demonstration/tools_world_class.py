@@ -10,6 +10,9 @@ information from the external world, perform complex calculations, and interact
 with other systems, significantly expanding its operational scope.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Any, Dict, List, Optional
 

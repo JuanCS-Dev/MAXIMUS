@@ -5,6 +5,8 @@ Tests compliance with Constituição Vértice v3.0.
 Author: Vértice Platform Team
 """
 
+from __future__ import annotations
+
 import pytest
 from fastapi.testclient import TestClient
 

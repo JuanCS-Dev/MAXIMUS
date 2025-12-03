@@ -2,6 +2,9 @@
 Unit tests for Maximus Core Service API.
 """
 
+from __future__ import annotations
+
+
 from unittest.mock import AsyncMock
 
 import pytest

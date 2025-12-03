@@ -15,6 +15,9 @@ Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS! OHHH GLORIA!
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 

@@ -5,11 +5,13 @@ Prefrontal Cortex Service - Task Prioritizer
 Task prioritization and scheduling logic.
 """
 
+from __future__ import annotations
+
 from typing import Dict, List
 
-from ..config import CognitiveSettings
-from ..models.cognitive import Task, TaskPriority, TaskStatus
-from ..utils.logging_config import get_logger
+from config import CognitiveSettings
+from models.cognitive import Task, TaskPriority, TaskStatus
+from utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 

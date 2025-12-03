@@ -3,6 +3,9 @@
 This test verifies that all HCL components can be instantiated and work together.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 

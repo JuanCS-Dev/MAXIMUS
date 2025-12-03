@@ -11,6 +11,9 @@ of Maximus, ensuring that all parts work in harmony to achieve intelligent
 behavior and respond effectively to complex tasks and dynamic environments.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime
 import os

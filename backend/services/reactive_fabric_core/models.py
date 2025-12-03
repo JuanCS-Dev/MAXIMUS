@@ -5,6 +5,9 @@ Data validation and serialization
 Sprint 1: Real implementation
 """
 
+from __future__ import annotations
+
+
 from pydantic import BaseModel, Field
 from typing import List, Dict, Any, Optional
 from datetime import datetime

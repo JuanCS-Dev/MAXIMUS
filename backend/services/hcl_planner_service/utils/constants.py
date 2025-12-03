@@ -6,6 +6,8 @@ All magic numbers and configuration constants.
 Each constant includes rationale for its value.
 """
 
+from __future__ import annotations
+
 # Gemini API Configuration
 GEMINI_MAX_TOKENS = 8192
 """Maximum output tokens for Gemini responses.

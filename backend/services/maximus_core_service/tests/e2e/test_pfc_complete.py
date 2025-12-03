@@ -16,6 +16,9 @@ Authors: Claude Code (Tactical Executor)
 Date: 2025-10-14
 """
 
+from __future__ import annotations
+
+
 import pytest
 from consciousness.system import ConsciousnessSystem, ConsciousnessConfig
 from consciousness.esgt.coordinator import SalienceScore

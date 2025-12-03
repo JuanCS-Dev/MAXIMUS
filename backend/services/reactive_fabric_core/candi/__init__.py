@@ -3,6 +3,9 @@ CANDI - Cyber ANalysis & Deception Intelligence
 Analysis and orchestration engine for Reactive Fabric Layer 2 (DMZ)
 """
 
+from __future__ import annotations
+
+
 from .candi_core import CANDICore, ThreatLevel, AnalysisResult
 from .forensic_analyzer import ForensicAnalyzer, ForensicReport
 from .attribution_engine import AttributionEngine, AttributionResult

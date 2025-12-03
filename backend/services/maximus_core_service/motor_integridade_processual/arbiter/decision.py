@@ -5,7 +5,10 @@ Provides structured decision formatting and human-readable explanations
 for ethical verdicts. Ensures decisions are properly justified with
 sufficient reasoning and confidence indicators.
 """
-from typing import Dict
+
+from __future__ import annotations
+
+from typing import Dict, Any
 from motor_integridade_processual.models.verdict import (
     EthicalVerdict
 )
@@ -76,7 +79,7 @@ class DecisionArbiter:
         
         return f"{decision_label}: {reason} (confidence: {confidence})"
     
-    def format_detailed_report(self, verdict: EthicalVerdict) -> Dict[str, any]:
+    def format_detailed_report(self, verdict: EthicalVerdict) -> Dict[str, Any]:
         """
         Generate detailed decision report with framework breakdown.
         
@@ -111,20 +114,17 @@ class DecisionArbiter:
         }
         
         # Add rejection reasons if present (from any framework)
-        all_rejections = []
-        for fv in verdict.framework_verdicts.values():
-            if fv.rejection_reasons:
-                all_rejections.extend(fv.rejection_reasons)
-        
-        if all_rejections:
-            report["rejection_reasons"] = [
-                {
-                    "issue": rr.issue_description,
-                    "severity": rr.severity,
-                    "framework": rr.framework.value
-                }
-                for rr in all_rejections
-            ]
+        if verdict.framework_verdicts:
+            rejection_reasons_list: list[dict[str, Any]] = []
+            report["rejection_reasons"] = rejection_reasons_list
+            for fv in verdict.framework_verdicts.values():
+                if fv.rejection_reasons:
+                    for rr in fv.rejection_reasons:
+                        rejection_reasons_list.append({
+                            "issue": rr.description,
+                            "severity": rr.severity,
+                            "framework": fv.framework_name.value
+                        })
         
         return report
 

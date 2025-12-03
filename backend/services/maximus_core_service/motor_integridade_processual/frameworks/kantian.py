@@ -12,6 +12,9 @@ Core Principles:
 Lei Governante: Constituição Vértice v2.6 - Lei I (Axioma da Ovelha Perdida)
 """
 
+from __future__ import annotations
+
+
 from typing import List, Optional
 from motor_integridade_processual.frameworks.base import AbstractEthicalFramework
 from motor_integridade_processual.models.action_plan import ActionPlan, ActionStep
@@ -38,7 +41,7 @@ class KantianDeontology(AbstractEthicalFramework):
         not consequences. The Categorical Imperative provides an absolute moral law.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Kantian framework with veto power."""
         super().__init__(name=FrameworkName.KANTIAN.value, weight=0.40, can_veto=True)
         self._veto_threshold = 0.8  # Veto on high severity violations
@@ -72,7 +75,7 @@ class KantianDeontology(AbstractEthicalFramework):
         
         if has_veto:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.KANTIAN,
                 decision=DecisionLevel.VETO,
                 score=0.0,
                 confidence=1.0,  # Absolute certainty on categorical violations
@@ -88,7 +91,7 @@ class KantianDeontology(AbstractEthicalFramework):
             
             if score < 0.5:
                 return FrameworkVerdict(
-                    framework_name=self.name,
+                    framework_name=FrameworkName.KANTIAN,
                     decision=DecisionLevel.REJECT,
                     score=score,
                     confidence=0.9,
@@ -97,7 +100,7 @@ class KantianDeontology(AbstractEthicalFramework):
                 )
             else:
                 return FrameworkVerdict(
-                    framework_name=self.name,
+                    framework_name=FrameworkName.KANTIAN,
                     decision=DecisionLevel.APPROVE_WITH_CONDITIONS,
                     score=score,
                     confidence=0.8,
@@ -108,7 +111,7 @@ class KantianDeontology(AbstractEthicalFramework):
         
         # No violations - full approval
         return FrameworkVerdict(
-            framework_name=self.name,
+            framework_name=FrameworkName.KANTIAN,
             decision=DecisionLevel.APPROVE,
             score=1.0,
             confidence=0.95,
@@ -121,7 +124,7 @@ class KantianDeontology(AbstractEthicalFramework):
         
         Lei I: Axioma da Ovelha Perdida - Life has infinite value.
         """
-        violations = []
+        violations: List[RejectionReason] = []
         
         # Check if involves humans/conscious beings
         if not step.affected_stakeholders:

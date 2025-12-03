@@ -1,5 +1,8 @@
 """Knowledge base for precedents and principles."""
 
+from __future__ import annotations
+
+
 from typing import List, Optional
 
 class KnowledgeBase:

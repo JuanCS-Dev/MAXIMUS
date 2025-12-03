@@ -7,6 +7,9 @@ Offensive/Defensive endpoints ready for real integration (currently mock).
 Run with: python test_adw_real_integration.py
 """
 
+from __future__ import annotations
+
+
 import sys
 from fastapi import FastAPI
 from fastapi.testclient import TestClient

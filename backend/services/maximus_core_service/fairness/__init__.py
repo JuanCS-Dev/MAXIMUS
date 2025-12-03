@@ -20,6 +20,9 @@ Target Metrics:
     - False positive rate: <5%
 """
 
+from __future__ import annotations
+
+
 __version__ = "1.0.0"
 __author__ = "VÉRTICE Platform Team"
 

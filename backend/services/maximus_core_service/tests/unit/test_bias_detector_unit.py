@@ -14,6 +14,9 @@ Author: Claude Code + JuanCS-Dev (Artisanal, DOUTRINA VÉRTICE)
 Date: 2025-10-21
 """
 
+from __future__ import annotations
+
+
 import pytest
 import numpy as np
 from unittest.mock import Mock, patch

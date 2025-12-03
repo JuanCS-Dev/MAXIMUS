@@ -4,6 +4,9 @@ Tests for Log Aggregation Collector.
 Tests the collection, parsing, and analysis of logs from various backends.
 """
 
+from __future__ import annotations
+
+
 
 import pytest
 from aioresponses import aioresponses

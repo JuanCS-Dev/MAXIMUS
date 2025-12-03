@@ -9,6 +9,8 @@ Pattern: Registry Pattern + Factory Pattern
 Inspiration: Google's agent management, Kubernetes controller pattern
 """
 
+from __future__ import annotations
+
 import asyncio
 from typing import Dict, List, Optional, Set, Any, cast
 from datetime import datetime

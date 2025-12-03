@@ -9,6 +9,9 @@ Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS!
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime
 from motor_integridade_processual.infrastructure.audit_trail import AuditLogger

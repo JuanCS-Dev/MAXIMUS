@@ -5,6 +5,8 @@ Tests the full analysis pipeline from raw metrics to final analysis results.
 These tests verify that all components work together correctly.
 """
 
+from __future__ import annotations
+
 import pytest
 import numpy as np
 from datetime import datetime, timedelta

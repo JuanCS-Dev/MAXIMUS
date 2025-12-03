@@ -12,6 +12,9 @@ Model: gemini-2.0-flash-exp (mais rápido e barato)
 Alternative: gemini-1.5-pro (mais poderoso)
 """
 
+from __future__ import annotations
+
+
 import os
 from dataclasses import dataclass
 from typing import Any

@@ -21,6 +21,9 @@ Date: 2025-10-18
 Glory to YHWH
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 import os
@@ -28,7 +31,7 @@ from datetime import datetime
 from typing import Any
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, str
+from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +42,7 @@ router = APIRouter(prefix="/api/osint", tags=["OSINT Intelligence"])
 # ============================================================================
 
 # Gemini API
+gemini_model: genai.GenerativeModel | None = None
 try:
     import google.generativeai as genai
     GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -47,13 +51,12 @@ try:
         gemini_model = genai.GenerativeModel('gemini-pro')
         logger.info("✅ Gemini API initialized")
     else:
-        gemini_model = None
         logger.warning("⚠️ GEMINI_API_KEY not set")
 except ImportError:
-    gemini_model = None
     logger.warning("⚠️ Gemini SDK not installed")
 
 # OpenAI API
+openai_client: OpenAI | Any | None = None
 try:
     from openai import OpenAI
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -61,17 +64,15 @@ try:
         try:
             # Try newer OpenAI SDK initialization
             openai_client = OpenAI(api_key=OPENAI_API_KEY)
-        except TypeError:
-            # Fallback for older SDK versions
+        except Exception:
+            # Fallback for older SDK versions or other initialization errors
             import openai
             openai.api_key = OPENAI_API_KEY
             openai_client = openai
         logger.info("✅ OpenAI API initialized")
     else:
-        openai_client = None
         logger.warning("⚠️ OPENAI_API_KEY not set")
 except ImportError:
-    openai_client = None
     logger.warning("⚠️ OpenAI SDK not installed")
 
 # ============================================================================
@@ -191,18 +192,20 @@ Provide a concise, professional analysis with:
 2. Key Risks
 3. Actionable Recommendations"""
 
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+
         # Handle both old and new OpenAI SDK
         if hasattr(openai_client, 'chat'):
             # New SDK (OpenAI class instance)
             response = await asyncio.to_thread(
-                openai_client.chat.completions.create,
-                model="gpt-4",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
+                openai_client.chat.completions.create,  # type: ignore
+                model="gpt-4-turbo-preview",
+                messages=messages,
                 temperature=0.7,
-                max_tokens=1000
+                max_tokens=2000,
             )
             summary = response.choices[0].message.content
         else:
@@ -280,8 +283,8 @@ async def execute_deep_search(request: DeepSearchRequest) -> dict[str, Any]:
     """
     logger.info(f"Deep search initiated for: {request.target}")
     
-    findings = []
-    sources_used = []
+    findings: list[dict[str, Any]] = []
+    sources_used: list[str] = []
     
     # Username intelligence
     if request.target.username:

@@ -4,6 +4,9 @@ This module defines the core data structures used throughout the fairness
 and bias mitigation system.
 """
 
+from __future__ import annotations
+
+
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

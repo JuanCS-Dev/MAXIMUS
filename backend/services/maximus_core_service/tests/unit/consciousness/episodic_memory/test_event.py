@@ -1,6 +1,9 @@
 """
 Tests for Episodic Memory Event Model
 """
+
+from __future__ import annotations
+
 import pytest
 from datetime import datetime, timedelta
 from consciousness.episodic_memory import Event, EventType, Salience

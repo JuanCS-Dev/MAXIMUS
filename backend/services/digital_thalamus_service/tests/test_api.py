@@ -2,17 +2,18 @@
 Unit tests for Digital Thalamus Service API.
 """
 
+from __future__ import annotations
+
+
 from unittest.mock import AsyncMock
 
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.services.digital_thalamus_service.api.dependencies import (
-    get_router
-)
-from backend.services.digital_thalamus_service.core.router import RequestRouter
-from backend.services.digital_thalamus_service.main import app
-from backend.services.digital_thalamus_service.models.gateway import RouteConfig
+from api.dependencies import get_router
+from core.router import RequestRouter
+from main import app
+from models.gateway import RouteConfig
 
 client = TestClient(app)
 

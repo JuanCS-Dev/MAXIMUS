@@ -1,5 +1,8 @@
 """Docker Actuator - Container Management via Docker SDK"""
 
+from __future__ import annotations
+
+
 import logging
 
 import docker

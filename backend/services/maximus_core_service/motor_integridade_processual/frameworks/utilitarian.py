@@ -12,6 +12,9 @@ Uses Bentham's 7 dimensions + Mill's qualitative distinctions.
 Lei Governante: Constituição Vértice v2.6 - Lei Zero (Imperativo do Florescimento)
 """
 
+from __future__ import annotations
+
+
 from motor_integridade_processual.frameworks.base import AbstractEthicalFramework
 from motor_integridade_processual.models.action_plan import ActionPlan, ActionStep, Effect
 from motor_integridade_processual.models.verdict import (
@@ -37,7 +40,7 @@ class UtilitarianCalculus(AbstractEthicalFramework):
         John Stuart Mill (1806-1873): Some pleasures are higher quality
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Utilitarian framework."""
         super().__init__(name=FrameworkName.UTILITARIAN.value, weight=0.30, can_veto=False)
     
@@ -72,7 +75,7 @@ class UtilitarianCalculus(AbstractEthicalFramework):
         # Determine verdict based on utility
         if final_score >= 0.75:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.UTILITARIAN,
                 decision=DecisionLevel.APPROVE,
                 score=final_score,
                 confidence=0.85,
@@ -81,7 +84,7 @@ class UtilitarianCalculus(AbstractEthicalFramework):
             )
         elif final_score >= 0.50:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.UTILITARIAN,
                 decision=DecisionLevel.APPROVE_WITH_CONDITIONS,
                 score=final_score,
                 confidence=0.75,
@@ -90,7 +93,7 @@ class UtilitarianCalculus(AbstractEthicalFramework):
             )
         else:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.UTILITARIAN,
                 decision=DecisionLevel.REJECT,
                 score=final_score,
                 confidence=0.80,

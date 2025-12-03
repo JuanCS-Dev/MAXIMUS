@@ -2,6 +2,9 @@
 Tests for MEA integration bridge.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from consciousness.esgt.coordinator import ESGTCoordinator, TriggerConditions

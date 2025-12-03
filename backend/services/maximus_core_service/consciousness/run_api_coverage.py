@@ -2,6 +2,9 @@
 Standalone API Coverage Runner - Solves import timing issue
 """
 
+from __future__ import annotations
+
+
 import sys
 import os
 

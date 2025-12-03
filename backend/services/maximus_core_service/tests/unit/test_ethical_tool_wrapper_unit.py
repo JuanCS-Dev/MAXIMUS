@@ -1,5 +1,8 @@
 """Unit tests for ethical_tool_wrapper"""
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
@@ -69,7 +72,6 @@ class TestEthicalToolWrapperInitialization:
         obj = EthicalToolWrapper()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_get_statistics(self):

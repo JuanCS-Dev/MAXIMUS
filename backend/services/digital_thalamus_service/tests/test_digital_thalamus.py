@@ -15,18 +15,17 @@ Note: NO production logic mocking (PAGANI compliant).
 All component logic is REAL. Only external dependencies would be mocked if present.
 """
 
-import asyncio
+from __future__ import annotations
 
-# Import the FastAPI app and components
-import sys
+
+import asyncio
 from datetime import datetime
 
 import pytest
 import pytest_asyncio
-from httpx import AsyncClient
+from httpx import ASGITransport, AsyncClient
 
-sys.path.insert(0, "/home/juan/vertice-dev/backend/services/digital_thalamus_service")
-from backend.services.digital_thalamus_service.api import app
+from thalamus_api import app, startup_event, shutdown_event
 from attention_control import AttentionControl
 from sensory_gating import SensoryGating
 from signal_filtering import SignalFiltering
@@ -37,7 +36,8 @@ from signal_filtering import SignalFiltering
 @pytest_asyncio.fixture
 async def client():
     """Create async HTTP client for testing FastAPI app."""
-    async with AsyncClient(app=app, base_url="http://test") as ac:
+    transport = ASGITransport(app=app)  # type: ignore[arg-type]
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
         yield ac
 
 
@@ -98,15 +98,11 @@ class TestLifecycleEvents:
 
     async def test_startup_event_executes(self):
         """Test startup event executes without errors."""
-        from api import startup_event
-
         await startup_event()
         # If no exception, test passes
 
     async def test_shutdown_event_executes(self):
         """Test shutdown event executes without errors."""
-        from api import shutdown_event
-
         await shutdown_event()
         # If no exception, test passes
 

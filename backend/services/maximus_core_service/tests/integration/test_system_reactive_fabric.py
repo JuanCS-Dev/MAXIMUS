@@ -12,6 +12,9 @@ Date: 2025-10-14
 Sprint: Reactive Fabric Sprint 3 - System Integration
 """
 
+from __future__ import annotations
+
+
 import pytest
 import asyncio
 import gc

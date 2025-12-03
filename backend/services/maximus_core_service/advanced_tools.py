@@ -11,6 +11,9 @@ These tools empower Maximus to tackle challenges requiring expert-level
 functionality.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Any
 

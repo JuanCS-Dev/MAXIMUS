@@ -4,6 +4,9 @@ Maximus Core Service - Configuration
 
 Pydantic-based configuration management.
 """
+
+from __future__ import annotations
+
 # pylint: disable=too-few-public-methods
 
 from functools import lru_cache

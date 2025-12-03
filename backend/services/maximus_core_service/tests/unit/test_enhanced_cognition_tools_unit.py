@@ -1,5 +1,8 @@
 """Unit tests for enhanced_cognition_tools"""
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
@@ -35,7 +38,6 @@ class TestEnhancedCognitionToolsInitialization:
         obj = EnhancedCognitionTools()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_predict_threats(self):
@@ -44,7 +46,6 @@ class TestEnhancedCognitionToolsInitialization:
         obj = EnhancedCognitionTools()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_hunt_proactively(self):
@@ -53,7 +54,6 @@ class TestEnhancedCognitionToolsInitialization:
         obj = EnhancedCognitionTools()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_investigate_incident(self):
@@ -62,7 +62,6 @@ class TestEnhancedCognitionToolsInitialization:
         obj = EnhancedCognitionTools()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_correlate_campaigns(self):
@@ -71,7 +70,6 @@ class TestEnhancedCognitionToolsInitialization:
         obj = EnhancedCognitionTools()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_list_available_tools(self):

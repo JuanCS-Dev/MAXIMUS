@@ -9,6 +9,9 @@ Define todas as estruturas de dados usadas pelo MIP:
 - Knowledge models: Princípios éticos e casos precedentes
 """
 
+from __future__ import annotations
+
+
 from typing import List
 
 __all__: List[str] = []

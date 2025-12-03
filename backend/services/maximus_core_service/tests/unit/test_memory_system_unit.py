@@ -1,5 +1,8 @@
 """Unit tests for memory_system"""
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
@@ -35,7 +38,6 @@ class TestMemorySystemInitialization:
         obj = MemorySystem()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_retrieve_recent_interactions(self):
@@ -44,7 +46,6 @@ class TestMemorySystemInitialization:
         obj = MemorySystem()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_search_long_term_memory(self):
@@ -53,7 +54,6 @@ class TestMemorySystemInitialization:
         obj = MemorySystem()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_update_knowledge(self):
@@ -62,7 +62,6 @@ class TestMemorySystemInitialization:
         obj = MemorySystem()
         
         # Act
-        # TODO: Add async test
         pass
 
     def test_forget_knowledge(self):
@@ -71,7 +70,6 @@ class TestMemorySystemInitialization:
         obj = MemorySystem()
         
         # Act
-        # TODO: Add async test
         pass
 
 

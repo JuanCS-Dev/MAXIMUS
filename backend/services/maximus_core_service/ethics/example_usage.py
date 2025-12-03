@@ -4,6 +4,9 @@ This script demonstrates how to use the ethical frameworks to evaluate
 cybersecurity actions.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 from .base import ActionContext

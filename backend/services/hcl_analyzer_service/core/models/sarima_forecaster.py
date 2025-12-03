@@ -126,6 +126,7 @@ class SARIMAForecaster:  # pylint: disable=too-many-instance-attributes
         self._history = list(data)
 
         try:
+            # pylint: disable=import-outside-toplevel
             # Try to import statsmodels (optional dependency)
             from statsmodels.tsa.statespace.sarimax import SARIMAX
 

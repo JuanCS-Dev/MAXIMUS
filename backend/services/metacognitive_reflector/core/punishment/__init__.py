@@ -10,6 +10,9 @@ Execution and persistence of punishments:
 - Rollback: Action reversal
 """
 
+from __future__ import annotations
+
+
 from .penal_registry import (
     OffenseType,
     PenalRecord,

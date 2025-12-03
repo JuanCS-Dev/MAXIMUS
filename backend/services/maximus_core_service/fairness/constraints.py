@@ -4,6 +4,9 @@ This module implements fairness constraints for cybersecurity AI models,
 including demographic parity, equalized odds, and calibration metrics.
 """
 
+from __future__ import annotations
+
+
 import logging
 from typing import Any
 

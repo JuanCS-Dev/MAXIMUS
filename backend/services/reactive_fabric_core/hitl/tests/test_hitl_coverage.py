@@ -2,6 +2,9 @@
 Additional tests for HITL Engine to increase coverage.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime, timedelta
 

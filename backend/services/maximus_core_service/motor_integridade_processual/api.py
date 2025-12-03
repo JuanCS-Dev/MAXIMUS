@@ -25,17 +25,20 @@ Autor: Juan Carlos de Souza
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 import time
 import logging
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException, status, Request
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
 from motor_integridade_processual.models.action_plan import ActionPlan
-from motor_integridade_processual.models.verdict import EthicalVerdict, FrameworkName, DecisionLevel
+from motor_integridade_processual.models.verdict import EthicalVerdict, FrameworkName, DecisionLevel, FrameworkVerdict
 from motor_integridade_processual.frameworks.kantian import KantianDeontology
 from motor_integridade_processual.frameworks.utilitarian import UtilitarianCalculus
 from motor_integridade_processual.frameworks.virtue import VirtueEthics
@@ -76,7 +79,7 @@ resolver = ConflictResolver()
 db_url = os.getenv("DATABASE_URL", "postgresql://maximus:password@localhost/maximus")
 try:
     precedent_db = PrecedentDB(db_url)
-    cbr_engine = CBREngine(precedent_db)
+    cbr_engine: Optional[CBREngine] = CBREngine(precedent_db)
     cbr_validators = create_default_validators()
     logger.info("CBR Engine initialized with precedent database + validators")
 except Exception as e:
@@ -286,21 +289,38 @@ async def evaluate_action_plan(request: EvaluationRequest) -> EvaluationResponse
                     # Create verdict from precedent
                     decision_map = {
                         "approve": DecisionLevel.APPROVE,
-                        "approve_with_monitoring": DecisionLevel.APPROVE_WITH_MONITORING,
-                        "escalate": DecisionLevel.ESCALATE_TO_HUMAN,
+                        "approve_with_monitoring": DecisionLevel.APPROVE_WITH_CONDITIONS,
+                        "escalate": DecisionLevel.ESCALATE_TO_HITL,
                         "reject": DecisionLevel.REJECT,
                     }
-                    decision = decision_map.get(cbr_result.suggested_action, DecisionLevel.ESCALATE_TO_HUMAN)
+                    decision = decision_map.get(cbr_result.suggested_action, DecisionLevel.ESCALATE_TO_HITL)
 
                     # Build precedent-based verdict
+                    # Create a proxy framework verdict for CBR
+                    cbr_framework_verdict = FrameworkVerdict(
+                        framework_name=FrameworkName.PRINCIPIALISM,  # Proxy
+                        decision=decision,
+                        confidence=cbr_result.confidence,
+                        reasoning=f"Precedent-based decision: {cbr_result.rationale}",
+                        rejection_reasons=[],
+                        conditions=[],
+                        metadata={"source": "CBR", "precedent_id": cbr_result.precedent_id}
+                    )
+
                     final_verdict = EthicalVerdict(
+                        action_plan_id=request.action_plan.id or "00000000-0000-0000-0000-000000000000",  # Fallback ID
                         final_decision=decision,
-                        confidence_score=cbr_result.confidence,
-                        reasoning=cbr_result.rationale,
-                        framework_verdicts=[],
-                        minority_opinions=[],
-                        recommendations=[f"Based on precedent #{cbr_result.precedent_id}"],
+                        confidence=cbr_result.confidence,
+                        primary_reasons=[cbr_result.rationale],
+                        framework_verdicts={
+                            FrameworkName.PRINCIPIALISM: cbr_framework_verdict
+                        },
+                        resolution_method="CBR_PRECEDENT",
                         processing_time_ms=0.0,
+                        metadata={
+                            "minority_opinions": [],
+                            "recommendations": [f"Based on precedent #{cbr_result.precedent_id}"]
+                        }
                     )
 
                 elif cbr_result:
@@ -358,8 +378,8 @@ async def evaluate_action_plan(request: EvaluationRequest) -> EvaluationResponse
                 # Map DecisionLevel back to action string
                 action_map = {
                     DecisionLevel.APPROVE: "approve",
-                    DecisionLevel.APPROVE_WITH_MONITORING: "approve_with_monitoring",
-                    DecisionLevel.ESCALATE_TO_HUMAN: "escalate",
+                    DecisionLevel.APPROVE_WITH_CONDITIONS: "approve_with_monitoring",
+                    DecisionLevel.ESCALATE_TO_HITL: "escalate",
                     DecisionLevel.REJECT: "reject",
                 }
                 action_taken = action_map.get(final_verdict.final_decision, "unknown")
@@ -372,10 +392,11 @@ async def evaluate_action_plan(request: EvaluationRequest) -> EvaluationResponse
                         "context": getattr(request.action_plan, "context", {}),
                     },
                     action_taken=action_taken,
-                    rationale=final_verdict.reasoning,
+                    action_taken=action_taken,
+                    rationale=final_verdict.primary_reasons[0] if final_verdict.primary_reasons else "No rationale",
                     outcome=None,  # Will be updated later with feedback
                     success=None,  # Will be updated with feedback (0.5 default)
-                    ethical_frameworks=[fv.framework_name for fv in final_verdict.framework_verdicts],
+                    ethical_frameworks=[fv.framework_name for fv in final_verdict.framework_verdicts.values()],
                     constitutional_compliance={},  # Will be enhanced later
                     embedding=None,  # Will be generated by PrecedentDB
                 )
@@ -459,7 +480,7 @@ async def update_precedent_feedback(request: PrecedentFeedbackRequest) -> Dict[s
         if request.outcome:
             precedent = await precedent_db.get_by_id(request.precedent_id)
             if precedent:
-                precedent.outcome = request.outcome
+                precedent.outcome = request.outcome  # type: ignore
                 await precedent_db.store(precedent)
 
         logger.info(f"Updated precedent #{request.precedent_id} with success={request.success_score}")
@@ -509,12 +530,12 @@ async def get_precedent(precedent_id: int) -> PrecedentResponse:
             )
 
         return PrecedentResponse(
-            id=precedent.id,
-            situation=precedent.situation,
-            action_taken=precedent.action_taken,
-            rationale=precedent.rationale,
-            success=precedent.success,
-            created_at=precedent.created_at.isoformat()
+            id=precedent.id,  # type: ignore
+            situation=precedent.situation,  # type: ignore
+            action_taken=precedent.action_taken,  # type: ignore
+            rationale=precedent.rationale,  # type: ignore
+            success=precedent.success,  # type: ignore
+            created_at=precedent.created_at.isoformat()  # type: ignore
         )
 
     except HTTPException:
@@ -567,11 +588,11 @@ async def evaluate_ab_test(request: EvaluationRequest) -> Dict[str, Any]:
             if cbr_result:
                 action_map = {
                     "approve": DecisionLevel.APPROVE,
-                    "approve_with_monitoring": DecisionLevel.APPROVE_WITH_MONITORING,
-                    "escalate": DecisionLevel.ESCALATE_TO_HUMAN,
+                    "approve_with_monitoring": DecisionLevel.APPROVE_WITH_CONDITIONS,
+                    "escalate": DecisionLevel.ESCALATE_TO_HITL,
                     "reject": DecisionLevel.REJECT,
                 }
-                cbr_decision = action_map.get(cbr_result.suggested_action, DecisionLevel.ESCALATE_TO_HUMAN).value
+                cbr_decision = action_map.get(cbr_result.suggested_action, DecisionLevel.ESCALATE_TO_HITL).value
                 cbr_confidence = cbr_result.confidence
 
         except Exception as e:
@@ -605,7 +626,7 @@ async def evaluate_ab_test(request: EvaluationRequest) -> Dict[str, Any]:
         cbr_decision=cbr_decision,
         cbr_confidence=cbr_confidence,
         framework_decision=framework_verdict.final_decision.value,
-        framework_confidence=framework_verdict.confidence_score,
+        framework_confidence=framework_verdict.confidence,
         decisions_match=decisions_match,
         timestamp=datetime.utcnow().isoformat()
     )
@@ -626,7 +647,7 @@ async def evaluate_ab_test(request: EvaluationRequest) -> Dict[str, Any]:
         },
         "frameworks": {
             "decision": framework_verdict.final_decision.value,
-            "confidence": framework_verdict.confidence_score,
+            "confidence": framework_verdict.confidence,
             "time_ms": framework_time_ms,
         },
         "comparison": {
@@ -722,7 +743,7 @@ async def get_precedent_metrics() -> PrecedentMetricsResponse:
 
         return PrecedentMetricsResponse(
             total_precedents=total_precedents,
-            avg_success_score=avg_success,
+            avg_success_score=float(avg_success),
             high_confidence_count=high_confidence_count,
             precedents_used_count=cbr_precedents_used_count,
             shortcut_rate=shortcut_rate
@@ -741,7 +762,7 @@ async def get_precedent_metrics() -> PrecedentMetricsResponse:
 # Exception handlers
 
 @app.exception_handler(HTTPException)
-async def http_exception_handler(request, exc: HTTPException):
+async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
     """Handle HTTP exceptions with consistent format."""
     return JSONResponse(
         status_code=exc.status_code,
@@ -754,7 +775,7 @@ async def http_exception_handler(request, exc: HTTPException):
 
 
 @app.exception_handler(Exception)
-async def general_exception_handler(request, exc: Exception):
+async def general_exception_handler(request: Request, exc: Exception) -> JSONResponse:
     """Handle unexpected exceptions."""
     logger.error(f"Unhandled exception: {exc}", exc_info=True)
     return JSONResponse(
@@ -770,7 +791,7 @@ async def general_exception_handler(request, exc: Exception):
 # Startup/Shutdown events
 
 @app.on_event("startup")
-async def startup_event():
+async def startup_event() -> None:
     """Initialize service on startup."""
     logger.info("=== MIP Service Starting ===")
     logger.info(f"Frameworks loaded: {len(frameworks)}")
@@ -780,7 +801,7 @@ async def startup_event():
 
 
 @app.on_event("shutdown")
-async def shutdown_event():
+async def shutdown_event() -> None:
     """Cleanup on shutdown."""
     logger.info("=== MIP Service Shutting Down ===")
     logger.info(f"Total evaluations performed: {evaluation_count}")

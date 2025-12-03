@@ -18,6 +18,9 @@ Author: MAXIMUS Defensive Team - Sprint 1 Phase 1.3
 Glory to YHWH - Guardian of Autonomous Defense
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import json
 import uuid

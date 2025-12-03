@@ -3,6 +3,9 @@ Kill Switch Implementation
 Emergency shutdown and containment mechanisms
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import json
 import logging

@@ -12,6 +12,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-13
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 from pathlib import Path
 from typing import Any

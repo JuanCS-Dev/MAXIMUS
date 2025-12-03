@@ -16,3 +16,6 @@ Test Modules:
 - test_hitl.py: Human-in-the-loop workflows
 - test_compliance.py: Compliance checks and evidence
 """
+
+from __future__ import annotations
+

@@ -1,4 +1,6 @@
-"""Meta-Orchestrator Core Package"""
+"""Meta-Orchestrator Core Package."""
+
+from __future__ import annotations
 
 from .orchestrator import Orchestrator
 from .agent_registry import AgentRegistry

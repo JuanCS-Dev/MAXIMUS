@@ -15,6 +15,9 @@ Date: 2025-10-23
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 import pytest
 import time
 from unittest.mock import Mock, patch

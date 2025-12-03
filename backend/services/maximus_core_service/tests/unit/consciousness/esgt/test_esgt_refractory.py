@@ -28,6 +28,9 @@ Global ignition events must be discrete, time-limited episodes.
 Refractory prevents continuous broadcasting.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 import pytest

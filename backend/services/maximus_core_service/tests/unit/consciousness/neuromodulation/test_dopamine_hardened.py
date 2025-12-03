@@ -36,6 +36,9 @@ Version: 1.0.1 - Systemic Refactor
 Date: 2025-10-08
 """
 
+from __future__ import annotations
+
+
 import time
 from unittest.mock import MagicMock
 

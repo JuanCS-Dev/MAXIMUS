@@ -4,6 +4,9 @@ Prefrontal Cortex Service - Configuration
 
 Pydantic-based configuration management for executive cognitive functions.
 """
+
+from __future__ import annotations
+
 # pylint: disable=too-few-public-methods
 
 from functools import lru_cache

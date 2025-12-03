@@ -18,6 +18,9 @@ Authors: Claude Code + Juan
 Date: 2025-10-22 - VERDADE SEM COMPROMISSOS
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 

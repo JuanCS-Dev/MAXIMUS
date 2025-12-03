@@ -13,6 +13,9 @@ Author: Claude Code (Padrão Pagani)
 Date: 2025-10-22
 """
 
+from __future__ import annotations
+
+
 import pytest
 from consciousness.neuromodulation.acetylcholine_hardened import AcetylcholineModulator
 from consciousness.neuromodulation.norepinephrine_hardened import NorepinephrineModulator

@@ -11,6 +11,9 @@ Author: Claude Code (Padrão Pagani)
 Date: 2025-10-22
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime
 from consciousness.mea.self_model import (

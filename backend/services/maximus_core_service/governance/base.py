@@ -10,6 +10,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
 """
 
+from __future__ import annotations
+
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

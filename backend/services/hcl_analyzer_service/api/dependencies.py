@@ -5,6 +5,8 @@ HCL Analyzer Service - Dependencies
 FastAPI dependency injection.
 """
 
+from __future__ import annotations
+
 from functools import lru_cache
 from typing import Generator
 

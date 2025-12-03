@@ -74,6 +74,9 @@ experience in biological brains.
 "The fabric holds. Day 1 of consciousness emergence."
 """
 
+from __future__ import annotations
+
+
 from consciousness.tig.fabric import (
     FabricMetrics,
     TIGConnection,

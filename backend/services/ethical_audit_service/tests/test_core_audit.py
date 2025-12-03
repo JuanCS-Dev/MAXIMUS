@@ -14,12 +14,15 @@ Following PAGANI Standard:
 - 95%+ coverage target
 """
 
+from __future__ import annotations
+
+
 import uuid
 from datetime import datetime, timedelta
 
 import pytest
 
-from backend.services.ethical_audit_service.models import (
+from models_legacy import (
     ComplianceResult,
     DecisionType,
     FinalDecision,
@@ -327,7 +330,7 @@ class TestHumanOverrides:
 
     async def test_log_override_different_reasons(self, authenticated_client, create_test_override_request):
         """Test logging overrides with different reasons."""
-        from models import OverrideReason
+        from models_legacy import OverrideReason
 
         reasons = [
             OverrideReason.FALSE_POSITIVE,

@@ -5,6 +5,8 @@ HCL Planner Service - API Request Models
 Pydantic models for API request validation.
 """
 
+from __future__ import annotations
+
 from typing import Dict, Any
 from pydantic import BaseModel, Field
 

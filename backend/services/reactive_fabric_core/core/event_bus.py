@@ -5,6 +5,9 @@ Reactive Fabric Core - Event Bus
 Simple event bus for reactive event handling.
 """
 
+from __future__ import annotations
+
+
 from typing import Callable, List
 import uuid
 

@@ -3,6 +3,9 @@ PostgreSQL Honeypot Implementation
 Database honeypot with realistic fake data and honeytokens
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import json
 import logging

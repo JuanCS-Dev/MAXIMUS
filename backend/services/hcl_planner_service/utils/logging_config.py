@@ -6,6 +6,8 @@ Provides structured logging setup following Google SRE practices.
 All logs are JSON-formatted with contextual metadata.
 """
 
+from __future__ import annotations
+
 import logging
 import sys
 from typing import Any, Dict

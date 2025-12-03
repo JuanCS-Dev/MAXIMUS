@@ -5,10 +5,13 @@ Ethical Audit Service - API Dependencies
 Dependency injection for FastAPI endpoints.
 """
 
-from ..config import Settings, get_settings
-from ..core.constitutional_validator import ConstitutionalValidator
-from ..core.violation_detector import ViolationDetector
-from ..utils.logging_config import get_logger, setup_logging
+from __future__ import annotations
+
+
+from config import Settings, get_settings
+from core.constitutional_validator import ConstitutionalValidator
+from core.violation_detector import ViolationDetector
+from utils.logging_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 

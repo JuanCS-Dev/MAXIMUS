@@ -5,13 +5,16 @@ Maximus Core Service - API Routes
 FastAPI endpoints for system coordination and health.
 """
 
+from __future__ import annotations
+
+
 from typing import List
 
 from fastapi import APIRouter, Depends
 
-from ..core.coordinator import SystemCoordinator
-from ..core.health_aggregator import HealthAggregator
-from ..models.system import SystemStatus
+from ..core.coordinator import SystemCoordinator  # type: ignore
+from ..core.health_aggregator import HealthAggregator  # type: ignore
+from ..models.system import SystemStatus  # type: ignore  # type: ignore
 from .dependencies import get_coordinator, get_health_aggregator
 
 router = APIRouter()
@@ -57,7 +60,7 @@ async def get_registered_services(
     Returns:
         List of registered service names
     """
-    return coordinator.get_registered_services()
+    return list(coordinator.get_registered_services())
 
 
 @router.post("/services/{service_name}/register", response_model=dict)

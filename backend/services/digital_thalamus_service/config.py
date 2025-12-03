@@ -4,6 +4,9 @@ Digital Thalamus Service - Configuration
 
 Pydantic-based configuration management for API Gateway.
 """
+
+from __future__ import annotations
+
 # pylint: disable=too-few-public-methods
 
 from functools import lru_cache

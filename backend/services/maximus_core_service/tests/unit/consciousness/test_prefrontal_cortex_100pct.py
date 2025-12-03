@@ -23,6 +23,9 @@ Date: 2025-10-14
 Philosophy: "A ovelha perdida deve ser encontrada" - Lei I validation
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock
 from consciousness.prefrontal_cortex import (

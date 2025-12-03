@@ -5,6 +5,9 @@ Publishes threat detections and status updates
 Sprint 1: Real implementation
 """
 
+from __future__ import annotations
+
+
 import structlog
 from aiokafka import AIOKafkaProducer
 from aiokafka.errors import KafkaError

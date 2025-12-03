@@ -4,6 +4,9 @@ Metacognitive Reflector - Configuration
 
 Pydantic-based configuration for the Metacognitive Reflector service.
 """
+
+from __future__ import annotations
+
 # pylint: disable=too-few-public-methods
 
 from functools import lru_cache

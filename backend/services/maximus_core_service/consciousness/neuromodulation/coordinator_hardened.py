@@ -29,6 +29,9 @@ Version: 1.0.0
 Date: 2025-10-08
 """
 
+from __future__ import annotations
+
+
 import logging
 from collections.abc import Callable
 from dataclasses import dataclass

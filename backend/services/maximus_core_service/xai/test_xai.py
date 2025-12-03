@@ -3,6 +3,9 @@
 Tests all XAI components: LIME, SHAP, Counterfactual, Feature Tracker, Engine.
 """
 
+from __future__ import annotations
+
+
 import numpy as np
 import pytest
 

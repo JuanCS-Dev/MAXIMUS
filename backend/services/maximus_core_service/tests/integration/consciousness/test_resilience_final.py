@@ -7,6 +7,9 @@ Final resilience tests: Timeouts, Error Boundaries, Cross-Component Integration.
 "The culmination of consciousness substrate hardening."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Any, Callable, List, Optional
 

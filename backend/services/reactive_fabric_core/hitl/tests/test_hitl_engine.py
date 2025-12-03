@@ -4,6 +4,9 @@ Tests for HITL Engine.
 Tests alert management, decision workflows, and human oversight interfaces.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 
 import pytest

@@ -9,6 +9,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-23
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 

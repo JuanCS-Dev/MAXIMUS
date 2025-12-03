@@ -1,5 +1,8 @@
 """FastAPI endpoints for HCL Decision CRUD operations"""
 
+from __future__ import annotations
+
+
 import logging
 
 logger = logging.getLogger(__name__)

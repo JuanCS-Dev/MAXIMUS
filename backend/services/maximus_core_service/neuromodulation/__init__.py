@@ -12,6 +12,9 @@ Author: Maximus AI Team
 Version: 1.0.0
 """
 
+from __future__ import annotations
+
+
 from .acetylcholine_system import AcetylcholineSystem
 from .dopamine_system import DopamineSystem
 from .neuromodulation_controller import NeuromodulationController

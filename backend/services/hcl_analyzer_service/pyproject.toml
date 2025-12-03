@@ -45,3 +45,15 @@ testpaths = [".", "tests"]
 python_files = ["test_*.py"]
 addopts = ["--verbose", "--tb=short", "--cov=.", "--cov-report=term-missing"]
 asyncio_mode = "auto"
+
+[tool.pylint.messages_control]
+disable = [
+    "duplicate-code",  # R0801 - Similar code is expected in analyzer variants
+]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint.design]
+max-args = 10
+max-locals = 20

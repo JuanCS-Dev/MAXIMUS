@@ -6,6 +6,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-20
 """
 
+from __future__ import annotations
+
+
 import pytest
 import time
 

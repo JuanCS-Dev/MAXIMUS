@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """
 FASE 2 - CRITICAL MODULES COVERAGE REPORT

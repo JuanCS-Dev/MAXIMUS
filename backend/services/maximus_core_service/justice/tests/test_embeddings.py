@@ -7,6 +7,9 @@ Tests cover:
 - Consistency of embeddings
 """
 
+from __future__ import annotations
+
+
 import pytest
 from services.maximus_core_service.justice.embeddings import CaseEmbedder
 

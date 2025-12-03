@@ -9,6 +9,9 @@ Performance Targets:
     - R² > 0.5 (24h predictions)
 """
 
+from __future__ import annotations
+
+
 import logging
 
 import pandas as pd

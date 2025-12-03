@@ -5,6 +5,9 @@ MAXIMUS 2.0 - Integration Tests for Meta-Cognitive Tribunal
 Tests the Three Judges (VERITAS, SOPHIA, DIKĒ) and the Ensemble Arbiter.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional

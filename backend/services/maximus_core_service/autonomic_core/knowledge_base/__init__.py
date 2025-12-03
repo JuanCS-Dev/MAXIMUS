@@ -5,6 +5,9 @@ PostgreSQL + TimescaleDB for storing HCL decisions and outcomes.
 FastAPI endpoints for CRUD operations.
 """
 
+from __future__ import annotations
+
+
 from .database_schema import create_schema
 from .decision_api import DecisionAPI
 

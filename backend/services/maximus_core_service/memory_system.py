@@ -11,6 +11,9 @@ It also incorporates mechanisms for updating and consolidating memories to ensur
 the knowledge base remains current and coherent.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 from typing import Any
 

@@ -22,6 +22,9 @@ Success Criteria:
 - Graceful degradation: No crashes, only quality reduction
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 from unittest.mock import patch

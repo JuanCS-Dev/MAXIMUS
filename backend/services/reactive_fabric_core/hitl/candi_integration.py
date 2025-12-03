@@ -3,6 +3,9 @@ CANDI-HITL Integration
 Bridge between CANDI Core analysis and HITL decision system
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from datetime import datetime

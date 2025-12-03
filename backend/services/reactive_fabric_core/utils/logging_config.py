@@ -5,6 +5,9 @@ Reactive Fabric Core - Logging Configuration
 Structured logging for reactive event system.
 """
 
+from __future__ import annotations
+
+
 import logging
 import sys
 from typing import Any

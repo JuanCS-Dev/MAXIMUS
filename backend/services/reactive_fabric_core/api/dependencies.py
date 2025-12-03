@@ -5,6 +5,9 @@ Reactive Fabric Core - API Dependencies
 Dependency injection for FastAPI endpoints.
 """
 
+from __future__ import annotations
+
+
 from ..config import Settings, get_settings
 from ..core.event_bus import EventBus
 from ..utils.logging_config import get_logger, setup_logging

@@ -33,6 +33,9 @@ Version: 1.0.0
 Date: 2025-10-08
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 import time
@@ -149,7 +152,7 @@ class PredictiveCodingLayerBase(ABC):
     @abstractmethod
     def get_layer_name(self) -> str:
         """Return layer name for logging (e.g., 'Layer1_Sensory')."""
-        pass
+        ...
 
     @abstractmethod
     async def _predict_impl(self, input_data: Any) -> Any:
@@ -162,7 +165,7 @@ class PredictiveCodingLayerBase(ABC):
         Returns:
             Prediction output
         """
-        pass
+        ...
 
     @abstractmethod
     def _compute_error_impl(self, predicted: Any, actual: Any) -> float:
@@ -176,7 +179,7 @@ class PredictiveCodingLayerBase(ABC):
         Returns:
             Prediction error (scalar)
         """
-        pass
+        ...
 
     async def predict(self, input_data: Any) -> Any | None:
         """

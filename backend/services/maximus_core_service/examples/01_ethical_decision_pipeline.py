@@ -14,6 +14,9 @@ Date: 2025-10-06
 Status: ✅ REGRA DE OURO 10/10
 """
 
+from __future__ import annotations
+
+
 import sys
 from pathlib import Path
 from typing import Any

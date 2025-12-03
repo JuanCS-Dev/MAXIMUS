@@ -24,6 +24,9 @@ self_model.py:
 PADRÃO PAGANI ABSOLUTO - 100% MEANS 100%
 """
 
+from __future__ import annotations
+
+
 import pytest
 from consciousness.mea.attention_schema import AttentionSchemaModel, AttentionSignal
 from consciousness.mea.boundary_detector import BoundaryDetector

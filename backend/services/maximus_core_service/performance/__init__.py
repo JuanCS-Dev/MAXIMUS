@@ -15,6 +15,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
 """
 
+from __future__ import annotations
+
+
 from .batch_predictor import BatchConfig, BatchPredictor, Priority
 from .benchmark_suite import BenchmarkMetrics, BenchmarkResult, BenchmarkSuite
 from .distributed_trainer import DistributedConfig, DistributedTrainer

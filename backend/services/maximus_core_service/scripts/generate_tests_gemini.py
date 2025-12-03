@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """
 AI-Assisted Test Generator for MAXIMUS AI 3.0 - Gemini Version

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Quick test of the ethical AI system (no Docker required).
 

@@ -5,13 +5,16 @@ Digital Thalamus Service - API Routes
 FastAPI endpoints for API Gateway.
 """
 
+from __future__ import annotations
+
+
 from typing import Dict
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from ..core.router import RequestRouter
-from ..models.gateway import RouteConfig
-from .dependencies import get_router
+from core.router import RequestRouter
+from models.gateway import RouteConfig
+from api.dependencies import get_router
 
 router = APIRouter()
 

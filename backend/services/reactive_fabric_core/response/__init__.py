@@ -4,6 +4,9 @@ Response System for Reactive Fabric.
 Phase 2: ACTIVE response capabilities with automated mitigation.
 """
 
+from __future__ import annotations
+
+
 from .response_orchestrator import (
     ResponseOrchestrator,
     ResponseConfig,

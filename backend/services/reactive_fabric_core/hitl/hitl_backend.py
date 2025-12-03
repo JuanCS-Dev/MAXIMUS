@@ -3,6 +3,9 @@ HITL Console Backend
 FastAPI-based Human-in-the-Loop decision system with JWT + 2FA
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 import secrets

@@ -5,7 +5,10 @@ Generates ethical alternatives for action plans that were rejected
 or received low ethical scores. Suggests modifications to improve
 alignment with ethical frameworks.
 """
-from typing import List, Optional
+
+from __future__ import annotations
+
+from typing import List, Optional, Any
 from copy import deepcopy
 from motor_integridade_processual.models.action_plan import (
     ActionPlan, 
@@ -66,7 +69,7 @@ class AlternativeGenerator:
             for fw_verdict in verdict.framework_verdicts.values():
                 if fw_verdict.rejection_reasons:
                     for reason in fw_verdict.rejection_reasons:
-                        suggestions.append(self._suggestion_from_rejection(reason))
+                        suggestions.append(self._suggestion_from_rejection(reason, fw_verdict.framework_name))
         
         # Deduplicate and limit
         unique_suggestions = list(dict.fromkeys(suggestions))
@@ -145,10 +148,10 @@ class AlternativeGenerator:
         
         return suggestions
     
-    def _suggestion_from_rejection(self, reason: RejectionReason) -> str:
+    def _suggestion_from_rejection(self, reason: RejectionReason, framework_name: Any = None) -> str:
         """Convert rejection reason to actionable suggestion."""
-        framework = reason.framework
-        issue = reason.issue_description
+        framework = framework_name.value if hasattr(framework_name, "value") else str(framework_name)
+        issue = reason.description
         severity = reason.severity
         
         severity_label = "CRITICAL" if severity >= 0.8 else "HIGH" if severity >= 0.6 else "MODERATE"

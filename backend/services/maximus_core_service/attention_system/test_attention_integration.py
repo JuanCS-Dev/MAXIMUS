@@ -3,6 +3,9 @@
 Tests the foveal/peripheral attention mechanism with simulated data sources.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 import random

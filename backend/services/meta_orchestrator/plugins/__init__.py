@@ -1,4 +1,6 @@
-"""Meta-Orchestrator Plugins Package"""
+"""Meta-Orchestrator Plugins Package."""
+
+from __future__ import annotations
 
 from .base import (
     AgentPlugin,

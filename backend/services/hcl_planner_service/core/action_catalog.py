@@ -6,6 +6,8 @@ Defines all available infrastructure actions that the HCL Planner can recommend.
 Actions are organized by category and include full parameter specifications.
 """
 
+from __future__ import annotations
+
 from typing import Dict, Any, List
 from dataclasses import dataclass, field
 

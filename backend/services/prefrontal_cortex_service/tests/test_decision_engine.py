@@ -2,6 +2,8 @@
 Unit tests for DecisionEngine.
 """
 
+from __future__ import annotations
+
 import pytest
 
 from backend.services.prefrontal_cortex_service.config import CognitiveSettings

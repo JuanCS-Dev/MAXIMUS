@@ -11,6 +11,9 @@ retrieval, empowering Maximus to access and leverage vast amounts of information
 for more informed and contextually relevant responses.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Any, Dict, List, Optional
 import uuid

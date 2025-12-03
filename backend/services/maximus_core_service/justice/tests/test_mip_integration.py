@@ -7,6 +7,9 @@ Tests cover:
 - Precedent retention after decisions
 """
 
+from __future__ import annotations
+
+
 import pytest
 from fastapi.testclient import TestClient
 from motor_integridade_processual.api import app

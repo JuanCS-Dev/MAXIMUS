@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """
 Monte Carlo N=100 Monitor & Report Generator

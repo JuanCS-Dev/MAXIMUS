@@ -2,6 +2,8 @@
 Additional tests to achieve 95%+ coverage.
 """
 
+from __future__ import annotations
+
 import pytest
 import numpy as np
 from unittest.mock import patch, MagicMock, PropertyMock
@@ -760,3 +762,66 @@ class TestExceptionPaths:
 
         # Should fallback to simple detection
         assert result.anomaly_score > 0
+
+
+class TestSARIMAHealthCheck:
+    """Tests for SARIMA health check."""
+
+    @pytest.mark.asyncio
+    async def test_health_check_unfitted(self):
+        """Test health check on unfitted model."""
+        forecaster = SARIMAForecaster()
+
+        health = await forecaster.health_check()
+
+        assert health["healthy"] is True
+        assert health["model_fitted"] is False
+
+    @pytest.mark.asyncio
+    async def test_health_check_fitted(self):
+        """Test health check on fitted model."""
+        forecaster = SARIMAForecaster()
+        np.random.seed(42)
+        data = list(np.random.randn(100) * 5 + 50)
+        forecaster.fit(data)
+
+        health = await forecaster.health_check()
+
+        assert health["healthy"] is True
+        assert health["model_fitted"] is True
+
+
+class TestIsolationHealthCheck:
+    """Tests for Isolation detector health check."""
+
+    def test_get_diagnostics_not_fitted(self):
+        """Test diagnostics on unfitted detector."""
+        detector = IsolationAnomalyDetector()
+
+        diagnostics = detector.get_diagnostics()
+
+        assert "fitted" in diagnostics
+        assert diagnostics["fitted"] is False
+
+    @pytest.mark.asyncio
+    async def test_health_check_not_fitted(self):
+        """Test health check on unfitted detector."""
+        detector = IsolationAnomalyDetector()
+
+        health = await detector.health_check()
+
+        assert health["healthy"] is True
+        assert health["model_fitted"] is False
+
+    @pytest.mark.asyncio
+    async def test_health_check_fitted(self):
+        """Test health check on fitted detector."""
+        detector = IsolationAnomalyDetector()
+        np.random.seed(42)
+        data = [[50 + np.random.randn() * 5, 50 + np.random.randn() * 5, 0.01] for _ in range(100)]
+        detector.fit(data)
+
+        health = await detector.health_check()
+
+        assert health["healthy"] is True
+        assert health["model_fitted"] is True

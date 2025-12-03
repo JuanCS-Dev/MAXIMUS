@@ -1,5 +1,7 @@
 """HCL Analyzer Core Package."""
 
+from __future__ import annotations
+
 from .analyzer import (
     SystemAnalyzer,
     detect_static_anomalies,

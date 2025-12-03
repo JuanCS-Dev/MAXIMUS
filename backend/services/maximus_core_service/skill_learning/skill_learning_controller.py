@@ -6,6 +6,9 @@ Acquisition System) service, enabling skill learning within Maximus Core.
 Production-ready implementation with real HSAS integration.
 """
 
+from __future__ import annotations
+
+
 import logging
 from dataclasses import dataclass
 from datetime import datetime

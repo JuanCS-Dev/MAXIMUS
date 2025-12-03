@@ -43,6 +43,9 @@ Version: 1.0.0
 License: Part of VÉRTICE Ethical AI Platform
 """
 
+from __future__ import annotations
+
+
 from .aggregation import (
     AggregationResult,
     DPAggregator,

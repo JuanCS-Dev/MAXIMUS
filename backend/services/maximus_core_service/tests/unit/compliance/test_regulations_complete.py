@@ -5,6 +5,9 @@ Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS!
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime
 from compliance.regulations import (

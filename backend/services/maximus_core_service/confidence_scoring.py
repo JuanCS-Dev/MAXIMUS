@@ -10,6 +10,9 @@ to users or downstream systems, enabling more informed decision-making and
 facilitating adaptive behavior in uncertain situations.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Any
 

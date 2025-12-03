@@ -28,6 +28,9 @@ Authors:
 Date: October 21, 2025
 """
 
+from __future__ import annotations
+
+
 from .cascade import (
     CoagulationCascade,
     CascadeState,

@@ -9,6 +9,9 @@ Free Energy Principle: Model long-term attack patterns and campaign progression.
 Prediction error = unexpected campaign evolution (novel TTPs).
 """
 
+from __future__ import annotations
+
+
 import logging
 
 import numpy as np

@@ -13,6 +13,9 @@ Date: 2025-10-06
 Quality: Production-ready, REGRA DE OURO compliant
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import UTC, datetime, timedelta
 

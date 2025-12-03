@@ -39,6 +39,9 @@ IIT/GWT Relevance:
 "Time is the fabric of consciousness. Desynchronization tears it."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 

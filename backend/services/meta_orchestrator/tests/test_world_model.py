@@ -2,6 +2,8 @@
 Tests for SimuRA World Model with Dyna-Think integration.
 """
 
+from __future__ import annotations
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime

@@ -4,6 +4,9 @@ Kafka Metrics Streamer
 Streams collected metrics to Kafka topic 'system.telemetry.raw' for real-time processing.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import json
 import logging

@@ -8,6 +8,9 @@ This allows efficient resource allocation by only applying expensive analysis
 to events that warrant attention.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 import time

@@ -3,6 +3,9 @@ Forensic Analyzer
 Advanced multi-layer behavioral and payload analysis for attack events
 """
 
+from __future__ import annotations
+
+
 import logging
 import re
 from dataclasses import dataclass, field

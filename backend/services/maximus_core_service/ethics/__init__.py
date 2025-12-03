@@ -25,6 +25,9 @@ Usage:
     print(f"Explanation: {decision.explanation}")
 """
 
+from __future__ import annotations
+
+
 from .base import (
     ActionContext,
     EthicalCache,

@@ -12,6 +12,9 @@ Key Adaptations:
     - Optimized for real-time explanation generation
 """
 
+from __future__ import annotations
+
+
 import logging
 import time
 import uuid

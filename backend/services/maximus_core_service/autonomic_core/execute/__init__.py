@@ -11,6 +11,9 @@ Autonomic Execute Module - Actuators
 Safety mechanisms: dry-run, auto-rollback, rate limiting, human approval.
 """
 
+from __future__ import annotations
+
+
 from .cache_actuator import CacheActuator
 from .database_actuator import DatabaseActuator
 from .docker_actuator import DockerActuator

@@ -11,6 +11,9 @@ Date: 2025-10-14
 Sprint: Reactive Fabric Sprint 3
 """
 
+from __future__ import annotations
+
+
 import pytest
 from consciousness.system import ConsciousnessSystem, ConsciousnessConfig
 from consciousness.reactive_fabric.collectors.metrics_collector import MetricsCollector

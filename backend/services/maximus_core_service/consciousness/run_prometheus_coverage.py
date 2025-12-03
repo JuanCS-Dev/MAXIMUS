@@ -2,6 +2,9 @@
 Standalone Prometheus Metrics Coverage Runner
 """
 
+from __future__ import annotations
+
+
 import sys
 import os
 

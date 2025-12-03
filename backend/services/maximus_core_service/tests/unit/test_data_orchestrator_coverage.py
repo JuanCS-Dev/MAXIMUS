@@ -15,6 +15,9 @@ Authors: Claude Code (Coverage Sprint)
 Date: 2025-10-14
 """
 
+from __future__ import annotations
+
+
 import pytest
 import asyncio
 import time

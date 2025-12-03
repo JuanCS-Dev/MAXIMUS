@@ -5,6 +5,9 @@ Correlates events from multiple collectors and identifies patterns.
 Phase 1: PASSIVE orchestration only - no automated responses.
 """
 
+from __future__ import annotations
+
+
 from .orchestration_engine import (
     OrchestrationEngine,
     OrchestrationConfig,

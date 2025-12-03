@@ -9,8 +9,11 @@ Biblical Foundation:
 - Stewardship: Responsible resource usage tracking
 """
 
+from __future__ import annotations
+
+
 import os
-from typing import Any, Callable, Dict, Optional
+from typing import Any, Dict, Optional
 
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter

@@ -6,6 +6,8 @@ Data models for the episodic memory service.
 Defines the structure for storing and retrieving agent memories.
 """
 
+from __future__ import annotations
+
 from enum import Enum
 from typing import List, Dict, Any, Optional
 from datetime import datetime

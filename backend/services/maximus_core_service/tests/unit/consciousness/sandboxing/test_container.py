@@ -1,6 +1,9 @@
 """
 Tests for Sandboxing Container
 """
+
+from __future__ import annotations
+
 import pytest
 import time
 from consciousness.sandboxing import ConsciousnessContainer, ResourceLimits

@@ -20,6 +20,9 @@ Date: 2025-10-06 (Updated: 2025-10-23 for 100/100 Integration)
 Quality: Production-ready, REGRA DE OURO compliant
 """
 
+from __future__ import annotations
+
+
 import logging
 from datetime import UTC, datetime
 

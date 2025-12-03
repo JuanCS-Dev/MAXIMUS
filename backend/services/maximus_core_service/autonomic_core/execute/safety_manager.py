@@ -1,5 +1,8 @@
 """Safety Manager - Dry-run, Rollback, Rate Limiting"""
 
+from __future__ import annotations
+
+
 import logging
 import time
 from collections import deque

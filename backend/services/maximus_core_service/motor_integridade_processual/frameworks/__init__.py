@@ -10,6 +10,9 @@ Implementa 4 frameworks éticos fundamentais para avaliação de action plans:
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 from motor_integridade_processual.frameworks.base import (
     EthicalFramework,
     AbstractEthicalFramework

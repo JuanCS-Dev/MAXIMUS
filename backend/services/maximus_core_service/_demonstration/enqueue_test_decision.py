@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python
 """
 Enqueue Test Decision - E2E Validation Script

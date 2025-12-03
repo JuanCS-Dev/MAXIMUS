@@ -40,6 +40,9 @@ DOUTRINA:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
+from __future__ import annotations
+
+
 import pytest
 from .constitutional_validator import (
     ConstitutionalValidator,

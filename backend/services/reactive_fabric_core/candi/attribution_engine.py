@@ -3,6 +3,9 @@ Attribution Engine
 ML-powered threat actor identification and attribution scoring
 """
 
+from __future__ import annotations
+
+
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime

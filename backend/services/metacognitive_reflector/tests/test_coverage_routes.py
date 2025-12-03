@@ -2,6 +2,9 @@
 Tests for API routes to achieve 100% coverage.
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from fastapi import FastAPI

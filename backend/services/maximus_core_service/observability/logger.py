@@ -15,6 +15,9 @@ Date: 2025-10-14
 Governance: Constituição Vértice v2.5 - Article IV (Operational Excellence)
 """
 
+from __future__ import annotations
+
+
 import logging
 import json
 from datetime import datetime, timezone

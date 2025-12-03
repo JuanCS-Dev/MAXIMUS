@@ -5,6 +5,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
 """
 
+from __future__ import annotations
+
+
 __version__ = "3.0.0"
 __version_info__ = (3, 0, 0)
 __build__ = "20251006"

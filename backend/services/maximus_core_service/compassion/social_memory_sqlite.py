@@ -13,6 +13,9 @@ Date: 2025-10-14
 Governance: Constituição Vértice v2.5 - Padrão Pagani
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import aiosqlite
 import json
@@ -167,7 +170,11 @@ class SocialMemorySQLite:
             return
 
         if self.db:
-            await self.db.close()
+            try:
+                await self.db.close()
+            except Exception:
+                pass
+            self.db = None
             logger.info("SocialMemorySQLite closed")
 
         await self.cache.clear()

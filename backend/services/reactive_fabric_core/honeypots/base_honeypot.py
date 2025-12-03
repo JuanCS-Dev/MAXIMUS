@@ -3,6 +3,9 @@ Base Honeypot Implementation
 Abstract base class for all honeypot types
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import hashlib
 import json

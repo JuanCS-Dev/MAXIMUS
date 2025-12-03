@@ -3,6 +3,9 @@ Threat Intelligence
 Integration with MISP and threat intelligence feeds
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from dataclasses import dataclass, field

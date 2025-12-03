@@ -4,6 +4,9 @@ This module defines the abstract base class that all explainers must implement,
 ensuring a consistent interface for explanation generation across the VÉRTICE platform.
 """
 
+from __future__ import annotations
+
+
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field

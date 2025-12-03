@@ -9,6 +9,9 @@ Biblical Foundation:
 - Stewardship: Responsible monitoring of system resources
 """
 
+from __future__ import annotations
+
+
 import time
 
 from fastapi import APIRouter, Response
@@ -20,7 +23,7 @@ from prometheus_client import (
     generate_latest,
 )
 
-from .constitutional_metrics import (
+from shared.constitutional_metrics import (
     record_constitutional_compliance,
     record_fpc_score,
     record_fruit_compliance,

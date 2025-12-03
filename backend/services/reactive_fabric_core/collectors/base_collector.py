@@ -5,6 +5,9 @@ This module defines the interface that all collectors must implement,
 ensuring consistent behavior across different intelligence sources.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from abc import ABC, abstractmethod

@@ -10,6 +10,9 @@ Target: 100.00% coverage with REAL execution.
 PADRÃO PAGANI ABSOLUTO - 100% MEANS 100%
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import pytest
 from unittest.mock import MagicMock, patch

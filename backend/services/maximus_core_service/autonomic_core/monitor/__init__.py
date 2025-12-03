@@ -5,6 +5,9 @@ Collects 50+ system metrics via Prometheus for autonomous regulation.
 Part of the Homeostatic Control Loop (HCL).
 """
 
+from __future__ import annotations
+
+
 from .kafka_streamer import KafkaMetricsStreamer
 from .sensor_definitions import (
     ApplicationSensors,

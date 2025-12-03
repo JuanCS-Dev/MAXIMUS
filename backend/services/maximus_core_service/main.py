@@ -5,6 +5,9 @@ Maximus Core Service - Main Application
 Entry point for the Maximus Core Service.
 """
 
+from __future__ import annotations
+
+
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 

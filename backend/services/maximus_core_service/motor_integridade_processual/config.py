@@ -7,6 +7,9 @@ incluindo thresholds éticos, pesos de frameworks, e configurações de infraest
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 from typing import Dict, Any
 from pydantic_settings import BaseSettings
 from pydantic import Field
@@ -31,9 +34,10 @@ class MIPSettings(BaseSettings):
     """
     
     # Infrastructure
-    neo4j_uri: str = Field(default="bolt://localhost:7687", env="NEO4J_URI")
-    neo4j_user: str = Field(default="neo4j", env="NEO4J_USER")
-    neo4j_password: str = Field(default="maximus2025", env="NEO4J_PASSWORD")
+    # Infrastructure
+    neo4j_uri: str = Field(default="bolt://localhost:7687")
+    neo4j_user: str = Field(default="neo4j")
+    neo4j_password: str = Field(default="maximus2025")
     
     # Framework Weights (devem somar 1.0)
     kantian_weight: float = Field(default=0.40, ge=0.0, le=1.0)

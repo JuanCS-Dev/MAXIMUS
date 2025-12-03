@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Industrial Test Generator V4 - ABSOLUT PERFECTION EM NOME DE JESUS
 

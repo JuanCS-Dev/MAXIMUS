@@ -28,6 +28,9 @@ Version: 1.0.0
 Date: 2025-10-08
 """
 
+from __future__ import annotations
+
+
 import logging
 import time
 from abc import ABC, abstractmethod
@@ -161,7 +164,7 @@ class NeuromodulatorBase(ABC):
     @abstractmethod
     def get_modulator_name(self) -> str:
         """Return modulator name for logging/metrics (e.g., 'dopamine', 'serotonin')."""
-        pass
+        ...
 
     @property
     def level(self) -> float:

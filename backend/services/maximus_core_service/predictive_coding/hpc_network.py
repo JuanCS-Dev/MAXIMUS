@@ -13,6 +13,9 @@ Layers:
 Free Energy Minimization: System learns to predict future states and acts to minimize surprise.
 """
 
+from __future__ import annotations
+
+
 import logging
 
 import numpy as np

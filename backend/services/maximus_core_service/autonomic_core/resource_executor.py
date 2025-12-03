@@ -10,6 +10,9 @@ This component ensures that the decisions made by the Homeostatic Control Loop
 performance.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime
 from enum import Enum
@@ -50,11 +53,11 @@ class ResourceExecutor:
     operational modes by interacting with the underlying infrastructure.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initializes the ResourceExecutor. (No external clients initialized here for simplicity)."""
         pass
 
-    async def execute_plan(self, plan: Any) -> ExecutionResult:
+    async def execute_allocation(self, allocation: Any) -> ExecutionResult:
         """Executes a resource plan, performing the specified actions.
 
         Args:
@@ -68,7 +71,7 @@ class ResourceExecutor:
         errors = []
 
         # Simplified execution for demonstration
-        for action in plan.actions:
+        for action in allocation.actions:
             try:
                 if action == ActionType.SCALE_UP:
                     await self._scale_workers(up=True)

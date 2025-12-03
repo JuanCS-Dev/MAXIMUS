@@ -7,6 +7,9 @@ Tests cover:
 - Full CBR cycle
 """
 
+from __future__ import annotations
+
+
 import pytest
 from services.maximus_core_service.justice.cbr_engine import CBREngine, CBRResult
 from services.maximus_core_service.justice.precedent_database import PrecedentDB, CasePrecedent

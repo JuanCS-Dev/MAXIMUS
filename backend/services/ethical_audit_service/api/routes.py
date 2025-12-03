@@ -5,14 +5,17 @@ Ethical Audit Service - API Routes
 FastAPI endpoints for Guardian Agent operations.
 """
 
+from __future__ import annotations
+
+
 from typing import Any, Dict
 
 from fastapi import APIRouter, Depends
 
-from ..core.constitutional_validator import ConstitutionalValidator
-from ..core.violation_detector import ViolationDetector
-from ..models.audit import ComplianceReport, Violation
-from .dependencies import get_detector, get_validator
+from core.constitutional_validator import ConstitutionalValidator
+from core.violation_detector import ViolationDetector
+from models.audit import ComplianceReport, Violation
+from api.dependencies import get_detector, get_validator
 
 router = APIRouter()
 

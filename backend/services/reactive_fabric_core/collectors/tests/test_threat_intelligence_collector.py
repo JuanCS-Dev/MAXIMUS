@@ -4,6 +4,9 @@ Tests for Threat Intelligence Collector.
 Tests integration with external threat intelligence feeds and APIs.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 
 import pytest

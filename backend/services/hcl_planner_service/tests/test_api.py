@@ -2,21 +2,27 @@
 Unit tests for HCL Planner API.
 """
 
+from __future__ import annotations
+
 from unittest.mock import AsyncMock, patch
 import pytest
 from fastapi.testclient import TestClient
-from backend.services.hcl_planner_service.main import app
-from backend.services.hcl_planner_service.core.planner import AgenticPlanner
+
+from main import app
+from core.planner import AgenticPlanner
+from api.dependencies import get_planner
 
 client = TestClient(app)
+
 
 @pytest.fixture(name="mock_planner")
 def fixture_mock_planner():
     """Mock planner fixture."""
-    with patch("backend.services.hcl_planner_service.api.dependencies.AgenticPlanner") as mock:
+    with patch("api.dependencies.AgenticPlanner") as mock:
         instance = AsyncMock()
         mock.return_value = instance
         yield instance
+
 
 def test_health_check(mock_planner):  # pylint: disable=unused-argument
     """Test health check endpoint."""
@@ -28,7 +34,6 @@ def test_health_check(mock_planner):  # pylint: disable=unused-argument
         mock.get_status.return_value = {"status": "active", "model": "test"}
         return mock
 
-    from backend.services.hcl_planner_service.api.dependencies import get_planner  # pylint: disable=import-outside-toplevel
     app.dependency_overrides[get_planner] = override_get_planner
 
     response = client.get("/health")
@@ -36,11 +41,13 @@ def test_health_check(mock_planner):  # pylint: disable=unused-argument
     assert response.json()["status"] == "healthy"
     assert response.json()["planner"]["status"] == "active"
 
+
 def test_metrics():
     """Test metrics endpoint."""
     response = client.get("/metrics")
     assert response.status_code == 200
     assert "planner_active 1" in response.text
+
 
 @pytest.mark.asyncio
 async def test_generate_plan_endpoint():
@@ -50,7 +57,6 @@ async def test_generate_plan_endpoint():
         mock.recommend_actions.return_value = [{"type": "scale_up"}]
         return mock
 
-    from backend.services.hcl_planner_service.api.dependencies import get_planner  # pylint: disable=import-outside-toplevel
     app.dependency_overrides[get_planner] = override_get_planner
 
     payload = {

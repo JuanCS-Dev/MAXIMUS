@@ -15,6 +15,9 @@ Key Components:
 - SalienceScorer: Calculates attention priority scores
 """
 
+from __future__ import annotations
+
+
 from .attention_core import (
     AttentionSystem,
     FovealAnalysis,

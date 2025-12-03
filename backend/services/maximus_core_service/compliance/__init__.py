@@ -59,6 +59,9 @@ Date: 2025-10-06
 License: Proprietary - VÉRTICE Platform
 """
 
+from __future__ import annotations
+
+
 from .base import (
     # Configuration
     ComplianceConfig,

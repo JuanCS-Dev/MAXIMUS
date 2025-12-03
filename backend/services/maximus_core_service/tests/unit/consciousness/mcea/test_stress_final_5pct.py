@@ -14,6 +14,9 @@ Target missing lines identified from 95% coverage:
 PADRÃO PAGANI ABSOLUTO - 100% MEANS 100%
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import pytest
 import pytest_asyncio

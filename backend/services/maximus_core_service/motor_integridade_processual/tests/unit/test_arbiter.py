@@ -9,6 +9,9 @@ Tests cover:
 
 Coverage Target: 100%
 """
+
+from __future__ import annotations
+
 from uuid import uuid4
 from motor_integridade_processual.arbiter.decision import DecisionFormatter, DecisionArbiter
 from motor_integridade_processual.arbiter.alternatives import AlternativeGenerator, AlternativeSuggester

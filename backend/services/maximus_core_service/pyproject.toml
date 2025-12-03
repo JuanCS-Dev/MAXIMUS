@@ -279,13 +279,17 @@ log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
-disallow_untyped_defs = false  # Gradual typing
+disallow_untyped_defs = true  # Strict typing enforced
 check_untyped_defs = true
 no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 warn_no_return = true
 strict_equality = true
+exclude = ["transformers", "_demonstration", "tests", ".*/tests/.*", "test_.*\\.py"]
+mypy_path = "backend/services/maximus_core_service"
+explicit_package_bases = true
+namespace_packages = true
 
 [[tool.mypy.overrides]]
 module = [
@@ -297,8 +301,20 @@ module = [
     "xgboost.*",
     "GPUtil.*",
     "kubernetes.*",
+    "networkx.*",
+    "skfuzzy.*",
+    "ruptures.*",
+    "scipy.*",
+    "sklearn.*",
+    "testcontainers.*",
+    "kafka.*",
+    "psycopg2.*",
+    "psutil.*",
+    "core.*",
+    "models.*",
 ]
 ignore_missing_imports = true
+follow_imports = "skip"
 
 # ============================================================================
 # Hatchling Build Configuration

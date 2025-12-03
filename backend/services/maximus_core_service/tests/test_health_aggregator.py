@@ -2,6 +2,9 @@
 Unit tests for HealthAggregator.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from backend.services.maximus_core_service.core.health_aggregator import (

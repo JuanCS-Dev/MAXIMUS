@@ -1,1 +1,3 @@
-"""HCL Analyzer Service - Test Package"""
+"""HCL Analyzer Service - Test Package."""
+
+from __future__ import annotations

@@ -5,6 +5,9 @@ This collector integrates with log aggregation systems like Elasticsearch,
 Splunk, and ELK Stack to collect and analyze security-relevant logs.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from datetime import datetime, timedelta

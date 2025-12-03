@@ -2,6 +2,8 @@
 Unit tests for HCL Analyzer API.
 """
 
+from __future__ import annotations
+
 from datetime import datetime
 from unittest.mock import AsyncMock
 import pytest

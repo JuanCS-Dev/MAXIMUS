@@ -18,6 +18,9 @@ Version: 1.0.0
 Date: 2025-10-12
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock
 

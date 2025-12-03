@@ -1,37 +1,7 @@
-"""
-Biomimetic Safety Bridge - Production-Hardened Integration Layer
+"""Biomimetic Safety Bridge - Integration layer for Neuromodulation + Predictive Coding."""
 
-Integrates two biomimetic systems with Safety Core:
-1. Neuromodulation System (4 modulators: DA, 5HT, ACh, NE)
-2. Predictive Coding Hierarchy (5 layers: Sensory → Strategic)
+from __future__ import annotations
 
-Biological Inspiration:
-- Brain integrates neuromodulation + predictive processing seamlessly
-- Neuromodulators influence prediction error signals (attention allocation)
-- Prediction errors drive neuromodulator release (learning signals)
-- Homeostatic balance maintained across both systems
-
-Functional Role in MAXIMUS:
-- Coordinate neuromodulation + predictive coding cycles
-- Aggregate metrics from both systems for Safety Core
-- Detect cross-system anomalies (e.g., runaway neuromodulation + high prediction errors)
-- Trigger kill switch on aggregate failures
-- Isolate failures between systems (one can fail without crashing the other)
-
-Safety Features (CRITICAL):
-- System isolation: Neuromodulation failure doesn't crash Predictive Coding (and vice versa)
-- Aggregate circuit breaker: If both systems fail → kill switch
-- Bounded coordination: Max coordination cycles per second
-- Timeout protection: Max time per coordination cycle
-- Full observability: Aggregates ALL metrics from both systems
-- Emergency shutdown: Coordinated shutdown of both systems
-
-NO MOCK, NO PLACEHOLDER, NO TODO.
-
-Authors: Claude Code + Juan
-Version: 1.0.0
-Date: 2025-10-08
-"""
 
 import asyncio
 import logging
@@ -94,31 +64,7 @@ class BridgeState:
 
 
 class BiomimeticSafetyBridge:
-    """
-    Integration layer connecting Neuromodulation + Predictive Coding with Safety Core.
-
-    This bridge ensures:
-    1. **System Isolation**: Each system can fail independently without crashing the other
-    2. **Coordinated Operation**: Both systems work together to process inputs
-    3. **Aggregate Monitoring**: Combines metrics from both systems
-    4. **Cross-System Anomaly Detection**: Detects when both systems show problems simultaneously
-    5. **Aggregate Circuit Breaker**: Kill switch when both systems fail
-    6. **Emergency Shutdown**: Coordinated shutdown of both systems
-
-    Usage:
-        bridge = BiomimeticSafetyBridge(kill_switch_callback=safety.kill_switch.trigger)
-
-        # Process input through both systems
-        result = await bridge.coordinate_processing(raw_event_vector)
-
-        # Get aggregate metrics
-        metrics = bridge.get_health_metrics()
-
-        # Emergency shutdown
-        bridge.emergency_stop()
-
-    Thread Safety: NOT thread-safe. Use external locking for async/parallel calls.
-    """
+    """Integration layer connecting Neuromodulation + Predictive Coding with Safety Core."""
 
     def __init__(self, config: BridgeConfig | None = None, kill_switch_callback: Callable[[str], None] | None = None):
         """Initialize biomimetic safety bridge.

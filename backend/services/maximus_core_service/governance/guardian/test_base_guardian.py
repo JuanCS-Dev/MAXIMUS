@@ -27,6 +27,9 @@ MISSION: 14-DAY 100% COVERAGE SPRINT - DIA 1
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime, timedelta
 

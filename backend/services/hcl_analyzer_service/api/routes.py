@@ -5,6 +5,8 @@ HCL Analyzer Service - API Routes
 FastAPI routes for the service.
 """
 
+from __future__ import annotations
+
 from fastapi import APIRouter, Depends, HTTPException
 
 from ..core.analyzer import SystemAnalyzer

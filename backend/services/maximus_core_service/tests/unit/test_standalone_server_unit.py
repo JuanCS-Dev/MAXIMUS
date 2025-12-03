@@ -4,6 +4,9 @@ Generated using Industrial Test Generator V2 (2024-2025 techniques)
 Combines: AST analysis + Parametrization + Hypothesis integration
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock, AsyncMock
 from datetime import datetime

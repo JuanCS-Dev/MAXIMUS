@@ -10,6 +10,9 @@ steps for the Resource Executor, ensuring the AI's operational efficiency and
 responsiveness.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 from enum import Enum
 from typing import Any
@@ -52,7 +55,7 @@ class ResourcePlanner:
     plan of actions to optimize resource usage and maintain system health.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initializes the ResourcePlanner and its fuzzy logic system."""
         pass
 

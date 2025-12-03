@@ -5,6 +5,9 @@ Target: 71.9% → 95%+ coverage (16 missing lines)
 Zero mocks - Padrão Pagani Absoluto
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 import pytest
 

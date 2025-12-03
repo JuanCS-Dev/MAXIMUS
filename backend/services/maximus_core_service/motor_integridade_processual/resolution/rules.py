@@ -6,6 +6,9 @@ Defines precedence rules and meta-ethical principles for conflict resolution.
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 from typing import Dict, Any
 from motor_integridade_processual.models.action_plan import ActionPlan
 
@@ -49,7 +52,7 @@ class ResolutionRules:
         Returns:
             Dict with constraint results
         """
-        constraints = {}
+        constraints: Dict[str, Any] = {}
         
         # Lei I: Ovelha Perdida - Protect vulnerable
         if plan.affects_life_death:

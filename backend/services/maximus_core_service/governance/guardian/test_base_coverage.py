@@ -8,6 +8,9 @@ Date: 2025-10-14
 Coverage Target: 100.00%
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime, timedelta
 

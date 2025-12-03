@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python
 """
 E2E Validation Script for Governance Production Server

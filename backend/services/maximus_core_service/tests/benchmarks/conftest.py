@@ -3,6 +3,9 @@
 Registers custom pytest markers for benchmark tests.
 """
 
+from __future__ import annotations
+
+
 
 def pytest_configure(config):
     """Register custom markers."""

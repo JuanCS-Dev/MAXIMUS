@@ -10,6 +10,9 @@ Structural tests - Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS! FASE B P4 COMPASSION! 🔥
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 

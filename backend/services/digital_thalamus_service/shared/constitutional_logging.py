@@ -9,10 +9,13 @@ Biblical Foundation:
 - Wisdom: Contextual information for decision tracking
 """
 
+from __future__ import annotations
+
+
 import logging
 import os
 import sys
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 import structlog
 from opentelemetry import trace

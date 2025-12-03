@@ -6,6 +6,9 @@ Target: 90% coverage for safety.py
 EM NOME DE JESUS - SER BOM, NÃO PARECER BOM!
 """
 
+from __future__ import annotations
+
+
 import time
 import tempfile
 import asyncio

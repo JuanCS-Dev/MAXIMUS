@@ -6,6 +6,9 @@ Dynamic resource allocation using:
 - Soft Actor-Critic RL Agent (continuous optimization)
 """
 
+from __future__ import annotations
+
+
 from .fuzzy_controller import FuzzyLogicController
 from .mode_definitions import OPERATIONAL_MODES
 from .rl_agent import SACAgent

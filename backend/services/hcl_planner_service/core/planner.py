@@ -20,12 +20,14 @@ Example:
     >>> actions = await planner.recommend_actions(state, analysis, goals)
 """
 
+from __future__ import annotations
+
 from typing import Any, Dict, List, Optional, cast
 
-from ..config import GeminiSettings
-from .gemini_client import GeminiClient, GeminiAPIError
-from .action_catalog import get_action_catalog
-from ..utils.logging_config import get_logger
+from config import GeminiSettings
+from core.gemini_client import GeminiClient, GeminiAPIError
+from core.action_catalog import get_action_catalog
+from utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 
@@ -177,7 +179,7 @@ class AgenticPlanner:
 
                 # Use global client (started at service init)
                 reflector = PrioritizedReflectorClient()
-                
+
                 log = ExecutionLog(
                     trace_id=f"plan-{uuid4().hex[:8]}",
                     agent_id="hcl_planner",
@@ -193,7 +195,7 @@ class AgenticPlanner:
                     log,
                     priority=ReflectionPriority.HIGH
                 )
-                
+
                 logger.debug(
                     "reflection_submitted_async",
                     extra={"trace_id": log.trace_id}

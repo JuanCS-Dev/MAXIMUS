@@ -1,5 +1,8 @@
 """Failure Predictor - XGBoost-based failure forecasting"""
 
+from __future__ import annotations
+
+
 import logging
 
 import numpy as np

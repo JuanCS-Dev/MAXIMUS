@@ -4,6 +4,9 @@ Tests for Deception Engine.
 Tests honeytoken generation, decoy systems, trap documents, and breadcrumbs.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 
 import pytest

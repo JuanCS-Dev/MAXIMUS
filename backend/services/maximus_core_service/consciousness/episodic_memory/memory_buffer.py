@@ -2,6 +2,9 @@
 Episodic Memory Buffer
 Short-term to long-term memory consolidation system.
 """
+
+from __future__ import annotations
+
 from collections import deque
 from datetime import datetime
 from typing import List, Dict, Optional

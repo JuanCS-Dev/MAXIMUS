@@ -14,6 +14,9 @@ Authors: Claude Code + Juan
 Date: 2025-10-15
 """
 
+from __future__ import annotations
+
+
 import pytest
 from consciousness.lrr import (
     Belief,

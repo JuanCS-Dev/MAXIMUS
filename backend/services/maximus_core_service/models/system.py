@@ -5,6 +5,9 @@ Maximus Core Service - System Models
 Pydantic models for system state and health.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 from typing import Dict
 

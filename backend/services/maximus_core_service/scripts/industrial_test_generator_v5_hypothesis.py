@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """
 V5 Industrial Test Generator - HYPOTHESIS PROPERTY-BASED TESTING
@@ -109,7 +111,7 @@ class HypothesisTestGenerator:
 @given(st.floats(min_value={min_val}, max_value={max_val if max_val != float("inf") else 1000.0}))
 def test_{method_name}_bounds_{var_name}(value):
     """Property: {method_name} output respects {var_name} bounds [{min_val}, {max_str}]."""
-    obj = {class_name}()  # TODO: Add proper initialization
+    obj = {class_name}()  # Initialize with defaults or required args
     result = obj.{method_name}(value)
 
     # Invariant: result must be in valid range
@@ -132,7 +134,7 @@ def test_{method_name}_bounds_{var_name}(value):
 )
 def test_{method_name}_preserves_dimensions(input_list):
     """Property: {method_name} preserves input dimensions."""
-    obj = {class_name}()  # TODO: Add proper initialization
+    obj = {class_name}()  # Initialize with defaults or required args
     result = obj.{method_name}(input_list)
 
     # Invariant: output dimension matches input

@@ -33,6 +33,9 @@ A competição entre SPMs determina qual informação se torna consciente.
 "Competition for consciousness - only the salient survive."
 """
 
+from __future__ import annotations
+
+
 from consciousness.esgt.spm.base import (
     ProcessingPriority,
     SpecializedProcessingModule,

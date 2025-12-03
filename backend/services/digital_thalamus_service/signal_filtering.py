@@ -12,6 +12,9 @@ for improving the accuracy and efficiency of subsequent perception and reasoning
 tasks, preventing the AI from being overwhelmed by noisy or irrelevant data.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 from typing import Any, Dict, Optional
 

@@ -5,6 +5,9 @@ Manages alerts, decision requests, and human oversight interfaces.
 Phase 1: PASSIVE operation - collects decisions but doesn't execute automated responses.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from collections import defaultdict
 from datetime import datetime, timedelta

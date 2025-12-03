@@ -11,6 +11,9 @@ Features:
     - Dashboard integration support
 """
 
+from __future__ import annotations
+
+
 import logging
 from collections import defaultdict, deque
 from dataclasses import dataclass, field

@@ -5,6 +5,9 @@ Metacognitive Reflector - API Dependencies
 Dependency injection for FastAPI endpoints.
 """
 
+from __future__ import annotations
+
+
 from ..config import Settings, get_settings
 from ..core.memory_client import MemoryClient
 from ..core.reflector import Reflector

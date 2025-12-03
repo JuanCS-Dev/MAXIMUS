@@ -5,12 +5,15 @@ Ethical Audit Service - Violation Detector
 Detects violations of constitutional principles.
 """
 
+from __future__ import annotations
+
+
 import uuid
 from typing import List
 
-from ..config import AuditSettings
-from ..models.audit import ComplianceReport, Violation
-from ..utils.logging_config import get_logger
+from config import AuditSettings
+from models.audit import ComplianceReport, Violation
+from utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 

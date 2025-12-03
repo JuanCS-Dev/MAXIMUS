@@ -4,6 +4,9 @@ Additional tests to boost Threat Intelligence Collector coverage to >95%.
 Focuses on uncovered edge cases, error paths, and integration scenarios.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock
 

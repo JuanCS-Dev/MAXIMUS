@@ -4,6 +4,9 @@ Generated using Industrial Test Generator V2 (2024-2025 techniques)
 Combines: AST analysis + Parametrization + Hypothesis integration
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock, AsyncMock
 from datetime import datetime
@@ -39,7 +42,6 @@ class TestFLClient:
     @pytest.mark.skip(reason="Requires 2 arguments")
     def test_init_with_args(self):
         """Test initialization with required arguments."""
-        # TODO: Provide 2 required arguments
         # Required args: config, model_adapter
         # obj = FLClient(...)
         pass
@@ -54,7 +56,6 @@ class TestFLClient:
     @pytest.mark.skip(reason="Needs implementation")
     def test_methods_exist(self, method_name):
         """Test that methods exist and are callable."""
-        # TODO: Create instance and test method exists
         # obj = FLClient()
         # assert hasattr(obj, method_name)
         # assert callable(getattr(obj, method_name))

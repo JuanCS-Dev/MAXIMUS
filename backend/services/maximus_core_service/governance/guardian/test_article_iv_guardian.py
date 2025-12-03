@@ -29,6 +29,9 @@ CONTRACT: 100% OU NADA
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
+from __future__ import annotations
+
+
 import tempfile
 from datetime import datetime, timedelta
 from pathlib import Path

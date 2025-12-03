@@ -5,6 +5,9 @@ Metacognitive Reflector - Main Application
 Entry point for the Metacognitive Reflector service.
 """
 
+from __future__ import annotations
+
+import logging
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
@@ -14,6 +17,7 @@ from .api.dependencies import initialize_service
 from .api.routes import router as api_router
 from .config import get_settings
 
+logger = logging.getLogger(__name__)
 settings = get_settings()
 
 
@@ -27,8 +31,8 @@ async def lifespan(_: FastAPI) -> AsyncGenerator[None, None]:
 
     yield
 
-    # Shutdown
-    pass
+    # Shutdown - cleanup handled by context managers
+    logger.info("Metacognitive Reflector shutdown complete")
 
 
 app = FastAPI(

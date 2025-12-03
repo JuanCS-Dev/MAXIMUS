@@ -9,6 +9,9 @@ NOTE: Tests temporarily skipped - BenchmarkSuite API changed.
 TODO: Update tests to match new BenchmarkSuite.benchmark_model() signature
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 pytest.skip("BenchmarkSuite API changed - tests need update", allow_module_level=True)

@@ -5,14 +5,16 @@ Prefrontal Cortex Service - Main Application
 Entry point for the Prefrontal Cortex Executive Service.
 """
 
+from __future__ import annotations
+
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
 
-from .api.dependencies import initialize_service
-from .api.routes import router as api_router
-from .config import get_settings
+from api.dependencies import initialize_service
+from api.routes import router as api_router
+from config import get_settings
 
 settings = get_settings()
 

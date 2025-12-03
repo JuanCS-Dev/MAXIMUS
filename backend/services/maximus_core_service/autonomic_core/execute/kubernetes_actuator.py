@@ -1,5 +1,8 @@
 """Kubernetes Actuator - K8s API Integration"""
 
+from __future__ import annotations
+
+
 import logging
 import subprocess
 

@@ -4,25 +4,17 @@ HCL Planner Service - Dependency Injection
 
 FastAPI dependency injection functions.
 
-Provides injectable dependencies for:
-    - Settings
-    - Agentic Planner
-    - Logging
-
-Example:
-    >>> @app.get("/plan")
-    >>> async def plan(
-    ...     planner: AgenticPlanner = Depends(get_planner)
-    ... ):
-    ...     return await planner.recommend_actions(...)
+Provides injectable dependencies for Settings, Agentic Planner, Logging.
 """
+
+from __future__ import annotations
 
 from functools import lru_cache
 from typing import Generator
 
-from ..config import Settings, get_settings
-from ..core import AgenticPlanner
-from ..utils.logging_config import get_logger, setup_logging
+from config import Settings, get_settings
+from core import AgenticPlanner
+from utils.logging_config import get_logger, setup_logging
 
 logger = get_logger(__name__)
 

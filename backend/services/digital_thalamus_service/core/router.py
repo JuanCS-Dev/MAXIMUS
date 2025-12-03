@@ -5,11 +5,14 @@ Digital Thalamus Service - Request Router
 Core routing logic for directing requests to services.
 """
 
+from __future__ import annotations
+
+
 from typing import Dict
 
-from ..config import GatewaySettings
-from ..models.gateway import RouteConfig
-from ..utils.logging_config import get_logger
+from config import GatewaySettings
+from models.gateway import RouteConfig
+from utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 

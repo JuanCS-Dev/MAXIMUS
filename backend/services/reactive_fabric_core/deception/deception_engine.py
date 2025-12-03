@@ -10,6 +10,9 @@ This engine manages:
 Phase 1: PASSIVE deception only - monitoring without active engagement
 """
 
+from __future__ import annotations
+
+
 import hashlib
 import json
 import logging

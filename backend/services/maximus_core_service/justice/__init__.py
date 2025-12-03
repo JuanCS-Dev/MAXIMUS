@@ -1,5 +1,8 @@
 """Justice module - Ethical reasoning and precedent management for Maximus AI."""
 
+from __future__ import annotations
+
+
 from .precedent_database import PrecedentDB, CasePrecedent
 from .embeddings import CaseEmbedder
 from .constitutional_validator import (

@@ -31,6 +31,9 @@ IIT/GWT Relevance:
 "Consciousness is a serial bottleneck in parallel processing."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 import pytest

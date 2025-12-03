@@ -5,6 +5,9 @@ PostgreSQL with asyncpg connection pool
 Sprint 1: Real implementation
 """
 
+from __future__ import annotations
+
+
 import asyncpg
 import structlog
 import json

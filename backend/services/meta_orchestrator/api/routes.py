@@ -11,6 +11,8 @@ Endpoints:
 - GET /health - Service health
 """
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime
 from typing import List, Dict, Any, Optional
@@ -19,10 +21,10 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from ..core.orchestrator import Orchestrator  # pylint: disable=relative-beyond-top-level
-from ..core.agent_registry import AgentRegistry  # pylint: disable=relative-beyond-top-level
-from ..core.task_decomposer import TaskDecomposer  # pylint: disable=relative-beyond-top-level
-from ..plugins.base import Task, TaskPriority  # pylint: disable=relative-beyond-top-level
+from core.orchestrator import Orchestrator
+from core.agent_registry import AgentRegistry
+from core.task_decomposer import TaskDecomposer
+from plugins.base import Task, TaskPriority
 
 
 # Configure logging
@@ -38,7 +40,9 @@ class MissionRequest(BaseModel):  # pylint: disable=too-few-public-methods
     context: Dict[str, Any] = Field(default_factory=dict, description="Mission context")
     priority: str = Field(default="medium", description="Priority: low, medium, high, critical")
 
-    class Config:
+    class Config:  # pylint: disable=too-few-public-methods
+        """Pydantic configuration."""
+
         schema_extra = {
             "example": {
                 "type": "infrastructure",

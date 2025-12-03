@@ -29,6 +29,9 @@ network/compute failures without overwhelming recovering services.
 "Retry smartly, not blindly."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import random
 import time

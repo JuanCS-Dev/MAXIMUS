@@ -23,6 +23,9 @@ Date: 2025-10-06
 Quality: REGRA DE OURO - Zero mocks, 100% production code validation
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 # ============================================================================

@@ -24,10 +24,14 @@ Authors: Juan & Claude Code
 Version: 1.0.0 - FASE VII Week 9-10
 """
 
+from __future__ import annotations
+
+
 import time
 from typing import Any
+from collections.abc import Callable
 
-from fastapi import Response
+from fastapi import Response, Request
 from prometheus_client import CONTENT_TYPE_LATEST, CollectorRegistry, Counter, Gauge, generate_latest
 
 # ==================== PROMETHEUS REGISTRY ====================
@@ -217,7 +221,7 @@ def update_violation_metrics(violations: list) -> None:
 # ==================== FASTAPI HANDLER ====================
 
 
-def get_metrics_handler():
+def get_metrics_handler() -> Callable[[Request], Response]:
     """Get FastAPI handler for /metrics endpoint.
 
     Returns:
@@ -231,7 +235,7 @@ def get_metrics_handler():
         app.add_route("/metrics", get_metrics_handler())
     """
 
-    def metrics_endpoint():
+    def metrics_endpoint(request: Request) -> Response:
         """Prometheus metrics endpoint."""
         return Response(content=generate_latest(consciousness_registry), media_type=CONTENT_TYPE_LATEST)
 

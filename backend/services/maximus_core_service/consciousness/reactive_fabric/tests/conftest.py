@@ -7,6 +7,9 @@ Date: 2025-10-14
 Sprint: Reactive Fabric Sprint 3 - Test Coverage
 """
 
+from __future__ import annotations
+
+
 import time
 import pytest
 from unittest.mock import AsyncMock, MagicMock

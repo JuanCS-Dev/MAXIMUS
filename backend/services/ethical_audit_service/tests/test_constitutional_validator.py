@@ -2,13 +2,16 @@
 Unit tests for ConstitutionalValidator.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
-from backend.services.ethical_audit_service.config import AuditSettings
-from backend.services.ethical_audit_service.core.constitutional_validator import (
+from config import AuditSettings
+from core.constitutional_validator import (
     ConstitutionalValidator
 )
-from backend.services.ethical_audit_service.models.audit import ViolationType
+from models.audit import ViolationType
 
 
 @pytest.fixture(name="settings")

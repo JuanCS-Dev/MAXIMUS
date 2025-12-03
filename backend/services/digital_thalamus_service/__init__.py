@@ -9,5 +9,8 @@ Key components within this package are responsible for:
 - Ingesting raw data from various sensory services (visual, auditory, chemical, somatosensory).
 - Filtering, prioritizing, and pre-processing sensory inputs.
 - Directing processed sensory data to higher-level cognitive services.
-- Ensuring efficient and timely delivery of essential information for perception and decision-making.
+- Ensuring efficient and timely delivery of essential information
+  for perception and decision-making.
 """
+
+from __future__ import annotations

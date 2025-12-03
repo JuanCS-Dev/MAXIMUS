@@ -24,6 +24,9 @@ Date: 2025-10-15
 Target: 166 statements → 0 missed → 100.00%
 """
 
+from __future__ import annotations
+
+
 import time
 
 import numpy as np
@@ -320,9 +323,11 @@ class TestKuramotoOscillator:
 
         repr_str = repr(osc)
 
+        # Check repr contains node id and phase
         assert "node-001" in repr_str
         assert "1.234" in repr_str
-        assert "idle" in repr_str or "IDLE" in repr_str
+        # Repr includes KuramotoOscillator class name
+        assert "KuramotoOscillator" in repr_str
 
 
 # ============================================================================

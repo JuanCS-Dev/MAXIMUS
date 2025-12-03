@@ -17,6 +17,9 @@ Version: 1.0.0 - FASE IV Sprint 2
 Date: 2025-10-07
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 from dataclasses import dataclass

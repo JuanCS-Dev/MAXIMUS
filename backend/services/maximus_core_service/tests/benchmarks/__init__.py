@@ -14,3 +14,6 @@ Success Criteria: All metrics within biological plausibility
 Authors: Juan & Claude Code
 Version: 1.0.0 - FASE IV Sprint 3
 """
+
+from __future__ import annotations
+

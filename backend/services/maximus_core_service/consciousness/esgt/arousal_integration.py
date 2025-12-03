@@ -46,6 +46,9 @@ Same stimulus can be:
 "Arousal gates consciousness itself."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 from dataclasses import dataclass
@@ -173,7 +176,8 @@ class ESGTArousalBridge:
             try:
                 await self._modulation_task
             except asyncio.CancelledError:
-                pass
+                # Task cancelled intentionally
+                return
 
         self._modulation_task = None
 
@@ -213,8 +217,6 @@ class ESGTArousalBridge:
 
                 # Check for ESGT events (refractory signaling)
                 if self.config.enable_refractory_arousal_drop:
-                    time.time()
-
                     # Check if ESGT just occurred
                     if self.esgt_coordinator.last_esgt_time > last_esgt_time:
                         # New ESGT event
@@ -255,10 +257,8 @@ class ESGTArousalBridge:
 
         threshold = self.config.baseline_threshold / (factor**self.config.threshold_sensitivity)
 
-        # Clamp to valid range
-        threshold = max(self.config.min_threshold, min(self.config.max_threshold, threshold))
-
-        return threshold
+        # Clamp to valid range [0, 1]
+        return float(max(self.config.min_threshold, min(self.config.max_threshold, threshold)))
 
     def _update_esgt_threshold(self, threshold: float) -> None:
         """Update ESGT coordinator's salience threshold."""
@@ -276,13 +276,11 @@ class ESGTArousalBridge:
         # Request arousal modulation (temporary drop)
         from consciousness.mcea.controller import ArousalModulation
 
-        modulation = ArousalModulation(
+        self.arousal_controller.request_modulation(
             source="esgt_refractory",
             delta=-self.config.refractory_arousal_drop,
-            duration_seconds=1.0,  # 1 second drop
+            duration_seconds=1.0,
         )
-
-        self.arousal_controller.request_arousal_modulation(modulation)
 
     def get_current_threshold(self) -> float:
         """Get current ESGT salience threshold."""

@@ -27,6 +27,9 @@ Version: 1.0.0
 Date: 2025-10-08
 """
 
+from __future__ import annotations
+
+
 from unittest.mock import MagicMock
 
 import pytest

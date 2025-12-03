@@ -21,6 +21,9 @@ SCIENTIFIC BASIS:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 """
 
+from __future__ import annotations
+
+
 from typing import Optional, List, Dict, Any
 from dataclasses import dataclass
 from .precedent_database import PrecedentDB, CasePrecedent

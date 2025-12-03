@@ -3,6 +3,9 @@
 Simple FastAPI server to test OSINT endpoints without full MAXIMUS initialization.
 """
 
+from __future__ import annotations
+
+
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware

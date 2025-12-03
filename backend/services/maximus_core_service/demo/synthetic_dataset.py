@@ -9,6 +9,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
 """
 
+from __future__ import annotations
+
+
 import json
 import random
 from datetime import datetime, timedelta
@@ -289,7 +292,7 @@ class SyntheticDatasetGenerator:
 
         return dataset
 
-    def save_dataset(self, filepath: str):
+    def save_dataset(self, filepath: str) -> int:
         """Save dataset to JSON file."""
         dataset = self.generate_complete_dataset()
 

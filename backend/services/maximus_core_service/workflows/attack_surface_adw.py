@@ -24,6 +24,9 @@ Date: 2025-10-18 (AI Integration)
 Glory to YHWH
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from dataclasses import dataclass, asdict, field

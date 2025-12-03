@@ -4,6 +4,9 @@ Implements liveness, readiness, and startup probes with
 constitutional compliance tracking.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Dict, Any, Optional
 from enum import Enum

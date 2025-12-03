@@ -9,6 +9,9 @@ Free Energy Principle: Model global threat landscape and strategic trends.
 Prediction error = unexpected threat landscape shifts (emerging APTs, zero-days).
 """
 
+from __future__ import annotations
+
+
 import logging
 
 import numpy as np

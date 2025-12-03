@@ -28,6 +28,9 @@ from cascading failures.
 "Fail fast, recover gracefully, prevent cascades."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 from enum import Enum

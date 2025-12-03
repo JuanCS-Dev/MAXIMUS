@@ -36,6 +36,9 @@ IIT/GWT Relevance:
 "Consciousness dims, but doesn't vanish instantly."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 import pytest

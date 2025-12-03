@@ -6,7 +6,9 @@ FastAPI application for the HCL Analyzer Service.
 Exposes endpoints for analyzing system metrics.
 """
 
-from typing import Dict, Any
+from __future__ import annotations
+
+from typing import Any, Dict
 
 from fastapi import FastAPI
 from fastapi.responses import PlainTextResponse

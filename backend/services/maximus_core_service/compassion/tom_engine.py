@@ -15,6 +15,9 @@ Date: 2025-10-14
 Governance: Constituição Vértice v2.5 - Padrão Pagani
 """
 
+from __future__ import annotations
+
+
 from typing import Dict, Any, Optional, List
 from datetime import datetime
 import logging
@@ -114,7 +117,8 @@ class ToMEngine:
             logger.warning("ToMEngine already initialized")
             return
 
-        await self.social_memory.initialize()
+        if self.social_memory:
+            await self.social_memory.initialize()
 
         # Initialize Redis if configured
         if self.redis_url and REDIS_AVAILABLE:

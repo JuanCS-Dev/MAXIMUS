@@ -1,5 +1,8 @@
 """Unit tests for confidence_scoring"""
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock
 from datetime import datetime
@@ -35,7 +38,6 @@ class TestConfidenceScoringInitialization:
         obj = ConfidenceScoring()
         
         # Act
-        # TODO: Add async test
         pass
 
 

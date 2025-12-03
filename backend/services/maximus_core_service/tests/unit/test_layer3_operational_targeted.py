@@ -12,6 +12,9 @@ Lei Governante: Constituição Vértice v2.6
 🎯 MODULE #45 - 90% MILESTONE! 🎯
 """
 
+from __future__ import annotations
+
+
 import pytest
 import numpy as np
 

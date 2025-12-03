@@ -2,6 +2,9 @@
 Combined Safety Coverage Runner - Original + Missing Lines Tests
 """
 
+from __future__ import annotations
+
+
 import sys
 import os
 

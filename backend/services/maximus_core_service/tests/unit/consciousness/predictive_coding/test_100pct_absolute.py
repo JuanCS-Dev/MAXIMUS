@@ -16,6 +16,9 @@ Authors: Claude Code + Juan
 Date: 2025-10-15
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from unittest.mock import MagicMock, patch
 

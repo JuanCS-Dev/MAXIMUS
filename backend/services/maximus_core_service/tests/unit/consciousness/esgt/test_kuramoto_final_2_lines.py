@@ -8,6 +8,9 @@ Target missing lines (98.80% → 100.00%):
 PADRÃO PAGANI ABSOLUTO - 100% MEANS 100%
 """
 
+from __future__ import annotations
+
+
 import pytest
 from consciousness.esgt.kuramoto import SynchronizationDynamics
 

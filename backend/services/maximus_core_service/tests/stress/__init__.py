@@ -9,3 +9,6 @@ Tests system behavior under extreme load conditions:
 
 These tests validate production readiness and identify bottlenecks.
 """
+
+from __future__ import annotations
+

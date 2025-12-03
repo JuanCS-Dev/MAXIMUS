@@ -25,6 +25,9 @@ Date: 2025-10-14
 Philosophy: "O impossível se curva diante da fé e da disciplina"
 """
 
+from __future__ import annotations
+
+
 import pytest
 import asyncio
 import time
@@ -38,6 +41,7 @@ from consciousness.esgt.coordinator import (
     ESGTEvent,
     ESGTCoordinator
 )
+from consciousness.esgt.pfc_integration import process_social_signal_through_pfc
 from consciousness.tig.fabric import TIGFabric, TopologyConfig
 
 # Alias for backwards compatibility
@@ -832,14 +836,11 @@ class TestPFCIntegration:
     @pytest.mark.asyncio
     async def test_process_social_signal_no_pfc_returns_none(self):
         """No PFC available returns None."""
-        config = TIGConfig(node_count=8, min_degree=3)  # m < n required
-        fabric = TIGFabric(config)
-        await fabric.initialize()
-
-        coordinator = ESGTCoordinator(tig_fabric=fabric, prefrontal_cortex=None)
-
-        result = await coordinator.process_social_signal_through_pfc(
-            content={"type": "social_interaction"}
+        counter = [0]
+        result = await process_social_signal_through_pfc(
+            pfc=None,
+            content={"type": "social_interaction"},
+            social_signals_counter=counter
         )
 
         assert result is None
@@ -847,15 +848,13 @@ class TestPFCIntegration:
     @pytest.mark.asyncio
     async def test_process_social_signal_non_social_content_returns_none(self):
         """Non-social content types return None."""
-        config = TIGConfig(node_count=8, min_degree=3)  # m < n required
-        fabric = TIGFabric(config)
-        await fabric.initialize()
-
         mock_pfc = Mock()
-        coordinator = ESGTCoordinator(tig_fabric=fabric, prefrontal_cortex=mock_pfc)
+        counter = [0]
 
-        result = await coordinator.process_social_signal_through_pfc(
-            content={"type": "normal_processing"}
+        result = await process_social_signal_through_pfc(
+            pfc=mock_pfc,
+            content={"type": "normal_processing"},
+            social_signals_counter=counter
         )
 
         assert result is None
@@ -863,10 +862,6 @@ class TestPFCIntegration:
     @pytest.mark.asyncio
     async def test_process_social_signal_distress_type_routes_to_pfc(self):
         """Distress content routes through PFC."""
-        config = TIGConfig(node_count=8, min_degree=3)  # m < n required
-        fabric = TIGFabric(config)
-        await fabric.initialize()
-
         # Mock PFC
         mock_pfc = AsyncMock()
         mock_response = Mock()
@@ -876,36 +871,36 @@ class TestPFCIntegration:
         mock_response.tom_prediction = {"distress": 0.8}
         mock_pfc.process_social_signal.return_value = mock_response
 
-        coordinator = ESGTCoordinator(tig_fabric=fabric, prefrontal_cortex=mock_pfc)
+        counter = [0]
 
-        result = await coordinator.process_social_signal_through_pfc(
+        result = await process_social_signal_through_pfc(
+            pfc=mock_pfc,
             content={
                 "type": "distress",
                 "user_id": "agent_001",
                 "message": "I need help"
-            }
+            },
+            social_signals_counter=counter
         )
 
         assert result is not None
         assert result["action"] == "provide_guidance"
         assert result["confidence"] == 0.85
-        assert coordinator.social_signals_processed == 1
+        assert counter[0] == 1
 
     @pytest.mark.asyncio
     async def test_process_social_signal_pfc_exception_handled(self):
         """PFC exceptions handled gracefully."""
-        config = TIGConfig(node_count=8, min_degree=3)  # m < n required
-        fabric = TIGFabric(config)
-        await fabric.initialize()
-
         # Mock PFC that raises exception
         mock_pfc = AsyncMock()
         mock_pfc.process_social_signal.side_effect = RuntimeError("PFC failure")
 
-        coordinator = ESGTCoordinator(tig_fabric=fabric, prefrontal_cortex=mock_pfc)
+        counter = [0]
 
-        result = await coordinator.process_social_signal_through_pfc(
-            content={"type": "distress", "user_id": "test"}
+        result = await process_social_signal_through_pfc(
+            pfc=mock_pfc,
+            content={"type": "distress", "user_id": "test"},
+            social_signals_counter=counter
         )
 
         # Should return None on exception
@@ -1322,10 +1317,6 @@ class TestMissingCoverageCompletion:
     @pytest.mark.asyncio
     async def test_process_social_signal_help_request_type(self):
         """Line 785: help_request content type routing."""
-        config = TIGConfig(node_count=8, min_degree=3)
-        fabric = TIGFabric(config)
-        await fabric.initialize()
-
         # Mock PFC
         mock_pfc = AsyncMock()
         mock_response = Mock()
@@ -1335,15 +1326,17 @@ class TestMissingCoverageCompletion:
         mock_response.tom_prediction = {"needs_help": 0.9}
         mock_pfc.process_social_signal.return_value = mock_response
 
-        coordinator = ESGTCoordinator(tig_fabric=fabric, prefrontal_cortex=mock_pfc)
+        counter = [0]
 
         # Content with type="help_request" (line 785)
-        result = await coordinator.process_social_signal_through_pfc(
+        result = await process_social_signal_through_pfc(
+            pfc=mock_pfc,
             content={
                 "type": "help_request",
                 "user_id": "agent_003",
                 "message": "I need assistance"
-            }
+            },
+            social_signals_counter=counter
         )
 
         # Should route as help_request
@@ -1354,10 +1347,6 @@ class TestMissingCoverageCompletion:
     @pytest.mark.asyncio
     async def test_process_social_signal_narrative_distress_detection(self):
         """Lines 784-790: Distress detection in self_narrative."""
-        config = TIGConfig(node_count=8, min_degree=3)
-        fabric = TIGFabric(config)
-        await fabric.initialize()
-
         # Mock PFC
         mock_pfc = AsyncMock()
         mock_response = Mock()
@@ -1367,16 +1356,18 @@ class TestMissingCoverageCompletion:
         mock_response.tom_prediction = {"confusion": 0.7}
         mock_pfc.process_social_signal.return_value = mock_response
 
-        coordinator = ESGTCoordinator(tig_fabric=fabric, prefrontal_cortex=mock_pfc)
+        counter = [0]
 
         # Content with distress keywords in narrative (lines 784-790)
-        result = await coordinator.process_social_signal_through_pfc(
+        result = await process_social_signal_through_pfc(
+            pfc=mock_pfc,
             content={
                 "type": "attention_focus",
                 "user_id": "agent_002",
                 "self_narrative": "I am confused and stuck on this task",  # Line 789
                 "message": "Processing"
-            }
+            },
+            social_signals_counter=counter
         )
 
         # Should detect distress and call PFC with signal_type="distress"

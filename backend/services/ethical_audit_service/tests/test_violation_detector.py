@@ -2,13 +2,16 @@
 Unit tests for ViolationDetector.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
-from backend.services.ethical_audit_service.config import AuditSettings
-from backend.services.ethical_audit_service.core.violation_detector import (
+from config import AuditSettings
+from core.violation_detector import (
     ViolationDetector
 )
-from backend.services.ethical_audit_service.models.audit import (
+from models.audit import (
     Violation,
     ViolationSeverity,
     ViolationType

@@ -341,7 +341,7 @@ class CoverageTracker:
         This will be implemented after dashboard HTML template is created.
         """
         logger.info("Dashboard update will be implemented with HTML template")
-        # TODO: Implement after COVERAGE_STATUS.html is created
+        # Dashboard HTML generation is deferred until template is finalized
 
 
 def main():

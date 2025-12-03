@@ -11,6 +11,9 @@ Performance targets:
 - Memory: <100MB increase over 1000 operations
 """
 
+from __future__ import annotations
+
+
 import pytest
 import asyncio
 import time

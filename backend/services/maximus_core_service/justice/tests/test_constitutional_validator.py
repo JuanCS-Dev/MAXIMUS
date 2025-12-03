@@ -10,6 +10,9 @@ This is SAFETY-CRITICAL code.
 Target: 100% coverage on core enforcement logic.
 """
 
+from __future__ import annotations
+
+
 import pytest
 from justice.constitutional_validator import (
     ConstitutionalValidator,

@@ -5,6 +5,9 @@ MAXIMUS 2.0 - Tests for Punishment Handlers
 Tests for punishment execution handlers and executor.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from metacognitive_reflector.core.punishment import (

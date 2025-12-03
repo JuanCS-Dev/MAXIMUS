@@ -19,6 +19,9 @@ Date: 2025-10-14
 Governance: Constituição Vértice v2.5 - Article III (Ethical Foundation)
 """
 
+from __future__ import annotations
+
+
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
 import logging
@@ -186,7 +189,7 @@ class PrefrontalCortex:
             response = CompassionateResponse(
                 action=action if approved else None,
                 confidence=confidence,
-                reasoning=mip_verdict["reasoning"],
+                reasoning=str(mip_verdict["reasoning"]),
                 tom_prediction=tom_prediction,
                 mip_verdict=mip_verdict,
                 processing_time_ms=processing_time
@@ -370,13 +373,13 @@ class PrefrontalCortex:
             try:
                 metacog_adjustment = self.metacog.calculate_confidence() - 0.5
             except Exception:
-                pass  # Metacog not ready yet
+                logger.debug("Metacog not ready yet")
 
         # Combine factors
         confidence = tom_confidence + mip_boost + metacog_adjustment
 
         # Clamp to [0, 1]
-        return max(0.0, min(1.0, confidence))
+        return float(max(0.0, min(1.0, confidence)))
 
     async def get_status(self) -> Dict[str, Any]:
         """Get PFC statistics.

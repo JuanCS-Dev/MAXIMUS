@@ -19,6 +19,9 @@ Date: 2025-10-06
 Quality: REGRA DE OURO - Zero mocks, structure validation
 """
 
+from __future__ import annotations
+
+
 import ast
 from pathlib import Path
 

@@ -25,6 +25,9 @@ Authors:
 Date: October 21, 2025
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import csv
 import json
@@ -145,9 +148,8 @@ class TestEulerVsRK4Comparison:
         # Note: We'll need to temporarily modify config
         coordinator = ESGTCoordinator(tig_fabric=tig_fabric)
 
-        # Patch integration method
-        # TODO: This assumes we can access kuramoto_coordinator
-        # If not, we may need to modify ESGTCoordinator to accept config
+        # Patch integration method if kuramoto_coordinator is accessible
+        # Note: ESGTCoordinator may need config modification if not available
         if hasattr(coordinator, "kuramoto_coordinator"):
             coordinator.kuramoto_coordinator.config.integration_method = method
 

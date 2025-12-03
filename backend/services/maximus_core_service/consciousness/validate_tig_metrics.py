@@ -3,6 +3,9 @@ Quick validation script for TIG metrics
 No pytest overhead - just direct fabric initialization and metrics check
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import sys
 

@@ -5,10 +5,13 @@ Digital Thalamus Service - Request Validator
 Request validation and sanitization logic.
 """
 
+from __future__ import annotations
+
+
 from typing import Any, Dict
 
-from ..models.gateway import GatewayRequest
-from ..utils.logging_config import get_logger
+from models.gateway import GatewayRequest
+from utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 

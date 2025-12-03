@@ -17,6 +17,9 @@ Version: 1.0.0 - Anti-Burro Edition
 Date: 2025-10-07
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from unittest.mock import Mock
 

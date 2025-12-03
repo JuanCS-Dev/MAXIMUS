@@ -15,6 +15,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
 """
 
+from __future__ import annotations
+
+
 __version__ = "1.0.0"
 __author__ = "Claude Code + JuanCS-Dev"
 __regra_de_ouro__ = "10/10"

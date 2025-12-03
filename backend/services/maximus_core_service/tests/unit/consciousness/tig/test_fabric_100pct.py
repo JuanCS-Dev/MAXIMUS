@@ -19,6 +19,9 @@ Date: 2025-10-14
 Status: Padrão Pagani Absoluto - TARGET 90%+
 """
 
+from __future__ import annotations
+
+
 from unittest.mock import Mock, patch
 
 import pytest
@@ -29,6 +32,7 @@ from consciousness.tig.fabric import (
     TIGFabric,
     TIGNode,
     TopologyConfig,
+    TopologyGenerator,
 )
 
 
@@ -255,8 +259,8 @@ async def test_tig_node_send_to_neighbor_exception():
     # Add connection to trigger latency sleep
     node.connections["target"] = TIGConnection(remote_node_id="target", latency_us=1.0)
 
-    # Mock asyncio.sleep to raise exception
-    with patch("consciousness.tig.fabric.asyncio.sleep", side_effect=RuntimeError("Network failure")):
+    # Mock asyncio.sleep to raise exception (correct path after refactoring)
+    with patch("consciousness.tig.fabric.node.asyncio.sleep", side_effect=RuntimeError("Network failure")):
         # Send to neighbor with exception (line 296)
         result = await node._send_to_neighbor("target", {"data": "fail"}, priority=0)
 
@@ -320,22 +324,24 @@ async def test_fabric_initialize_with_iit_violations_print():
 def test_apply_small_world_rewiring_with_isolated_nodes():
     """Coverage: Line 590 - _apply_small_world_rewiring continue path for nodes with <2 neighbors"""
     config = TopologyConfig(node_count=8, min_degree=2, enable_small_world_rewiring=True)
-    fabric = TIGFabric(config)
+
+    # After refactoring, topology generation is in TopologyGenerator
+    generator = TopologyGenerator(config)
 
     # Generate base topology
-    fabric._generate_scale_free_base()
+    generator._generate_scale_free_base()
 
     # Manually isolate a node (remove all edges)
     # This forces line 590 to execute (continue when len(neighbors) < 2)
     isolated_node = 0
-    edges_to_remove = list(fabric.graph.edges(isolated_node))
-    fabric.graph.remove_edges_from(edges_to_remove)
+    edges_to_remove = list(generator.graph.edges(isolated_node))
+    generator.graph.remove_edges_from(edges_to_remove)
 
     # Apply small-world rewiring (line 590 should be hit for isolated node)
-    fabric._apply_small_world_rewiring()
+    generator._apply_small_world_rewiring()
 
     # Verify rewiring completed
-    assert fabric.graph.number_of_nodes() == 8
+    assert generator.graph.number_of_nodes() == 8
 
 
 # ==============================================================================

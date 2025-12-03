@@ -2,23 +2,26 @@
 Unit tests for Ethical Audit Service API.
 """
 
+from __future__ import annotations
+
+
 from unittest.mock import AsyncMock
 
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.services.ethical_audit_service.api.dependencies import (
+from api.dependencies import (
     get_detector,
     get_validator
 )
-from backend.services.ethical_audit_service.core.constitutional_validator import (
+from core.constitutional_validator import (
     ConstitutionalValidator
 )
-from backend.services.ethical_audit_service.core.violation_detector import (
+from core.violation_detector import (
     ViolationDetector
 )
-from backend.services.ethical_audit_service.main import app
-from backend.services.ethical_audit_service.models.audit import (
+from main import app
+from models.audit import (
     ComplianceReport,
     Violation,
     ViolationSeverity,

@@ -18,6 +18,9 @@ Date: 2025-10-08
 Following: DOUTRINA VÉRTICE v2.0 + PADRÃO PAGANI
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 from unittest.mock import AsyncMock, MagicMock

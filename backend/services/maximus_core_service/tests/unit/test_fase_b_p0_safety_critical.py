@@ -14,6 +14,9 @@ Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS! FASE B INICIADA! 🔥
 """
 
+from __future__ import annotations
+
+
 import pytest
 from pathlib import Path
 

@@ -9,6 +9,9 @@ Free Energy Principle: Compress high-dimensional events into low-dimensional lat
 Prediction error = reconstruction error (events that don't fit learned patterns).
 """
 
+from __future__ import annotations
+
+
 import logging
 
 import numpy as np

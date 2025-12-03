@@ -19,6 +19,9 @@ Usage:
 Performance Target: <2s per explanation
 """
 
+from __future__ import annotations
+
+
 __version__ = "1.0.0"
 __author__ = "VÉRTICE Platform Team"
 

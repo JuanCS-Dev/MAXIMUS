@@ -113,6 +113,7 @@ class IsolationAnomalyDetector:
         self._feature_stds = feature_stds
 
         try:
+            # pylint: disable=import-outside-toplevel
             from sklearn.ensemble import IsolationForest
 
             self._model = IsolationForest(

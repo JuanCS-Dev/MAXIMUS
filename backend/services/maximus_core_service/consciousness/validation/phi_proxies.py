@@ -61,6 +61,9 @@ whether MAXIMUS achieves the structural prerequisites for phenomenal emergence.
 "Structure precedes experience. Validate the substrate, enable the phenomenon."
 """
 
+from __future__ import annotations
+
+
 import time
 from dataclasses import dataclass, field
 

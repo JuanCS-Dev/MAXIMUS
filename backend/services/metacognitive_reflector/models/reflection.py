@@ -5,6 +5,9 @@ Metacognitive Reflector - Models
 Pydantic models for reflection, critique, and memory updates.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 from enum import Enum
 from typing import Any, Dict, List, Optional

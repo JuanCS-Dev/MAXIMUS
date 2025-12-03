@@ -1,5 +1,8 @@
 """PostgreSQL + TimescaleDB Schema for HCL Decisions"""
 
+from __future__ import annotations
+
+
 CREATE_SCHEMA_SQL = """
 -- Enable TimescaleDB extension
 CREATE EXTENSION IF NOT EXISTS timescaledb;

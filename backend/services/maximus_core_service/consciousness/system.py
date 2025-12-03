@@ -19,6 +19,9 @@ Authors: Juan & Claude Code
 Version: 2.0.0 - FASE VII Week 9-10 (Safety Integration)
 """
 
+from __future__ import annotations
+
+
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -26,7 +29,7 @@ from prometheus_client import Gauge
 
 from consciousness.esgt.coordinator import ESGTCoordinator, TriggerConditions
 from consciousness.mcea.controller import ArousalConfig, ArousalController
-from consciousness.safety import ConsciousnessSafetyProtocol, SafetyThresholds, SafetyViolation
+from consciousness.safety import ConsciousnessSafetyProtocol, SafetyThresholds, SafetyViolation, ShutdownReason
 from consciousness.tig.fabric import TIGFabric, TopologyConfig
 
 # TRACK 1: PrefrontalCortex integration
@@ -43,7 +46,9 @@ consciousness_tig_node_count = Gauge("consciousness_tig_node_count", "Number of 
 consciousness_tig_edges = Gauge("consciousness_tig_edge_count", "Number of edges in the TIG fabric")
 consciousness_esgt_frequency = Gauge("consciousness_esgt_frequency", "Current frequency of the ESGT coordinator")
 consciousness_arousal_level = Gauge("consciousness_arousal_level", "Current arousal level of the MCEA controller")
-consciousness_kill_switch_active = Gauge("consciousness_kill_switch_active", "Status of the Safety Core kill switch (0=OK, 1=ENGAGED)")
+consciousness_kill_switch_active = Gauge(
+    "consciousness_kill_switch_active", "Status of Safety Core kill switch (0=OK, 1=ENGAGED)"
+)
 consciousness_violations_total = Gauge("consciousness_violations_total", "Number of active safety violations")
 
 
@@ -63,7 +68,7 @@ class ReactiveConfig:
     decision_history_size: int = 100  # Recent orchestration decisions
 
     # Feature Flags
-    enable_data_orchestration: bool = False  # Enable/disable orchestrator (DISABLED temporarily - metrics collector bug)
+    enable_data_orchestration: bool = False  # DISABLED temporarily - metrics collector bug
 
 
 @dataclass
@@ -244,9 +249,20 @@ class ConsciousnessSystem:
             print("✅ Consciousness System fully operational")
 
         except Exception as e:
-            print(f"❌ Failed to start consciousness system: {e}")
-            # Cleanup on failure
-            await self.stop()
+
+            # 7. Start Data Orchestrator (if enabled)
+            if self.config.reactive.enable_data_orchestration and self.orchestrator:
+                await self.orchestrator.start()
+
+            print("🧠 Consciousness System STARTED")
+            print("   - TIG Fabric: Initializing (background)")
+            print("   - ToM Engine: Active")
+            print("   - Metacognition: Active")
+            print("   - ESGT: Active")
+
+        except Exception as e:
+            print(f"❌ Consciousness System start failed: {e}")
+            self._running = False
             raise
 
     async def stop(self) -> None:
@@ -287,6 +303,7 @@ class ConsciousnessSystem:
 
             if self.tig_fabric:
                 await self.tig_fabric.exit_esgt_mode()
+                await self.tig_fabric.stop()
                 print("  ✅ TIG Fabric stopped")
 
             # TRACK 1: Close ToM Engine
@@ -314,7 +331,7 @@ class ConsciousnessSystem:
             - 'safety': Safety Protocol instance (if enabled)
             - 'metrics': Aggregated system metrics
         """
-        system_dict = {
+        system_dict: dict[str, Any] = {
             "tig": self.tig_fabric,
             "esgt": self.esgt_coordinator,
             "arousal": self.arousal_controller,
@@ -324,7 +341,7 @@ class ConsciousnessSystem:
         }
 
         # Add aggregated metrics for safety monitoring
-        metrics = {}
+        metrics: dict[str, Any | float] = {}
 
         if self.esgt_coordinator and self.esgt_coordinator._running:
             metrics["esgt_frequency"] = getattr(self.esgt_coordinator, "_current_frequency_hz", 0.0)
@@ -425,8 +442,16 @@ class ConsciousnessSystem:
             await self.stop()
             return True
 
-        return await self.safety_protocol.kill_switch.execute_emergency_shutdown(
-            reason=reason, violations=[], allow_hitl_override=True
+        # Convert string reason to ShutdownReason if possible, else MANUAL
+        try:
+            shutdown_reason = ShutdownReason(reason)
+        except ValueError:
+            shutdown_reason = ShutdownReason.MANUAL
+
+        # KillSwitch.trigger is synchronous and returns bool
+        return self.safety_protocol.kill_switch.trigger(
+            reason=shutdown_reason,
+            context={"original_reason": reason, "allow_hitl_override": True}
         )
 
     def __repr__(self) -> str:

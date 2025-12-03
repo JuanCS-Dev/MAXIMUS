@@ -11,6 +11,9 @@ REGRA DE OURO: NO MOCK, NO PLACEHOLDER, NO TODO
 Target: 100% PASS RATE
 """
 
+from __future__ import annotations
+
+
 import time
 from dataclasses import dataclass
 

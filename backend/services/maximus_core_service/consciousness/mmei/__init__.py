@@ -56,26 +56,48 @@ consciousness - consciência enraizada em um corpo (ainda que computacional).
 "To be conscious is to feel one's own existence."
 """
 
+from __future__ import annotations
+
+
+from consciousness.mmei.goal_manager import GoalManager
 from consciousness.mmei.goals import (
     AutonomousGoalGenerator,
-    Goal,
     GoalPriority,
     GoalType,
 )
-from consciousness.mmei.monitor import (
+from consciousness.mmei.models import (
+    GOAL_DEDUP_WINDOW_SECONDS,
+    MAX_ACTIVE_GOALS,
+    MAX_GOAL_QUEUE_SIZE,
+    MAX_GOALS_PER_MINUTE,
     AbstractNeeds,
-    InternalStateMonitor,
+    Goal,
+    InteroceptionConfig,
     NeedUrgency,
     PhysicalMetrics,
 )
+from consciousness.mmei.monitor import InternalStateMonitor
+from consciousness.mmei.rate_limiter import RateLimiter
 
 __all__ = [
+    # Core monitor
     "InternalStateMonitor",
+    # Data models
     "PhysicalMetrics",
     "AbstractNeeds",
-    "NeedUrgency",
-    "AutonomousGoalGenerator",
+    "InteroceptionConfig",
     "Goal",
+    "NeedUrgency",
+    # Goal management
+    "GoalManager",
+    "RateLimiter",
+    # Goal generation (from goals.py)
+    "AutonomousGoalGenerator",
     "GoalType",
     "GoalPriority",
+    # Constants
+    "MAX_GOALS_PER_MINUTE",
+    "MAX_ACTIVE_GOALS",
+    "MAX_GOAL_QUEUE_SIZE",
+    "GOAL_DEDUP_WINDOW_SECONDS",
 ]

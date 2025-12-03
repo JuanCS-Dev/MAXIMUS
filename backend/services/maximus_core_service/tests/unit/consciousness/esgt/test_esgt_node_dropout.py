@@ -33,6 +33,9 @@ Biological Analogy:
 "Consciousness is fault-tolerant by design."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 import pytest

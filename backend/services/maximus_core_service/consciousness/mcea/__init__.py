@@ -88,6 +88,9 @@ MPE como fundação - "estar desperto" precede "estar consciente de algo".
 "Arousal is the precondition for content. Without wakefulness, there is no experience."
 """
 
+from __future__ import annotations
+
+
 from consciousness.mcea.controller import (
     ArousalController,
     ArousalLevel,

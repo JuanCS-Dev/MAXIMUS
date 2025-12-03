@@ -2,6 +2,9 @@
 Unit tests for RequestRouter.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from backend.services.digital_thalamus_service.config import GatewaySettings

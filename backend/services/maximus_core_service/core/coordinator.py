@@ -5,6 +5,9 @@ Maximus Core Service - System Coordinator
 Core coordination logic for managing Maximus subsystems.
 """
 
+from __future__ import annotations
+
+
 from typing import List
 
 from ..config import CoordinationSettings

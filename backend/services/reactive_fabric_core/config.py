@@ -4,6 +4,9 @@ Reactive Fabric Core - Configuration
 
 Pydantic-based configuration for reactive event system.
 """
+
+from __future__ import annotations
+
 # pylint: disable=too-few-public-methods
 
 from functools import lru_cache

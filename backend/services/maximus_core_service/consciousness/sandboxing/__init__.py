@@ -2,6 +2,9 @@
 Sandboxing - Consciousness Container
 Isolates consciousness processes with resource limits and monitoring.
 """
+
+from __future__ import annotations
+
 import psutil
 import os
 import time

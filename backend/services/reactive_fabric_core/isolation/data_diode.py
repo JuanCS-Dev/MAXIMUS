@@ -3,6 +3,9 @@ Data Diode Implementation - Unidirectional Communication Enforcer
 Simulates hardware data diode behavior in software for L2→L1 communication
 """
 
+from __future__ import annotations
+
+
 import hashlib
 import json
 import logging

@@ -13,3 +13,5 @@ Key components within this package are responsible for:
 - Ensuring that the Maximus AI system maintains optimal performance, stability,
   and efficiency through proactive planning.
 """
+
+from __future__ import annotations

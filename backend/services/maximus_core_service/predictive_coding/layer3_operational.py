@@ -9,6 +9,9 @@ Free Energy Principle: Predict threat evolution over hours using temporal patter
 Prediction error = unexpected threat progression (novel attack patterns).
 """
 
+from __future__ import annotations
+
+
 import logging
 
 import numpy as np

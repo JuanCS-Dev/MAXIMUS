@@ -7,6 +7,9 @@ to evaluate ActionPlans within the Motor de Integridade Processual (MIP).
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 from abc import ABC, abstractmethod
 from typing import Protocol
 from motor_integridade_processual.models.action_plan import ActionPlan

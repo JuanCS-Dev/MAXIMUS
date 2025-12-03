@@ -18,6 +18,11 @@ Date: 2025-10-06
 License: Proprietary - VÉRTICE Platform
 """
 
+from __future__ import annotations
+
+from typing import Any
+
+
 import logging
 from datetime import datetime, timedelta
 
@@ -128,11 +133,15 @@ class GapAnalyzer:
                 gaps.append(gap)
 
         # Sort gaps by priority (severity, then mandatory, then category)
+        def get_mandatory(g: Gap) -> int:
+            c = regulation.get_control(g.control_id)
+            return 0 if c and c.mandatory else 1
+
         gaps_sorted = sorted(
             gaps,
             key=lambda g: (
                 self._severity_to_priority(g.severity),
-                0 if regulation.get_control(g.control_id).mandatory else 1,
+                get_mandatory(g),
                 g.priority,
             ),
         )
@@ -265,7 +274,7 @@ class GapAnalyzer:
     def track_remediation_progress(
         self,
         plan: RemediationPlan,
-    ) -> dict[str, any]:
+    ) -> dict[str, Any]:
         """
         Track remediation plan progress.
 
@@ -319,7 +328,7 @@ class GapAnalyzer:
     def estimate_remediation_effort(
         self,
         gaps: list[Gap],
-    ) -> dict[str, any]:
+    ) -> dict[str, Any]:
         """
         Estimate total remediation effort.
 

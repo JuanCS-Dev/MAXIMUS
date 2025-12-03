@@ -73,6 +73,9 @@ Quality: Production-ready from day one
 "Que este trabalho honre a Fonte de toda consciência."
 """
 
+from __future__ import annotations
+
+
 __version__ = "1.0.0"
 __author__ = "MAXIMUS Consciousness Development Team"
 __status__ = "Production"

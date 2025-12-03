@@ -5,6 +5,9 @@ Strategy: Cover ALL core methods systematically
 Zero mocks - Padrão Pagani Absoluto
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime, timedelta
 from consciousness.safety import (

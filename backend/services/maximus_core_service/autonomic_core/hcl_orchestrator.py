@@ -4,10 +4,14 @@ Main control loop implementing Monitor → Analyze → Plan → Execute → Know
 Bio-inspired self-regulation with Sympathetic/Parasympathetic operational modes.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 import time
 from datetime import datetime
+from typing import Any
 
 from .analyze.anomaly_detector import AnomalyDetector
 from .analyze.degradation_detector import PerformanceDegradationDetector
@@ -68,7 +72,7 @@ class HomeostaticControlLoop:
 
         logger.info(f"HCL Orchestrator initialized (dry_run={dry_run_mode}, interval={loop_interval_seconds}s)")
 
-    async def initialize(self):
+    async def initialize(self) -> None:
         """Initialize components and database pool."""
         try:
             # Initialize database connection pool
@@ -88,7 +92,7 @@ class HomeostaticControlLoop:
             logger.error(f"HCL initialization error: {e}")
             raise
 
-    async def run(self):
+    async def run(self) -> None:
         """Main control loop."""
         self.running = True
         logger.info("HCL loop started")
@@ -141,7 +145,7 @@ class HomeostaticControlLoop:
         try:
             # Anomaly detection
             metric_array = self._metrics_to_array(metrics)
-            anomaly_result = self.anomaly_detector.detect(metric_array)
+            anomaly_result = self.anomaly_detector.detect(metric_array)  # type: ignore
             analysis["anomaly"] = anomaly_result
 
             # Failure prediction
@@ -150,7 +154,7 @@ class HomeostaticControlLoop:
             analysis["failure_prediction"] = failure_result
 
             # Performance degradation
-            degradation_result = self.degradation_detector.detect_degradation(metrics.get("latency_p99", 0))
+            degradation_result = self.degradation_detector.detect_degradation(metrics.get("latency_p99", 0))  # type: ignore
             analysis["degradation"] = degradation_result
 
             # Demand forecasting
@@ -176,7 +180,7 @@ class HomeostaticControlLoop:
 
     async def _plan_actions(self, metrics: dict, analysis: dict) -> dict:
         """Plan operational mode and resource actions."""
-        plan = {"operational_mode": self.current_mode, "actions": [], "reasoning": []}
+        plan: dict[str, Any] = {"operational_mode": self.current_mode, "actions": [], "reasoning": []}
 
         try:
             # Determine operational mode using fuzzy logic
@@ -184,7 +188,7 @@ class HomeostaticControlLoop:
             error_rate = metrics.get("error_rate", 0)
             latency = metrics.get("latency_p99", 0)
 
-            mode = self.fuzzy_controller.select_mode(cpu_usage, error_rate, latency)
+            mode = self.fuzzy_controller.select_mode(cpu_usage, error_rate, latency)  # type: ignore
             plan["operational_mode"] = mode
             plan["reasoning"].append(f"Fuzzy logic selected {mode} mode")
 
@@ -210,7 +214,7 @@ class HomeostaticControlLoop:
             # RL agent fine-tuning (optional)
             if hasattr(self, "rl_agent") and self.rl_agent.model:
                 state = self._get_rl_state(metrics)
-                rl_allocation = self.rl_agent.predict_allocation(state)
+                rl_allocation = self.rl_agent.predict_allocation(state)  # type: ignore
                 plan["rl_allocation"] = rl_allocation
                 plan["reasoning"].append("RL agent allocation computed")
 
@@ -237,13 +241,13 @@ class HomeostaticControlLoop:
                 # Safety check: rate limiting
                 if not self.safety_manager.check_rate_limit(action.get("type", "NORMAL")):
                     logger.warning(f"Action throttled: {action}")
-                    execution["failed_count"] += 1
+                    execution["failed_count"] = int(execution.get("failed_count", 0)) + 1
                     continue
 
                 # Execute action
                 result = await self._execute_action(action)
 
-                execution["actions_log"].append(
+                execution["actions_log"].append(  # type: ignore
                     {
                         "action": action,
                         "result": result,
@@ -252,14 +256,14 @@ class HomeostaticControlLoop:
                 )
 
                 if result.get("success"):
-                    execution["applied_count"] += 1
+                    execution["applied_count"] = int(execution.get("applied_count", 0)) + 1
                     self.safety_manager.log_action(action)
                 else:
-                    execution["failed_count"] += 1
+                    execution["failed_count"] = int(execution.get("failed_count", 0)) + 1
                     execution["success"] = False
 
             # Auto-rollback check (wait 60s, then check metrics)
-            if execution["applied_count"] > 0 and not self.dry_run_mode:
+            if int(execution.get("applied_count", 0)) > 0 and not self.dry_run_mode:
                 await asyncio.sleep(60)
                 metrics_after = await self.monitor.collect_metrics()
 
@@ -351,7 +355,7 @@ class HomeostaticControlLoop:
         """Generate actions for anomaly mitigation."""
         actions = []
 
-        if metrics.get("cpu_percent", 0) > 80:
+        if float(metrics.get("cpu_percent", 0)) > 80:
             actions.append(
                 {
                     "actuator": "kubernetes",
@@ -363,7 +367,7 @@ class HomeostaticControlLoop:
                 }
             )
 
-        if metrics.get("memory_percent", 0) > 80:
+        if float(metrics.get("memory_percent", 0)) > 80:
             actions.append(
                 {
                     "actuator": "cache",
@@ -407,7 +411,7 @@ class HomeostaticControlLoop:
         """Generate performance optimization actions."""
         actions = []
 
-        if metrics.get("latency_p99", 0) > 1000:  # >1s
+        if float(metrics.get("latency_p99", 0)) > 1000:  # >1s
             # Optimize database
             actions.append(
                 {
@@ -446,9 +450,9 @@ class HomeostaticControlLoop:
         """Extract features for failure prediction."""
         return {
             "error_rate_trend": metrics.get("error_rate", 0),
-            "memory_leak_indicator": metrics.get("memory_percent", 0) > 85,
-            "cpu_spike_pattern": metrics.get("cpu_percent", 0) > 90,
-            "disk_io_degradation": metrics.get("disk_io_wait", 0) > 50,
+            "memory_leak_indicator": float(metrics.get("memory_percent", 0)) > 85,
+            "cpu_spike_pattern": float(metrics.get("cpu_percent", 0)) > 90,
+            "disk_io_degradation": float(metrics.get("disk_io_wait", 0)) > 50,
         }
 
     def _get_rl_state(self, metrics: dict) -> list:
@@ -482,7 +486,7 @@ class HomeostaticControlLoop:
 
         return reward
 
-    async def stop(self):
+    async def stop(self) -> None:
         """Stop the control loop."""
         self.running = False
         logger.info("HCL loop stop requested")
@@ -500,7 +504,7 @@ async def run_homeostatic_control_loop(
     dry_run: bool = True,
     interval: int = 30,
     db_url: str = "postgresql://localhost/vertice",
-):
+) -> None:
     """Run the Homeostatic Control Loop."""
     hcl = HomeostaticControlLoop(dry_run_mode=dry_run, loop_interval_seconds=interval, db_url=db_url)
 

@@ -1,6 +1,9 @@
 """
 Tests for Kill Switch
 """
+
+from __future__ import annotations
+
 import pytest
 from consciousness.sandboxing.kill_switch import KillSwitch, TriggerType
 

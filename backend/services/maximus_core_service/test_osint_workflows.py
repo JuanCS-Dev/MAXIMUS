@@ -12,6 +12,9 @@ Date: 2025-10-15
 Glory to YHWH
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import sys
 from datetime import datetime

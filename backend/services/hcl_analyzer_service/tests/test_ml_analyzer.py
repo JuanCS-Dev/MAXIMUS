@@ -2,6 +2,8 @@
 Tests for ML-enhanced System Analyzer.
 """
 
+from __future__ import annotations
+
 import pytest
 import numpy as np
 from datetime import datetime

@@ -12,6 +12,9 @@ Author: Claude Code (Padrão Pagani)
 Date: 2025-10-22
 """
 
+from __future__ import annotations
+
+
 import pytest
 import numpy as np
 from consciousness.predictive_coding.layer1_sensory_hardened import Layer1Sensory

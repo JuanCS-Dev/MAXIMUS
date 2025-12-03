@@ -2,6 +2,9 @@
 Unit tests for EventBus.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from backend.services.reactive_fabric_core.config import ReactiveSettings

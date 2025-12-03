@@ -14,6 +14,9 @@ NOTE: MMEI tests removed (require metrics collector setup).
 Focus on MCEA core consciousness component.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 import pytest

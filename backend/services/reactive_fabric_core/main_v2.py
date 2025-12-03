@@ -5,6 +5,9 @@ Reactive Fabric Core - Main Application (V2)
 Entry point for refactored Reactive Fabric service.
 """
 
+from __future__ import annotations
+
+
 from contextlib import asynccontextmanager
 from typing import AsyncGenerator
 

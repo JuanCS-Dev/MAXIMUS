@@ -5,6 +5,9 @@ Metacognitive Reflector - Logging Configuration
 Structured logging setup using structlog.
 """
 
+from __future__ import annotations
+
+
 import logging
 import sys
 from typing import Any

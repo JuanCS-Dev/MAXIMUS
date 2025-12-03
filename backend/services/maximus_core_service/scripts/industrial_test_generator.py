@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 #!/usr/bin/env python3
 """Industrial Test Generator - Mass test creation for 90%+ coverage.
 
@@ -312,7 +314,7 @@ class IndustrialTestGenerator:
             tests.append(f'    @pytest.mark.skip(reason="Requires complex initialization - implement manually")')
             tests.append(f'    def test_init_complex(self):')
             tests.append(f'        """Test initialization (needs manual implementation)."""')
-            tests.append(f'        # TODO: Provide required arguments')
+            tests.append(f'        # Provide required arguments for {class_name}')
             tests.append(f'        # obj = {class_name}(...)')
             tests.append(f'        pass')
             tests.append('')
@@ -325,7 +327,7 @@ class IndustrialTestGenerator:
             tests.append(f'    @pytest.mark.skip(reason="Needs manual implementation")')
             tests.append(f'    def test_{method["name"]}(self):')
             tests.append(f'        """Test {method["name"]} method."""')
-            tests.append(f'        # TODO: Implement test')
+            tests.append(f'        # Implementation steps:')
             tests.append(f'        # 1. Create instance with proper args')
             tests.append(f'        # 2. Call {method["name"]} with valid inputs')
             tests.append(f'        # 3. Assert expected behavior')

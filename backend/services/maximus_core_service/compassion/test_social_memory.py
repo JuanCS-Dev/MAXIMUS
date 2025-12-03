@@ -12,6 +12,9 @@ Authors: Claude Code (Executor Tático)
 Date: 2025-10-14
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import pytest
 from datetime import datetime

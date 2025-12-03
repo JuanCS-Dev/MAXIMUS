@@ -1,5 +1,8 @@
 """Performance Degradation Detector - PELT Change Point Detection"""
 
+from __future__ import annotations
+
+
 import logging
 
 import numpy as np

@@ -4,6 +4,9 @@ This file demonstrates how to use the fairness module for evaluating fairness,
 detecting bias, mitigating unfairness, and monitoring fairness over time.
 """
 
+from __future__ import annotations
+
+
 import numpy as np
 from base import FairnessMetric, ProtectedAttribute
 from bias_detector import BiasDetector

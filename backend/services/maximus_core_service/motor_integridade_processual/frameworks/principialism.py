@@ -13,6 +13,9 @@ Four Principles:
 Lei Governante: Constituição Vértice v2.6 - All Laws
 """
 
+from __future__ import annotations
+
+
 from typing import List, Dict
 from motor_integridade_processual.frameworks.base import AbstractEthicalFramework
 from motor_integridade_processual.models.action_plan import ActionPlan
@@ -42,7 +45,7 @@ class Principialism(AbstractEthicalFramework):
         common moral framework applicable across cultures.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Principialism framework."""
         super().__init__(name=FrameworkName.PRINCIPIALISM.value, weight=0.10, can_veto=False)
     
@@ -87,7 +90,7 @@ class Principialism(AbstractEthicalFramework):
         # Determine verdict
         if overall_score >= 0.80:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.PRINCIPIALISM,
                 decision=DecisionLevel.APPROVE,
                 score=overall_score,
                 confidence=0.88,
@@ -96,7 +99,7 @@ class Principialism(AbstractEthicalFramework):
             )
         elif overall_score >= 0.60:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.PRINCIPIALISM,
                 decision=DecisionLevel.APPROVE_WITH_CONDITIONS,
                 score=overall_score,
                 confidence=0.75,
@@ -106,7 +109,7 @@ class Principialism(AbstractEthicalFramework):
             )
         else:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.PRINCIPIALISM,
                 decision=DecisionLevel.REJECT,
                 score=overall_score,
                 confidence=0.82,

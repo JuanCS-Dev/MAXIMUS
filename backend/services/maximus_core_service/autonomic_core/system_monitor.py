@@ -9,6 +9,9 @@ the Homeostatic Control Loop (HCL) and Resource Analyzer, enabling informed
 decisions about system health and resource management.
 """
 
+from __future__ import annotations
+
+
 import time
 from datetime import datetime
 from typing import Any
@@ -25,7 +28,7 @@ class SystemMonitor:
     providing a comprehensive view of the system's current state.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initializes the SystemMonitor, setting up process and time tracking."""
         self.process = psutil.Process()  # The current process (Maximus)
         self.start_time = time.time()

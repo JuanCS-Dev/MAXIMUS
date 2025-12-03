@@ -18,6 +18,8 @@ Test Structure:
 - TestEdgeCases: Boundary conditions and error scenarios
 """
 
+from __future__ import annotations
+
 from datetime import datetime
 
 import pytest
@@ -25,7 +27,7 @@ import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 
 # Import FastAPI app and core components
-from api import app
+from api_legacy import app
 from emotional_state_monitor import EmotionalStateMonitor
 from impulse_inhibition import ImpulseInhibition
 from rational_decision_validator import RationalDecisionValidator

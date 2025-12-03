@@ -15,6 +15,9 @@ Autor: Juan Carlos de Souza
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 from typing import List, Dict, Optional, Any, Set
 from enum import Enum
 from datetime import datetime

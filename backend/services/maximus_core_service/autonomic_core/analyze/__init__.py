@@ -8,6 +8,9 @@ Predictive models for anticipating future system states:
 - Performance Degradation Detector (PELT)
 """
 
+from __future__ import annotations
+
+
 from .anomaly_detector import AnomalyDetector
 from .degradation_detector import PerformanceDegradationDetector
 from .demand_forecaster import ResourceDemandForecaster

@@ -13,6 +13,9 @@ Based on:
 - Voting or Consensus? Decision-Making in Multi-Agent Debate
 """
 
+from __future__ import annotations
+
+
 from .base import (
     Confidence,
     Evidence,

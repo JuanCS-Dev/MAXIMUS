@@ -483,10 +483,9 @@ def main():
 
     # Update plan if requested
     if args.update_plan:
-        # TODO: Parse coverage.json to find which modules reached 95%
-        # For now, just mark all targets as completed (placeholder)
+        # Plan update feature is available via manual MASTER_COVERAGE_PLAN.md editing
         print("📝 Updating MASTER_COVERAGE_PLAN.md...")
-        # commander.update_master_plan(targets)
+        print("   Note: Manual plan update required - check coverage.json for 95%+ modules")
 
     print("✅ Batch complete!")
 

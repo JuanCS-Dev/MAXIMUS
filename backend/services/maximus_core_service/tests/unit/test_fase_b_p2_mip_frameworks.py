@@ -10,6 +10,9 @@ Structural tests - Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS! FASE B P2 MIP FRAMEWORKS! 🔥
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 

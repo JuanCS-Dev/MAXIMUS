@@ -3,6 +3,9 @@ WebSocket Manager
 Real-time alerts and notifications for HITL Console
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from datetime import datetime

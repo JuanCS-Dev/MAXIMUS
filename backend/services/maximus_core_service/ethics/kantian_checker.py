@@ -9,6 +9,9 @@ Core Principles:
 3. Kingdom of Ends: Act as if you were legislating for all rational beings
 """
 
+from __future__ import annotations
+
+
 import time
 from typing import Any
 

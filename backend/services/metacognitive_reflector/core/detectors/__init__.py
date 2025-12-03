@@ -9,6 +9,9 @@ Specialized detectors for the philosophical judges:
 - ContextDepthAnalyzer: Measures reasoning sophistication
 """
 
+from __future__ import annotations
+
+
 from .semantic_cache import (
     CacheEntry,
     CacheLevel,

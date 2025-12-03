@@ -22,6 +22,9 @@ NO MOCKS - Full integration testing.
 Target: 95% confidence intervals, <5% false positive rate.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import json
 import logging

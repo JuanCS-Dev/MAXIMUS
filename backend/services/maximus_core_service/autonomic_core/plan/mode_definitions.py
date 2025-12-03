@@ -1,5 +1,8 @@
 """Operational Mode Definitions - Sympathetic/Parasympathetic Analogy"""
 
+from __future__ import annotations
+
+
 OPERATIONAL_MODES = {
     "HIGH_PERFORMANCE": {
         "trigger": "high_traffic OR critical_alert OR sla_risk",

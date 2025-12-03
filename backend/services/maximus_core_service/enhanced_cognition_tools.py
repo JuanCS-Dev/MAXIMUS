@@ -6,6 +6,9 @@ and autonomous investigation capabilities.
 NO MOCKS - Production-ready cognitive enhancement.
 """
 
+from __future__ import annotations
+
+
 import logging
 from typing import Any
 

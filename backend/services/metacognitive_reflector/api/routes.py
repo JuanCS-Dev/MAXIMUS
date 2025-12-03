@@ -5,6 +5,9 @@ Metacognitive Reflector - API Routes
 FastAPI endpoints for reflection, tribunal, and punishment management.
 """
 
+from __future__ import annotations
+
+
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status

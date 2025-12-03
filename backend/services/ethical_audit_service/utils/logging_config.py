@@ -5,6 +5,9 @@ Ethical Audit Service - Logging Configuration
 Structured logging configuration with audit trail.
 """
 
+from __future__ import annotations
+
+
 import logging
 import sys
 from typing import Any

@@ -18,6 +18,9 @@ Date: 2025-10-06
 License: Proprietary - VÉRTICE Platform
 """
 
+from __future__ import annotations
+
+
 import logging
 import threading
 import time
@@ -25,6 +28,7 @@ import uuid
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
+from typing import Any
 
 from .base import (
     ComplianceConfig,
@@ -55,9 +59,9 @@ class ComplianceAlert:
     acknowledged: bool = False
     acknowledged_by: str | None = None
     acknowledged_at: datetime | None = None
-    metadata: dict[str, any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
-    def acknowledge(self, acknowledged_by: str):
+    def acknowledge(self, acknowledged_by: str) -> None:
         """Mark alert as acknowledged."""
         self.acknowledged = True
         self.acknowledged_by = acknowledged_by
@@ -101,7 +105,7 @@ class ComplianceMonitor:
         evidence_collector: EvidenceCollector | None = None,
         gap_analyzer: GapAnalyzer | None = None,
         config: ComplianceConfig | None = None,
-    ):
+    ) -> None:
         """
         Initialize compliance monitor.
 
@@ -124,7 +128,7 @@ class ComplianceMonitor:
 
         logger.info("Compliance monitor initialized")
 
-    def register_alert_handler(self, handler: Callable[[ComplianceAlert], None]):
+    def register_alert_handler(self, handler: Callable[[ComplianceAlert], None]) -> None:
         """
         Register alert handler callback.
 
@@ -134,7 +138,7 @@ class ComplianceMonitor:
         self._alert_handlers.append(handler)
         logger.info(f"Registered alert handler: {handler.__name__}")
 
-    def start_monitoring(self, check_interval_seconds: int = 3600):
+    def start_monitoring(self, check_interval_seconds: int = 3600) -> None:
         """
         Start continuous compliance monitoring.
 
@@ -158,7 +162,7 @@ class ComplianceMonitor:
 
         logger.info(f"Compliance monitoring started (interval: {check_interval_seconds}s)")
 
-    def stop_monitoring(self):
+    def stop_monitoring(self) -> None:
         """Stop compliance monitoring."""
         if not self._monitoring:
             return
@@ -171,7 +175,7 @@ class ComplianceMonitor:
 
         logger.info("Compliance monitoring stopped")
 
-    def _monitoring_loop(self, check_interval: int):
+    def _monitoring_loop(self, check_interval: int) -> None:
         """
         Main monitoring loop.
 
@@ -194,7 +198,7 @@ class ComplianceMonitor:
 
         logger.info("Monitoring loop stopped")
 
-    def _run_monitoring_checks(self):
+    def _run_monitoring_checks(self) -> None:
         """Run all monitoring checks."""
         logger.debug("Running monitoring checks")
 
@@ -230,7 +234,7 @@ class ComplianceMonitor:
 
         logger.debug(f"Monitoring checks complete, {len(self._alerts)} total alerts")
 
-    def _check_compliance_thresholds(self, snapshot: ComplianceSnapshot):
+    def _check_compliance_thresholds(self, snapshot: ComplianceSnapshot) -> None:
         """
         Check if compliance is below configured thresholds.
 
@@ -276,7 +280,7 @@ class ComplianceMonitor:
                 )
                 self._send_alert(alert)
 
-    def _detect_violations(self, snapshot: ComplianceSnapshot):
+    def _detect_violations(self, snapshot: ComplianceSnapshot) -> None:
         """
         Detect new violations.
 
@@ -307,7 +311,7 @@ class ComplianceMonitor:
                     ):
                         self._send_alert(alert)
 
-    def _check_evidence_expiration(self):
+    def _check_evidence_expiration(self) -> None:
         """Check for expired or expiring evidence."""
         if not self.evidence_collector:
             return
@@ -351,7 +355,7 @@ class ComplianceMonitor:
             )
             self._send_alert(alert)
 
-    def _send_alert(self, alert: ComplianceAlert):
+    def _send_alert(self, alert: ComplianceAlert) -> None:
         """
         Send alert through registered handlers.
 
@@ -564,7 +568,7 @@ class ComplianceMonitor:
 
         return False
 
-    def generate_dashboard_data(self) -> dict[str, any]:
+    def generate_dashboard_data(self) -> dict[str, Any]:
         """
         Generate dashboard data for compliance monitoring.
 

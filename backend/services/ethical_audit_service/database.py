@@ -4,6 +4,9 @@ This module handles all database operations for ethical decisions,
 human overrides, and compliance logs using asyncpg and raw SQL for performance.
 """
 
+from __future__ import annotations
+
+
 import json
 import logging
 import os

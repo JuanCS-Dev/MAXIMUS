@@ -15,6 +15,9 @@ Date: 2025-10-06
 Quality: REGRA DE OURO - Zero mocks, production-ready demonstration
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime
 from typing import Dict, Any, List

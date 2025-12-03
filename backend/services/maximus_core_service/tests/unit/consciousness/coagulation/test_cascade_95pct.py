@@ -11,6 +11,9 @@ Author: Claude Code (Padrão Pagani)
 Date: 2025-10-22
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock
 from consciousness.coagulation.cascade import CoagulationCascade, ThreatSignal, CascadePhase, CascadePathway
@@ -20,7 +23,7 @@ def test_memory_consolidation_high_strength():
     """Test memory consolidation when strength >= 0.7 (lines 345-347)."""
     cascade = CoagulationCascade()
 
-    # Create high-salience threat to trigger strong consolidation
+    # Create threat for consolidation
     threat = ThreatSignal(
         threat_id="test-threat-high",
         severity=0.95,
@@ -28,11 +31,20 @@ def test_memory_consolidation_high_strength():
         pathway=CascadePathway.EXTRINSIC
     )
 
-    # Trigger cascade multiple times to build up to consolidation phase
-    for _ in range(5):
-        cascade.trigger_cascade(threat)
+    # Set up state for high consolidation_strength:
+    # _stabilize_memory calculates:
+    #   fibrin_formation = min(1.0, thrombin_level * FIBRIN_FORMATION_RATE)
+    #   consolidation_strength = min(1.0, fibrin * (amp / 10))
+    # We need consolidation_strength >= 0.7
+    # Set high thrombin and amplification so the calculation yields >= 0.7
+    cascade.state.thrombin_level = 1.0  # Will give fibrin_formation = 1.0 * 0.5 = 0.5
+    cascade.state.amplification_factor = 14.0  # 0.5 * (14/10) = 0.7 exactly
+
+    # Call _stabilize_memory directly to trigger lines 345-347
+    consolidation = cascade._stabilize_memory(threat)
 
     # Verify consolidation occurred (should trigger lines 345-347)
+    assert consolidation >= 0.7
     assert len(cascade.state.consolidated_memories) > 0
     assert any(f"memory-{threat.threat_id}" in mem for mem in cascade.state.consolidated_memories)
 
@@ -65,16 +77,22 @@ def test_check_timeout_when_cascade_not_started():
 
 
 def test_check_timeout_when_cascade_started_not_expired():
-    """Test check_timeout returns False when cascade active but not expired (lines 386-387)."""
+    """Test check_timeout returns False when cascade active but not expired (lines 386-387).
+
+    Note: trigger_cascade() clears _cascade_start_time at end (line 223),
+    so we must set it directly to test the mid-cascade behavior.
+    """
+    import time
+
     cascade = CoagulationCascade()
 
-    # Start cascade
-    threat = ThreatSignal(threat_id="test", severity=0.5, source="mmei", pathway=CascadePathway.INTRINSIC)
-    cascade.trigger_cascade(threat)
+    # Simulate cascade in progress by setting start time directly
+    # (trigger_cascade completes synchronously and clears _cascade_start_time)
+    cascade._cascade_start_time = time.time()
 
     assert cascade._cascade_start_time is not None
 
-    # Should return False (duration < max_duration)
+    # Should return False (duration < max_duration of 30s)
     assert cascade.check_timeout() is False
 
 

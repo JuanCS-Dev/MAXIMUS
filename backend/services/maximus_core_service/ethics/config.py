@@ -4,6 +4,9 @@ This module provides default configurations for all ethical frameworks
 and the integration engine.
 """
 
+from __future__ import annotations
+
+
 from typing import Any
 
 # Default configuration for Ethical Integration Engine

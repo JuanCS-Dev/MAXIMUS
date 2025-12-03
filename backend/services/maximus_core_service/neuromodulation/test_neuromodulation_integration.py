@@ -16,6 +16,9 @@ Date: 2025-10-06
 Quality: REGRA DE OURO - Zero mocks, 100% production code
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from neuromodulation import (

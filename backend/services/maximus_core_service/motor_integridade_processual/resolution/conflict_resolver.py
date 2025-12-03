@@ -7,6 +7,9 @@ Implements weighted aggregation, precedence rules, and escalation logic.
 Lei Governante: Constituição Vértice v2.6
 """
 
+from __future__ import annotations
+
+
 from typing import List, Dict, Optional, Tuple
 from motor_integridade_processual.models.verdict import (
     FrameworkVerdict,

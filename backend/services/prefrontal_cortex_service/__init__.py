@@ -12,3 +12,5 @@ Key components within this package are responsible for:
 - Maintaining a coherent internal model of the world and the AI's objectives.
 - Providing executive control and adaptive behavior for the entire Maximus AI system.
 """
+
+from __future__ import annotations

@@ -5,6 +5,9 @@ Aggregates 50+ sensor metrics from all services every 15 seconds.
 Streams to Kafka and stores in TimescaleDB.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from datetime import datetime

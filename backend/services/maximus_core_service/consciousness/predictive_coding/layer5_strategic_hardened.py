@@ -25,6 +25,9 @@ Version: 1.0.0 - Production Hardened
 Date: 2025-10-08
 """
 
+from __future__ import annotations
+
+
 from typing import Any
 
 import numpy as np
@@ -282,7 +285,7 @@ class Layer5Strategic(PredictiveCodingLayerBase):
             self._observation_history.pop(0)
 
         # Update priors: empirical frequency
-        goal_counts = {}
+        goal_counts: dict[str, int] = {}
         for _, goal in self._observation_history:
             goal_counts[goal] = goal_counts.get(goal, 0) + 1
 

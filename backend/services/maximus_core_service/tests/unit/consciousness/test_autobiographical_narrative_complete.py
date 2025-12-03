@@ -5,6 +5,9 @@ Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS!
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 import pytest
 from consciousness.autobiographical_narrative import AutobiographicalNarrative, NarrativeResult

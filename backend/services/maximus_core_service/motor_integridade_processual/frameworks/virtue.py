@@ -14,6 +14,9 @@ Based on Aristotle's Nicomachean Ethics.
 Lei Governante: Constituição Vértice v2.6 - Lei Zero (Florescimento)
 """
 
+from __future__ import annotations
+
+
 from typing import Dict, List
 from motor_integridade_processual.frameworks.base import AbstractEthicalFramework
 from motor_integridade_processual.models.action_plan import ActionPlan
@@ -43,7 +46,7 @@ class VirtueEthics(AbstractEthicalFramework):
         The virtuous person does the right thing naturally.
     """
     
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize Virtue Ethics framework."""
         super().__init__(name=FrameworkName.VIRTUE_ETHICS.value, weight=0.20, can_veto=False)
         
@@ -97,7 +100,7 @@ class VirtueEthics(AbstractEthicalFramework):
         # Determine verdict
         if avg_virtue >= 0.75:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.VIRTUE_ETHICS,
                 decision=DecisionLevel.APPROVE,
                 score=avg_virtue,
                 confidence=0.80,
@@ -105,7 +108,7 @@ class VirtueEthics(AbstractEthicalFramework):
             )
         elif avg_virtue >= 0.55:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.VIRTUE_ETHICS,
                 decision=DecisionLevel.APPROVE_WITH_CONDITIONS,
                 score=avg_virtue,
                 confidence=0.70,
@@ -114,7 +117,7 @@ class VirtueEthics(AbstractEthicalFramework):
             )
         else:
             return FrameworkVerdict(
-                framework_name=self.name,
+                framework_name=FrameworkName.VIRTUE_ETHICS,
                 decision=DecisionLevel.REJECT,
                 score=avg_virtue,
                 confidence=0.75,

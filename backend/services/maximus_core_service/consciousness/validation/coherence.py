@@ -43,6 +43,9 @@ properties necessary for phenomenal experience.
 "Coherence is the signature of conscious binding."
 """
 
+from __future__ import annotations
+
+
 import time
 from dataclasses import dataclass, field
 from enum import Enum

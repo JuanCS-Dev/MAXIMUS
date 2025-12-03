@@ -5,7 +5,9 @@ HCL Analyzer Service - Core Logic
 Core analysis logic for system metrics.
 """
 
-from typing import List, Dict, Any
+from __future__ import annotations
+
+from typing import Any, Dict, List
 
 from config import AnalyzerSettings
 from models.analysis import (

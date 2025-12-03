@@ -2,9 +2,12 @@
 Unit tests for Episodic Memory API.
 """
 
+from __future__ import annotations
+
 import pytest
 from fastapi.testclient import TestClient
-from backend.services.episodic_memory.api.routes import app
+
+from api.routes import app
 
 client = TestClient(app)
 

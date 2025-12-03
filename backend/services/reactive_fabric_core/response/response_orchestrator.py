@@ -5,6 +5,9 @@ Coordinates automated responses to detected threats.
 Phase 2: ACTIVE responses with safety controls.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from datetime import datetime
 from enum import Enum

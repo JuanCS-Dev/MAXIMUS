@@ -5,6 +5,9 @@ Reactive Fabric Core - API Routes
 FastAPI endpoints for reactive event system.
 """
 
+from __future__ import annotations
+
+
 from typing import List
 
 from fastapi import APIRouter, Depends

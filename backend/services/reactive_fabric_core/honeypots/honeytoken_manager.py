@@ -3,6 +3,9 @@ Intelligent Honeytoken Management System
 Creates, plants, and monitors honeytokens across all honeypots
 """
 
+from __future__ import annotations
+
+
 import json
 import logging
 import secrets

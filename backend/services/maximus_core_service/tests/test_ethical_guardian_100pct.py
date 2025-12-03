@@ -7,6 +7,9 @@ Date: 2025-10-15
 Target: 454 statements, 118 branches -> 100%
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, AsyncMock, PropertyMock
 

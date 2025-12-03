@@ -7,6 +7,9 @@ Date: 2025-10-06
 Updated: 2025-10-20 - Added Testcontainers support
 """
 
+from __future__ import annotations
+
+
 import sys
 import time
 import os

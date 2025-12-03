@@ -16,6 +16,8 @@ effective but also rational, ethical, and aligned with its overarching objective
 preventing flawed reasoning or unintended negative outcomes.
 """
 
+from __future__ import annotations
+
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 

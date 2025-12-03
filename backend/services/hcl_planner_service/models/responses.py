@@ -5,6 +5,8 @@ HCL Planner Service - API Response Models
 Pydantic models for API responses.
 """
 
+from __future__ import annotations
+
 from typing import Dict, Any, List
 from pydantic import BaseModel, Field
 

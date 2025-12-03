@@ -2,6 +2,9 @@
 Tests for API dependencies to achieve 100% coverage.
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import patch, MagicMock
 

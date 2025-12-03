@@ -4,6 +4,9 @@ This module defines the abstract base class that all ethical frameworks must imp
 ensuring a consistent interface for ethical evaluation across the VÉRTICE platform.
 """
 
+from __future__ import annotations
+
+
 import logging
 from abc import ABC, abstractmethod
 from dataclasses import dataclass

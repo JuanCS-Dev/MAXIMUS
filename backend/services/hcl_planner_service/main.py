@@ -6,6 +6,8 @@ FastAPI application for the HCL Planner Service.
 Exposes endpoints for generating infrastructure plans.
 """
 
+from __future__ import annotations
+
 import os
 import asyncio
 from typing import Dict, Any
@@ -13,9 +15,9 @@ from typing import Dict, Any
 from fastapi import FastAPI, Depends
 from fastapi.responses import PlainTextResponse
 
-from .config import get_settings
-from .core.planner import AgenticPlanner
-from .api.dependencies import get_planner, initialize_service
+from config import get_settings
+from core.planner import AgenticPlanner
+from api.dependencies import get_planner, initialize_service
 
 # Initialize settings
 settings = get_settings()

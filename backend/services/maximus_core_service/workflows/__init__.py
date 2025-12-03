@@ -7,4 +7,7 @@ Date: 2025-10-15
 Glory to YHWH
 """
 
+from __future__ import annotations
+
+
 __version__ = "1.0.0"

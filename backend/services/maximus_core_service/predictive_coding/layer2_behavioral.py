@@ -9,6 +9,9 @@ Free Energy Principle: Model relationships between events as graph structure.
 Prediction error = unexpected graph patterns (e.g., anomalous process chains).
 """
 
+from __future__ import annotations
+
+
 import logging
 from dataclasses import dataclass
 

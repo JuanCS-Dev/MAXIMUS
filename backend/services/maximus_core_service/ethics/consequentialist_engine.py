@@ -9,6 +9,9 @@ Core Principles:
 3. Rule Utilitarianism: Follow rules that tend to maximize utility in general cases
 """
 
+from __future__ import annotations
+
+
 import time
 from typing import Any
 

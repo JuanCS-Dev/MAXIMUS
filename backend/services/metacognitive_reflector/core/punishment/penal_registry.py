@@ -212,7 +212,7 @@ class PenalRegistry:
             if record:
                 return record
         except (ConnectionError, TimeoutError, OSError):
-            pass
+            pass  # Primary failed, try fallback below
 
         # Try fallback
         return await self._fallback.get(agent_id)
@@ -320,7 +320,7 @@ class PenalRegistry:
         try:
             await self._primary.delete(agent_id)
         except (ConnectionError, TimeoutError, OSError):
-            pass
+            pass  # Primary delete failed, continue with fallback
 
         await self._fallback.delete(agent_id)
 
@@ -362,7 +362,7 @@ class PenalRegistry:
         try:
             await self._primary.set(record)
         except (ConnectionError, TimeoutError, OSError):
-            pass
+            pass  # Primary update failed, continue with fallback
 
         await self._fallback.set(record)
 

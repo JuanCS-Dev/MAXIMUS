@@ -4,6 +4,9 @@ Additional tests for Log Aggregation Collector to achieve 100% coverage.
 Tests edge cases and error paths not covered by main test suite.
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, patch
 

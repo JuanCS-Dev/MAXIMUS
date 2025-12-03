@@ -3,6 +3,9 @@ Complete coverage tests for Threat Intelligence Collector.
 Target: 100% code coverage (19 missing lines)
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime, timedelta
 from unittest.mock import AsyncMock, MagicMock, patch

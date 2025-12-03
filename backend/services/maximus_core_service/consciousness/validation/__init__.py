@@ -46,6 +46,9 @@ While we cannot solve the hard problem philosophically, we can:
 "Validation is not proof of consciousness - it is evidence of consciousness-compatibility."
 """
 
+from __future__ import annotations
+
+
 from consciousness.validation.coherence import (
     CoherenceValidator,
     ESGTCoherenceMetrics,

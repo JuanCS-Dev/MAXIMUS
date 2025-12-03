@@ -2,6 +2,9 @@
 Simplified Social Memory Tests - Debug
 """
 
+from __future__ import annotations
+
+
 import pytest
 from compassion.social_memory_sqlite import (
     SocialMemorySQLite,

@@ -9,6 +9,10 @@ Biblical Foundation:
 - Stewardship: Responsible monitoring of system resources
 """
 
+from __future__ import annotations
+
+
+import datetime
 import time
 
 from fastapi import APIRouter, Response
@@ -210,8 +214,6 @@ def is_sabbath() -> bool:
     Returns:
         True if today is Sunday, False otherwise
     """
-    import datetime
-
     return datetime.datetime.now().weekday() == 6  # Sunday = 6
 
 

@@ -11,6 +11,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 
 from training.data_collection import CollectedEvent, DataCollector, DataSource, DataSourceType

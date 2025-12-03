@@ -29,6 +29,9 @@ Davie & Ratnoff, 1964) and cell-based model (Hoffman & Monroe, 2001).
 NO MOCKS - Production-ready biological system.
 """
 
+from __future__ import annotations
+
+
 import logging
 import time
 from dataclasses import dataclass, field

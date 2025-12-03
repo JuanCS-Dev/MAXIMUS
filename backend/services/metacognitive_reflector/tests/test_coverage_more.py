@@ -2,6 +2,9 @@
 Additional tests to improve coverage.
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from datetime import datetime, timedelta

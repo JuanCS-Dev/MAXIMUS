@@ -9,6 +9,9 @@ Structural tests - Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS! FASE B P3 FINAL BATCH! 🔥
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 

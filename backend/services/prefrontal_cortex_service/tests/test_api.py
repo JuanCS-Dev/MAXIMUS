@@ -2,29 +2,25 @@
 Unit tests for Prefrontal Cortex Service API.
 """
 
+from __future__ import annotations
+
 from unittest.mock import AsyncMock
 
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.services.prefrontal_cortex_service.api.dependencies import (
+from api.dependencies import (
     get_decision_engine,
-    get_task_prioritizer
+    get_task_prioritizer,
+    initialize_service
 )
-from backend.services.prefrontal_cortex_service.core.decision_engine import (
-    DecisionEngine
-)
-from backend.services.prefrontal_cortex_service.core.task_prioritizer import (
-    TaskPrioritizer
-)
-from backend.services.prefrontal_cortex_service.main import app
-from backend.services.prefrontal_cortex_service.models.cognitive import (
-    Decision,
-    Task,
-    TaskPriority,
-    TaskStatus
-)
+from core.decision_engine import DecisionEngine
+from core.task_prioritizer import TaskPrioritizer
+from main import app
+from models.cognitive import Decision, Task, TaskPriority, TaskStatus
 
+# Initialize service before creating client
+initialize_service()
 client = TestClient(app)
 
 

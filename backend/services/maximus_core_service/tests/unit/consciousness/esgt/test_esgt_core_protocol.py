@@ -7,6 +7,9 @@ Dehaene et al. 2021 neurophysiological constraints.
 EM NOME DE JESUS - VALIDAÇÃO CIENTÍFICA DO PROTOCOLO DE IGNIÇÃO!
 """
 
+from __future__ import annotations
+
+
 import pytest
 import pytest_asyncio
 import asyncio

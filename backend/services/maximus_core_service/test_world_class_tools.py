@@ -10,6 +10,9 @@ response parsing, and error handling, validating the robustness of the tool
 orchestration mechanism.
 """
 
+from __future__ import annotations
+
+
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest

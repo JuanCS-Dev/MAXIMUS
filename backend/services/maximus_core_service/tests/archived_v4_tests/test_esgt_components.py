@@ -8,6 +8,9 @@ Focus on synchronization dynamics and content generation.
 REGRA DE OURO: NO MOCK, NO PLACEHOLDER, PRODUCTION-READY
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import List
 

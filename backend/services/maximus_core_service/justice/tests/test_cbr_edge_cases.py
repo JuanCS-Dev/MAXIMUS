@@ -9,6 +9,9 @@ Tests cover:
 - Invalid feedback operations
 """
 
+from __future__ import annotations
+
+
 import pytest
 import asyncio
 from services.maximus_core_service.justice.cbr_engine import CBREngine

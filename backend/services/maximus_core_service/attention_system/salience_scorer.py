@@ -4,6 +4,9 @@ Determines which events/anomalies warrant deep (foveal) analysis vs.
 which can be handled by lightweight (peripheral) processing.
 """
 
+from __future__ import annotations
+
+
 import logging
 import time
 from dataclasses import dataclass

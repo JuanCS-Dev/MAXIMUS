@@ -5,6 +5,9 @@ Todas as correções aplicadas baseadas nas estruturas reais
 Coverage target: 100% de ethical_guardian.py
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, AsyncMock, PropertyMock
 

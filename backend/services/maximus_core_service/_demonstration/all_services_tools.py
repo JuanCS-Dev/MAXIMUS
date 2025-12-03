@@ -11,6 +11,9 @@ ensures that Maximus can dynamically access and utilize its full range of
 capabilities.
 """
 
+from __future__ import annotations
+
+
 from typing import Any, Dict, List, Optional
 
 from advanced_tools import AdvancedTools

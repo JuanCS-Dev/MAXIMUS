@@ -13,6 +13,9 @@ Authors: Juan & Claude
 Version: 1.0.0
 """
 
+from __future__ import annotations
+
+
 from .immune_system_bridge import ImmuneSystemBridge
 
 __all__ = ["ImmuneSystemBridge"]

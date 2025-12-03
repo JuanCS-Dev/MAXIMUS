@@ -3,6 +3,9 @@ pytest fixtures for HITL backend testing
 Now using proper TestClient with isolated in-memory database
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime
 from starlette.testclient import TestClient

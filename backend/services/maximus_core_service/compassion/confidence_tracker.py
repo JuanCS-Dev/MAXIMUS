@@ -16,6 +16,9 @@ Date: 2025-10-14
 Governance: Constituição Vértice v2.5 - Padrão Pagani
 """
 
+from __future__ import annotations
+
+
 import math
 from datetime import datetime, timedelta
 from typing import Dict, Tuple, List

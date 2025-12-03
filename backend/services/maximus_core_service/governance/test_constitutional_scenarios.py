@@ -11,6 +11,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-14
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime
 
 import pytest

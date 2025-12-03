@@ -17,6 +17,9 @@ Date: 2025-10-14
 Sprint: Reactive Fabric Sprint 3
 """
 
+from __future__ import annotations
+
+
 import time
 from collections import deque
 from dataclasses import dataclass, field

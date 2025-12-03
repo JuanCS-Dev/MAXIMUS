@@ -8,6 +8,9 @@ Author: Claude Code (Padrão Pagani)
 Date: 2025-10-22
 """
 
+from __future__ import annotations
+
+
 import pytest
 import os
 from consciousness.sandboxing.resource_limiter import ResourceLimiter, ResourceLimits

@@ -7,6 +7,9 @@ Wrapper sobre httpx com retry logic e circuit breaker.
 Autor: Juan Carlos de Souza
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from typing import Optional, Dict, Any

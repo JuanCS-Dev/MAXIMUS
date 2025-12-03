@@ -2,6 +2,9 @@
 Resource Limiter
 Enforces CPU, memory, and time limits on consciousness processes.
 """
+
+from __future__ import annotations
+
 import psutil
 import resource
 import os

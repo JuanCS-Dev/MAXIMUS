@@ -14,6 +14,9 @@ Authors: Claude Code + Juan
 Date: 2025-10-15
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime, timedelta
 from consciousness.episodic_memory.core import Episode, EpisodicMemory, windowed_temporal_accuracy

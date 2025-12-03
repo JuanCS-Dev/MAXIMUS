@@ -6,6 +6,9 @@ to modulate AI behavior in bio-inspired ways.
 Production-ready implementation.
 """
 
+from __future__ import annotations
+
+
 import logging
 from dataclasses import dataclass
 from datetime import datetime

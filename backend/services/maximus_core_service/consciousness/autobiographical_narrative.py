@@ -31,6 +31,7 @@ class AutobiographicalNarrative:
         self._binder = TemporalBinder()
 
     def build(self, episodes: Sequence[Episode]) -> NarrativeResult:
+        """Build autobiographical narrative from episodes."""
         ordered = sorted(episodes, key=lambda ep: ep.timestamp)
         coherence = self._compute_coherence(ordered)
         narrative = self._build_text(ordered)

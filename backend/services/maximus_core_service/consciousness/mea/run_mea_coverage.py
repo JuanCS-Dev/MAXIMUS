@@ -7,6 +7,9 @@ before coverage starts, causing all MEA modules to be "previously imported."
 Solution: Clear sys.modules and reload after coverage starts.
 """
 
+from __future__ import annotations
+
+
 import sys
 import os
 

@@ -13,6 +13,9 @@ NO MOCKS - Testing actual cascade dynamics.
 Target: 100% PASS RATE
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from consciousness.coagulation.cascade import (

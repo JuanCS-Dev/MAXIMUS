@@ -2,6 +2,9 @@
 Unit tests for Reactive Fabric Core API (V2).
 """
 
+from __future__ import annotations
+
+
 from unittest.mock import AsyncMock
 
 import pytest

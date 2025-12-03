@@ -3,6 +3,9 @@ Tests for Reactive Fabric Core models
 Sprint 1: Basic validation
 """
 
+from __future__ import annotations
+
+
 import pytest
 from datetime import datetime
 from models import (

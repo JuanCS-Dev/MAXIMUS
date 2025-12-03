@@ -5,6 +5,9 @@ Creates and manages honeytokens, decoys, and deceptive elements.
 Phase 1: PASSIVE deception only - monitoring without active engagement.
 """
 
+from __future__ import annotations
+
+
 from .deception_engine import (
     DeceptionEngine,
     DeceptionConfig,

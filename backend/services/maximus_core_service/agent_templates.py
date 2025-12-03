@@ -10,6 +10,9 @@ match the requirements of a given situation, ensuring more appropriate and
 effective responses. This allows for flexible and context-aware AI behavior.
 """
 
+from __future__ import annotations
+
+
 from typing import Any
 
 

@@ -16,6 +16,9 @@ Author: Claude Code + JuanCS-Dev (Artisanal, DOUTRINA VÉRTICE)
 Date: 2025-10-20
 """
 
+from __future__ import annotations
+
+
 import pytest
 import asyncio
 from datetime import datetime

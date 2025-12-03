@@ -1,5 +1,7 @@
 """Utils package for HCL Planner Service."""
 
+from __future__ import annotations
+
 from .constants import *
 from .logging_config import setup_logging, get_logger
 

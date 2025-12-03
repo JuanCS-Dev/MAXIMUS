@@ -10,6 +10,9 @@ Tests cover all aspects of consequentialist/utilitarian ethics evaluation:
 Target: 90%+ coverage
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch
 from datetime import datetime

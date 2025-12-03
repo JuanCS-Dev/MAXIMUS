@@ -1,4 +1,5 @@
-"""Maximus HCL Analyzer Service - Package Initialization.
+"""
+Maximus HCL Analyzer Service - Package Initialization.
 
 This package provides the core functionality for the Maximus AI's Homeostatic
 Control Loop (HCL) Analyzer Service. It is responsible for performing in-depth
@@ -12,3 +13,5 @@ Key components within this package are responsible for:
 - Generating insights and recommendations for the HCL Planner Service.
 - Providing a comprehensive understanding of the AI's operational dynamics.
 """
+
+from __future__ import annotations

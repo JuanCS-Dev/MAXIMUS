@@ -9,15 +9,17 @@ Pattern: Coordinator + Strategy
 Inspiration: Kubernetes Controller, Google's agent orchestration
 """
 
+from __future__ import annotations
+
 import asyncio
 import time
 from typing import List, Dict
 import logging
 
 
+from plugins.base import Task, TaskStatus, TaskResult
 from .agent_registry import AgentRegistry
 from .task_decomposer import TaskDecomposer
-from plugins.base import Task, TaskStatus, TaskResult
 
 
 logger = logging.getLogger(__name__)

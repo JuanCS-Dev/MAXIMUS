@@ -14,6 +14,9 @@ Date: 2025-10-14
 Governance: Constituição Vértice v2.5 - Article IV (Operational Excellence)
 """
 
+from __future__ import annotations
+
+
 from prometheus_client import Counter, Gauge, Histogram
 from typing import Dict, Any
 import logging

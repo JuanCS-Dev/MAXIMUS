@@ -10,6 +10,9 @@ Core Principles:
 4. Justice: Fair distribution of benefits, risks, and costs
 """
 
+from __future__ import annotations
+
+
 import time
 from typing import Any
 

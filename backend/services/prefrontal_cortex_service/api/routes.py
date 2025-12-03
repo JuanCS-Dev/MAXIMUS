@@ -5,14 +5,16 @@ Prefrontal Cortex Service - API Routes
 FastAPI endpoints for executive cognitive functions.
 """
 
+from __future__ import annotations
+
 from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends
 
-from ..core.decision_engine import DecisionEngine
-from ..core.task_prioritizer import TaskPrioritizer
-from ..models.cognitive import Decision, Task, TaskStatus
-from .dependencies import get_decision_engine, get_task_prioritizer
+from core.decision_engine import DecisionEngine
+from core.task_prioritizer import TaskPrioritizer
+from models.cognitive import Decision, Task, TaskStatus
+from api.dependencies import get_decision_engine, get_task_prioritizer
 
 router = APIRouter()
 

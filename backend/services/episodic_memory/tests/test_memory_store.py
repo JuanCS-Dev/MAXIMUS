@@ -2,9 +2,12 @@
 Unit tests for Episodic Memory Store.
 """
 
+from __future__ import annotations
+
 import pytest
-from backend.services.episodic_memory.core.memory_store import MemoryStore
-from backend.services.episodic_memory.models.memory import MemoryType, MemoryQuery
+
+from core.memory_store import MemoryStore
+from models.memory import MemoryType, MemoryQuery
 
 @pytest.mark.asyncio
 async def test_store_and_retrieve():

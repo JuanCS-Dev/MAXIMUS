@@ -5,6 +5,9 @@ decisions made by the VÉRTICE AI platform. It supports the 4-framework ethical
 architecture (Kantian, Consequentialist, Virtue Ethics, Principialism).
 """
 
+from __future__ import annotations
+
+
 import logging
 import os
 import time

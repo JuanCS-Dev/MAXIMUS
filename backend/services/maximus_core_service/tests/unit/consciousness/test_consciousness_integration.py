@@ -31,6 +31,9 @@ Validates entire embodied consciousness architecture from substrate to phenomeno
 REGRA DE OURO: NO MOCK, NO PLACEHOLDER, NO TODO
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 
@@ -101,6 +104,10 @@ async def mcea_controller():
         update_interval_ms=100.0,
     )
     controller = ArousalController(config=config)
+    
+    # Speed up dynamics for testing
+    controller.config.arousal_increase_rate = 2.0
+    controller.config.arousal_decrease_rate = 2.0
 
     await controller.start()
     yield controller
@@ -127,7 +134,9 @@ async def esgt_coordinator():
 
     await coordinator.start()
     yield coordinator
+
     await coordinator.stop()
+    await fabric.stop()
 
 
 @pytest_asyncio.fixture
@@ -613,8 +622,10 @@ async def test_integration_metrics_collection():
     assert "total_modulations" in bridge_metrics, "Bridge should report metrics"
 
     # Cleanup
+
     await bridge.stop()
     await esgt.stop()
+    await fabric.stop()
     await mcea.stop()
     await mmei.stop()
 

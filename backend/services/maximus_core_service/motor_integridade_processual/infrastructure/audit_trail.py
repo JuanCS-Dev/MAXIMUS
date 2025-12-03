@@ -1,5 +1,8 @@
 """Audit trail logging."""
 
+from __future__ import annotations
+
+
 from typing import List
 from datetime import datetime
 from motor_integridade_processual.models.verdict import EthicalVerdict
@@ -7,7 +10,7 @@ from motor_integridade_processual.models.verdict import EthicalVerdict
 class AuditLogger:
     """Logs all ethical decisions for auditability."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         self.log: List[dict] = []
     
     def log_decision(self, verdict: EthicalVerdict) -> None:
@@ -16,7 +19,7 @@ class AuditLogger:
             "timestamp": datetime.utcnow().isoformat(),
             "action_plan_id": verdict.action_plan_id,
             "decision": verdict.final_decision.value,
-            "score": verdict.aggregate_score,
+            "score": verdict.confidence,  # Using confidence as score proxy
             "confidence": verdict.confidence
         }
         self.log.append(entry)

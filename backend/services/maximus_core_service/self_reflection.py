@@ -11,6 +11,9 @@ allowing it to learn from its own operations and continuously refine its
 performance without constant external intervention.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Any
 

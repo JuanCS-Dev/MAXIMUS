@@ -3,6 +3,9 @@
 Implements JWT-based authentication and RBAC (Role-Based Access Control).
 """
 
+from __future__ import annotations
+
+
 import logging
 import os
 from datetime import datetime, timedelta

@@ -9,6 +9,9 @@ Categories:
     - Storage (Disk I/O, DB connections, Query latency)
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import logging
 from typing import Any

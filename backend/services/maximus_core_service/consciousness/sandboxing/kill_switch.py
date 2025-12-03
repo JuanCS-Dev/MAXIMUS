@@ -2,6 +2,9 @@
 Kill Switch - Emergency Consciousness Shutdown
 Critical safety mechanism for immediate termination.
 """
+
+from __future__ import annotations
+
 import logging
 from datetime import datetime
 from typing import List, Callable, Optional, Dict, Any

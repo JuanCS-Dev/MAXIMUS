@@ -11,6 +11,9 @@ Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS!
 """
 
+from __future__ import annotations
+
+
 import pytest
 from motor_integridade_processual.frameworks.base import AbstractEthicalFramework
 from motor_integridade_processual.models.action_plan import ActionPlan

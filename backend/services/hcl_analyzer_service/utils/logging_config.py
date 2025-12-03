@@ -5,6 +5,8 @@ HCL Analyzer Service - Logging Configuration
 Structured logging configuration using structlog.
 """
 
+from __future__ import annotations
+
 import logging
 import sys
 from typing import Any

@@ -24,10 +24,10 @@ from pydantic import BaseModel, Field
 class MemoryType(str, Enum):
     """
     6 types of memory (MIRIX architecture).
-    
+
     Based on research: https://arxiv.org/MIRIX (July 2025)
     """
-    
+
     CORE = "core"              # Persona + user facts (permanent)
     EPISODIC = "episodic"      # Time-stamped events (90 days)
     SEMANTIC = "semantic"      # Knowledge graphs (indefinite)
@@ -38,7 +38,7 @@ class MemoryType(str, Enum):
 
 class MemoryPriority(int, Enum):
     """Priority for memory retrieval caching."""
-    
+
     LOW = 1        # Resource, rarely accessed
     MEDIUM = 2     # Episodic, occasional access
     HIGH = 3       # Semantic, Procedural (frequent)
@@ -48,7 +48,7 @@ class MemoryPriority(int, Enum):
 class TypedMemory(BaseModel):
     """
     Memory with type-specific handling.
-    
+
     Attributes:
         id: Unique memory identifier
         type: Memory type (MIRIX category)
@@ -60,7 +60,7 @@ class TypedMemory(BaseModel):
         access_count: Number of retrievals (for cache optimization)
         last_accessed: Last access timestamp
         encrypted: Whether content is encrypted (Vault only)
-        
+
     Example:
         >>> memory = TypedMemory(
         ...     id="core-user-name",
@@ -70,72 +70,72 @@ class TypedMemory(BaseModel):
         ...     metadata={"source": "user_profile"}
         ... )
     """
-    
+
     id: str = Field(..., description="Unique memory identifier")
     type: MemoryType = Field(..., description="MIRIX memory type")
     content: Dict[str, Any] = Field(..., description="Memory content")
     embedding: List[float] = Field(..., description="Vector embedding")
     metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")
-    
+
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Creation time")
     ttl_days: Optional[int] = Field(None, description="Time-to-live (days)")
-    
+
     access_count: int = Field(0, description="Retrieval count")
     last_accessed: Optional[datetime] = Field(None, description="Last access time")
-    
+
     encrypted: bool = Field(False, description="Content encrypted (Vault only)")
-    
+
     def record_access(self) -> None:
         """Record memory access for cache optimization."""
         self.access_count += 1
         self.last_accessed = datetime.utcnow()
-    
+
     def is_expired(self) -> bool:
         """
         Check if memory has expired based on TTL.
-        
+
         Returns:
             True if expired, False otherwise
         """
         if self.ttl_days is None:
             return False  # Indefinite
-        
+
         expiry_date = self.timestamp + timedelta(days=self.ttl_days)
         return datetime.utcnow() > expiry_date
-    
+
     def should_cache(self, access_threshold: int = 3) -> bool:
         """
         Determine if memory should be cached.
-        
+
         Args:
             access_threshold: Minimum access count for caching
-            
+
         Returns:
             True if should cache
         """
         # Critical types always cached
         if self.type in [MemoryType.CORE, MemoryType.VAULT]:
             return True
-        
+
         # High-frequency access
         if self.access_count >= access_threshold:
             return True
-        
+
         # Recent access
         if self.last_accessed:
             hours_since_access = (datetime.utcnow() - self.last_accessed).total_seconds() / 3600
             return hours_since_access < 24
-        
+
         return False
-    
+
     @classmethod
     def get_ttl_for_type(cls, memory_type: MemoryType) -> Optional[int]:
         """
         Get default TTL for memory type.
-        
+
         Args:
             memory_type: Memory type
-            
+
         Returns:
             TTL in days (None = indefinite)
         """
@@ -148,15 +148,15 @@ class TypedMemory(BaseModel):
             MemoryType.VAULT: None        # Indefinite (encrypted)
         }
         return ttl_map[memory_type]
-    
+
     @classmethod
     def get_priority_for_type(cls, memory_type: MemoryType) -> MemoryPriority:
         """
         Get cache priority for memory type.
-        
+
         Args:
             memory_type: Memory type
-            
+
         Returns:
             Memory priority
         """
@@ -174,7 +174,7 @@ class TypedMemory(BaseModel):
 class MemoryTypeConfig(BaseModel):
     """
     Configuration for memory type.
-    
+
     Attributes:
         type: Memory type
         ttl_days: Default TTL
@@ -182,21 +182,21 @@ class MemoryTypeConfig(BaseModel):
         replication_factor: Number of replicas (HA)
         encryption_required: Whether encryption is required
     """
-    
+
     type: MemoryType
     ttl_days: Optional[int]
     priority: MemoryPriority
     replication_factor: int = Field(1, ge=1, le=3, description="Replication (1-3)")
     encryption_required: bool = False
-    
+
     @classmethod
     def for_type(cls, memory_type: MemoryType) -> "MemoryTypeConfig":
         """
         Get configuration for memory type.
-        
+
         Args:
             memory_type: Memory type
-            
+
         Returns:
             Memory type configuration
         """

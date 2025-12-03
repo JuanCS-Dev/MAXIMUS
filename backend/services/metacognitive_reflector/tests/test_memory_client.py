@@ -5,6 +5,9 @@ MAXIMUS 2.0 - Tests for Memory Client
 Tests for memory client with fallback storage.
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 from metacognitive_reflector.core.memory_client import MemoryClient

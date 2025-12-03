@@ -70,7 +70,7 @@ class MemoryClient:
                     timeout=self._timeout,
                 )
             except ImportError:
-                pass
+                pass  # httpx not available, will use in-memory storage
         return self._http_client
 
     async def store(
@@ -463,7 +463,7 @@ class MemoryClient:
                     )
                     http_healthy = response.status_code == 200
             except (ConnectionError, TimeoutError, OSError, asyncio.TimeoutError):
-                pass
+                pass  # HTTP check failed, fallback will be used
 
         return {
             "healthy": http_healthy or self._use_fallback,

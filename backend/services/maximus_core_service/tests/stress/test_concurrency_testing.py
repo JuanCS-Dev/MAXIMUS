@@ -8,6 +8,9 @@ Authors: Juan & Claude Code
 Version: 1.0.0 - FASE IV Sprint 2
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 import pytest

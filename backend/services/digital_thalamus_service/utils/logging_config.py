@@ -5,6 +5,9 @@ Digital Thalamus Service - Logging Configuration
 Structured logging configuration with request tracing.
 """
 
+from __future__ import annotations
+
+
 import logging
 import sys
 from typing import Any

@@ -10,6 +10,9 @@ Structural + Functional tests - Zero mocks - Padrão Pagani Absoluto
 EM NOME DE JESUS! FASE B P1 SIMPLE MODULES! 🔥
 """
 
+from __future__ import annotations
+
+
 import pytest
 
 

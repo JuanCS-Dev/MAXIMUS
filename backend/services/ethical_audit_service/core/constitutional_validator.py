@@ -5,11 +5,14 @@ Ethical Audit Service - Constitutional Validator
 Core constitutional compliance validation logic.
 """
 
+from __future__ import annotations
+
+
 from typing import Any, Dict
 
-from ..config import AuditSettings
-from ..models.audit import Violation, ViolationSeverity, ViolationType
-from ..utils.logging_config import get_logger
+from config import AuditSettings
+from models.audit import Violation, ViolationSeverity, ViolationType
+from utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 

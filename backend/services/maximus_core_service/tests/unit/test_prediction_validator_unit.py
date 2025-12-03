@@ -4,6 +4,9 @@ Generated using Industrial Test Generator V2 (2024-2025 techniques)
 Combines: AST analysis + Parametrization + Hypothesis integration
 """
 
+from __future__ import annotations
+
+
 import pytest
 from unittest.mock import Mock, patch, MagicMock, AsyncMock
 from datetime import datetime
@@ -51,7 +54,6 @@ class TestPredictionValidator:
     @pytest.mark.skip(reason="Needs implementation")
     def test_methods_exist(self, method_name):
         """Test that methods exist and are callable."""
-        # TODO: Create instance and test method exists
         # obj = PredictionValidator()
         # assert hasattr(obj, method_name)
         # assert callable(getattr(obj, method_name))

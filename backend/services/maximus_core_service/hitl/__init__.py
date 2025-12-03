@@ -71,6 +71,9 @@ Date: 2025-10-06
 License: Proprietary - VÉRTICE Platform
 """
 
+from __future__ import annotations
+
+
 from .audit_trail import (
     AuditQuery,
     AuditTrail,

@@ -11,6 +11,9 @@ Key Features:
     - Multi-objective optimization (proximity + sparsity + validity)
 """
 
+from __future__ import annotations
+
+
 import logging
 import time
 import uuid

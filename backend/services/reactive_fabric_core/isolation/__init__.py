@@ -3,6 +3,9 @@ Network Isolation Layer for Reactive Fabric
 Implements L3-L2-L1 isolation with Data Diode simulation
 """
 
+from __future__ import annotations
+
+
 from .data_diode import DataDiode, DiodeDirection
 from .firewall import NetworkFirewall, FirewallRule
 from .network_segmentation import NetworkSegmentation, VLANConfig

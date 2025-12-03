@@ -13,6 +13,9 @@ Version: 1.0.0
 Governance: Constituição Vértice v2.5
 """
 
+from __future__ import annotations
+
+
 __version__ = "1.0.0"
 __author__ = "Juan Carlos de Souza + Claude Code"
 

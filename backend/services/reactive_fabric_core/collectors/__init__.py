@@ -8,6 +8,9 @@ threat intelligence feeds.
 All collectors follow Phase 1 restrictions: PASSIVE ONLY, no automated responses.
 """
 
+from __future__ import annotations
+
+
 from .base_collector import BaseCollector, CollectorHealth, CollectorMetrics
 from .log_aggregation_collector import LogAggregationCollector
 

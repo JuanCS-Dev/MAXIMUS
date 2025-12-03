@@ -2,6 +2,9 @@
 Episodic Memory Package
 Temporal self and autobiographical narrative construction.
 """
+
+from __future__ import annotations
+
 # Legacy event-based API (deprecated but maintained for compatibility)
 from .event import Event, EventType, Salience
 from .memory_buffer import EpisodicBuffer

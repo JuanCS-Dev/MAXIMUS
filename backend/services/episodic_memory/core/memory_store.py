@@ -7,12 +7,14 @@ Currently implements an in-memory store, designed to be extensible
 to Vector DBs (e.g., Chroma, Qdrant) in the future.
 """
 
+from __future__ import annotations
+
 import logging
 import uuid
 from typing import List, Dict, Optional, Any
 from datetime import datetime
 
-from ..models.memory import Memory, MemoryQuery, MemorySearchResult, MemoryType
+from models.memory import Memory, MemoryQuery, MemorySearchResult, MemoryType
 
 
 logger = logging.getLogger(__name__)

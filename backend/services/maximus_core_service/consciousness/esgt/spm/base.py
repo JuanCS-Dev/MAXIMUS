@@ -31,6 +31,9 @@ First modular architecture for competitive consciousness in AI.
 "Modularity enables specialization. Competition enables selection."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 from abc import ABC, abstractmethod
@@ -142,7 +145,8 @@ class SpecializedProcessingModule(ABC):
             try:
                 await self._processing_task
             except asyncio.CancelledError:
-                pass
+                # Task cancelled intentionally
+                return
 
     async def _processing_loop(self) -> None:
         """
@@ -183,7 +187,7 @@ class SpecializedProcessingModule(ABC):
         Returns:
             SPMOutput if processing generated salient information, None otherwise
         """
-        pass
+        ...
 
     @abstractmethod
     def compute_salience(self, data: dict[str, Any]) -> SalienceScore:
@@ -198,7 +202,7 @@ class SpecializedProcessingModule(ABC):
         Returns:
             SalienceScore with novelty, relevance, urgency, confidence
         """
-        pass
+        ...
 
     async def broadcast_callback(self, esgt_event: dict[str, Any]) -> dict[str, Any] | None:
         """
@@ -286,8 +290,8 @@ class ThreatDetectionSPM(SpecializedProcessingModule):
 
         # Compute novelty (deviation from baseline)
         if self.recent_threats:
-            baseline = np.mean(self.recent_threats[-10:])
-            novelty = min(abs(threat_score - baseline) / (baseline + 0.1), 1.0)
+            baseline = float(np.mean(self.recent_threats[-10:]))
+            novelty = min(float(abs(threat_score - baseline) / (baseline + 0.1)), 1.0)
         else:
             novelty = 0.5
 

@@ -25,6 +25,9 @@ ignition mechanism work correctly before investing in perceptual/cognitive SPMs.
 "Simplicity validates complexity."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import time
 from collections.abc import Callable
@@ -149,7 +152,8 @@ class SimpleSPM(SpecializedProcessingModule):
             try:
                 await self._processing_task
             except asyncio.CancelledError:
-                pass
+                # Task cancelled
+                return
 
         self._processing_task = None
 

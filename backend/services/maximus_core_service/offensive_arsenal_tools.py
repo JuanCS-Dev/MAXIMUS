@@ -11,6 +11,9 @@ purposes only. Misuse can lead to severe consequences. Ensure proper authorizati
 and adhere to all legal and ethical guidelines before deployment.
 """
 
+from __future__ import annotations
+
+
 import asyncio
 from typing import Any
 

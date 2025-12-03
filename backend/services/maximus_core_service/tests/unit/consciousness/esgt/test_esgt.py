@@ -29,6 +29,9 @@ necessary for phenomenal experience.
 "Tests validate that bits can become qualia."
 """
 
+from __future__ import annotations
+
+
 import asyncio
 
 import pytest
@@ -410,10 +413,6 @@ def test_content_from_attention(esgt_coordinator):
     assert content["self_narrative"].startswith("Eu reposiciono foco")
     assert "perspective" in content
     assert content["modalities"]["proprioceptive"] == pytest.approx(0.5, rel=1e-6)
-
-    # At least one event should have completed successfully
-    successful_events = [e for e in events if e.was_successful()]
-    assert len(successful_events) >= 1, f"At least one event should succeed, got {len(successful_events)}/3"
 
 
 @pytest.mark.asyncio

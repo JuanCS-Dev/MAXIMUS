@@ -5,12 +5,14 @@ Prefrontal Cortex Service - Decision Engine
 Core decision-making logic for executive functions.
 """
 
+from __future__ import annotations
+
 from typing import Any, Dict, List
 import uuid
 
-from ..config import CognitiveSettings
-from ..models.cognitive import Decision
-from ..utils.logging_config import get_logger
+from config import CognitiveSettings
+from models.cognitive import Decision
+from utils.logging_config import get_logger
 
 logger = get_logger(__name__)
 

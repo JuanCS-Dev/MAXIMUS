@@ -3,6 +3,9 @@ CANDI Core Engine
 Central orchestration and analysis engine for Reactive Fabric
 """
 
+from __future__ import annotations
+
+
 import asyncio
 import hashlib
 import logging

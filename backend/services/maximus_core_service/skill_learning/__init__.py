@@ -18,6 +18,9 @@ Author: Maximus AI Team + Claude Code
 Version: 1.1.0 - REGRA DE OURO compliant (removed placeholders)
 """
 
+from __future__ import annotations
+
+
 from .skill_learning_controller import (
     SkillExecutionResult,
     SkillLearningController,

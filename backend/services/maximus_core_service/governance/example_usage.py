@@ -12,6 +12,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-06
 """
 
+from __future__ import annotations
+
+
 from datetime import datetime, timedelta
 
 from .base import (
@@ -25,14 +28,14 @@ from .ethics_review_board import ERBManager
 from .policy_engine import PolicyEngine
 
 
-def print_header(title: str):
+def print_header(title: str) -> None:
     """Print section header."""
     print("\n" + "=" * 80)
     print(f"  {title}")
     print("=" * 80 + "\n")
 
 
-def example_1_erb_meeting_decision():
+def example_1_erb_meeting_decision() -> None:
     """
     Example 1: ERB Meeting & Decision Making
 
@@ -94,7 +97,7 @@ def example_1_erb_meeting_decision():
     print("\n✅ Example 1 Complete!\n")
 
 
-def example_2_policy_enforcement():
+def example_2_policy_enforcement() -> None:
     """
     Example 2: Policy Enforcement
 
@@ -157,7 +160,7 @@ def example_2_policy_enforcement():
     print("\n✅ Example 2 Complete!\n")
 
 
-def example_3_whistleblower_report():
+def example_3_whistleblower_report() -> None:
     """
     Example 3: Whistleblower Report Handling
 
@@ -213,7 +216,7 @@ def example_3_whistleblower_report():
     print("\n✅ Example 3 Complete!\n")
 
 
-def run_all_examples():
+def run_all_examples() -> None:
     """Run all examples."""
     print("\n" + "╔" + "=" * 78 + "╗")
     print("║" + " " * 22 + "GOVERNANCE MODULE - EXAMPLES" + " " * 28 + "║")

@@ -6,6 +6,8 @@ FastAPI application for the Episodic Memory service.
 Exposes endpoints for storing, retrieving, and managing memories.
 """
 
+from __future__ import annotations
+
 import logging
 from datetime import datetime
 from typing import Dict, Any, Optional
@@ -14,8 +16,8 @@ from fastapi import FastAPI, HTTPException, Path
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
-from ..core.memory_store import MemoryStore
-from ..models.memory import Memory, MemoryQuery, MemorySearchResult, MemoryType
+from core.memory_store import MemoryStore
+from models.memory import Memory, MemoryQuery, MemorySearchResult, MemoryType
 
 
 # Configure logging

@@ -4,16 +4,9 @@ HCL Planner Service - Configuration Module
 
 Pydantic-based configuration management for the HCL Planner Service.
 All configuration is loaded from environment variables with sensible defaults.
-
-Environment Variables:
-    GEMINI_API_KEY: Google Gemini API key (required)
-    SERVICE_NAME: Service identifier (default: "hcl-planner")
-    LOG_LEVEL: Logging level (default: "INFO")
-    GEMINI_MODEL: Gemini model to use (default: "gemini-3.0-pro")
-    GEMINI_THINKING_LEVEL: Reasoning depth (default: "high")
-    GEMINI_MAX_TOKENS: Max output tokens (default: 8192)
-    GEMINI_TIMEOUT: Request timeout in seconds (default: 120)
 """
+
+from __future__ import annotations
 
 from typing import Literal, Optional
 from pydantic import Field

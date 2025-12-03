@@ -12,6 +12,9 @@ Author: Claude Code + JuanCS-Dev
 Date: 2025-10-13
 """
 
+from __future__ import annotations
+
+
 import hashlib
 import re
 from datetime import datetime

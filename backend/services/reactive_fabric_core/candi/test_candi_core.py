@@ -3,6 +3,9 @@ Test Suite for CANDI Core Engine
 Comprehensive testing of analysis pipeline and orchestration
 """
 
+from __future__ import annotations
+
+
 import pytest
 import pytest_asyncio
 import asyncio

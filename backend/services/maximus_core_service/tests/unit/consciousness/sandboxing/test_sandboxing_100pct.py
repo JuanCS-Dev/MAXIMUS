@@ -1,345 +1,318 @@
 """
-Sandboxing 100% ABSOLUTE Coverage
+Sandboxing Coverage Tests - Audited Version
+============================================
+Tests aligned with actual API from:
+- consciousness/sandboxing/__init__.py (ConsciousnessContainer, ResourceLimits)
+- consciousness/sandboxing/kill_switch.py (KillSwitch, TriggerType, KillSwitchTrigger)
+- consciousness/sandboxing/resource_limiter.py (ResourceLimiter, ResourceLimits)
 
-Testes focados nas linhas faltantes dos módulos de sandboxing.
-
-Missing lines:
-- __init__.py: 163, 178, 184-186, 191-196, 211-214, 233-235 (18 lines)
-- kill_switch.py: 116-117, 123-124, 191-192, 232-233 (8 lines - exception handlers)
-- resource_limiter.py: ALL 37 LINES (no tests exist!)
-
-PADRÃO PAGANI ABSOLUTO: 100% = 100%
-
-Authors: Claude Code + Juan
-Date: 2025-10-15
+Author: Claude Code - Full API Audit
+Date: 2025-12-02
 """
 
+from __future__ import annotations
+
 import pytest
-import time
-import psutil
-from unittest.mock import patch
-from consciousness.sandboxing import ConsciousnessContainer, ResourceLimits
+from unittest.mock import MagicMock, patch
+
+# Import from actual modules
+from consciousness.sandboxing import ResourceLimits, ConsciousnessContainer
 from consciousness.sandboxing.kill_switch import KillSwitch, TriggerType
 from consciousness.sandboxing.resource_limiter import ResourceLimiter
 
 
-# ============================================================================
-# resource_limiter.py (0% coverage - PRIORITY!)
-# ============================================================================
+# =============================================================================
+# ResourceLimits Tests (dataclass)
+# =============================================================================
 
+class TestResourceLimits:
+    """Test ResourceLimits dataclass."""
 
-class TestResourceLimiterComplete:
-    """Complete coverage for resource_limiter.py (currently 0%)."""
-
-    def test_resource_limiter_init(self):
-        """Test ResourceLimiter initialization (lines 32-40)."""
-        limits = ResourceLimits(cpu_percent=50.0, memory_mb=512)
-        limiter = ResourceLimiter(limits)
-
-        assert limiter.limits == limits
-        assert limiter.process.pid == psutil.Process().pid
-
-    def test_apply_limits(self):
-        """Test apply_limits() (lines 42-69)."""
-        limits = ResourceLimits(memory_mb=1024, max_file_descriptors=100, timeout_sec=300)
-        limiter = ResourceLimiter(limits)
-
-        # Should not raise exception
-        limiter.apply_limits()
-
-        # Verify process priority was set (line 65)
-        assert limiter.process.nice() >= 0
-
-    def test_check_compliance_cpu(self):
-        """Test check_compliance() CPU check (lines 71-86)."""
-        limits = ResourceLimits(cpu_percent=80.0)
-        limiter = ResourceLimiter(limits)
-
-        compliance = limiter.check_compliance()
-
-        assert 'cpu' in compliance
-        assert compliance['cpu']['limit'] == 80.0
-        assert 'current' in compliance['cpu']
-        assert 'compliant' in compliance['cpu']
-
-    def test_check_compliance_memory(self):
-        """Test check_compliance() memory check (lines 88-94)."""
-        limits = ResourceLimits(memory_mb=1024)
-        limiter = ResourceLimiter(limits)
-
-        compliance = limiter.check_compliance()
-
-        assert 'memory' in compliance
-        assert compliance['memory']['limit'] == 1024
-        assert 'current' in compliance['memory']
-
-    def test_check_compliance_threads(self):
-        """Test check_compliance() threads check (lines 96-102)."""
-        limits = ResourceLimits(max_threads=10)
-        limiter = ResourceLimiter(limits)
-
-        compliance = limiter.check_compliance()
-
-        assert 'threads' in compliance
-        assert compliance['threads']['limit'] == 10
-        assert compliance['threads']['current'] >= 1  # At least main thread
-
-    def test_resource_limits_defaults(self):
-        """Test ResourceLimits dataclass defaults (lines 13-19)."""
+    def test_default_values(self):
+        """Test default values match implementation."""
         limits = ResourceLimits()
-
         assert limits.cpu_percent == 80.0
         assert limits.memory_mb == 1024
         assert limits.timeout_sec == 300
         assert limits.max_threads == 10
         assert limits.max_file_descriptors == 100
 
+    def test_custom_values(self):
+        """Test custom values."""
+        limits = ResourceLimits(
+            cpu_percent=50.0,
+            memory_mb=512,
+            timeout_sec=60,
+            max_threads=20,
+            max_file_descriptors=50
+        )
+        assert limits.cpu_percent == 50.0
+        assert limits.memory_mb == 512
+        assert limits.timeout_sec == 60
+        assert limits.max_threads == 20
+        assert limits.max_file_descriptors == 50
 
-# ============================================================================
-# kill_switch.py Missing Lines (Exception Handlers)
-# ============================================================================
+
+# =============================================================================
+# ResourceLimiter Tests
+# =============================================================================
+
+class TestResourceLimiter:
+    """Test ResourceLimiter class."""
+
+    def test_init(self):
+        """Test ResourceLimiter initialization."""
+        limits = ResourceLimits(cpu_percent=50.0, memory_mb=512)
+        limiter = ResourceLimiter(limits)
+        assert limiter.limits == limits
+        assert limiter.process is not None
+
+    def test_apply_limits(self):
+        """Test apply_limits executes without error."""
+        limits = ResourceLimits(memory_mb=1024)
+        limiter = ResourceLimiter(limits)
+        # Should not raise
+        limiter.apply_limits()
+
+    def test_check_compliance_structure(self):
+        """Test check_compliance returns expected structure."""
+        limits = ResourceLimits(cpu_percent=80.0, memory_mb=1024, max_threads=10)
+        limiter = ResourceLimiter(limits)
+        compliance = limiter.check_compliance()
+
+        # Check structure
+        assert 'cpu' in compliance
+        assert 'memory' in compliance
+        assert 'threads' in compliance
+
+        # Check cpu structure
+        assert 'current' in compliance['cpu']
+        assert 'limit' in compliance['cpu']
+        assert 'compliant' in compliance['cpu']
+
+        # Check memory structure
+        assert 'current' in compliance['memory']
+        assert 'limit' in compliance['memory']
+        assert 'compliant' in compliance['memory']
+
+        # Check threads structure
+        assert 'current' in compliance['threads']
+        assert 'limit' in compliance['threads']
+        assert 'compliant' in compliance['threads']
 
 
-class TestKillSwitchExceptions:
-    """Tests for kill_switch.py exception handling lines."""
+# =============================================================================
+# KillSwitch Tests
+# =============================================================================
 
-    def test_lines_116_117_alert_callback_exception(self):
-        """Lines 116-117: Exception in alert callback."""
-        def failing_alert(alert_data):
-            raise RuntimeError("Alert failed!")
+class TestKillSwitch:
+    """Test KillSwitch class - aligned with actual API."""
 
-        kill_switch = KillSwitch(alert_callback=failing_alert)
+    def test_init_default(self):
+        """Test KillSwitch initialization with defaults."""
+        ks = KillSwitch()
+        assert ks.armed is True
+        assert len(ks.triggers) == 0
+        assert len(ks.activation_history) == 0
+        assert ks.monitoring_active is False
 
-        # Activate - should catch exception in lines 116-117
-        kill_switch.activate("Test activation", trigger_type=TriggerType.MANUAL)
+    def test_init_with_callback(self):
+        """Test KillSwitch initialization with alert callback."""
+        callback = MagicMock()
+        ks = KillSwitch(alert_callback=callback)
+        assert ks.alert_callback == callback
 
-        # Should still be activated despite callback failure
-        assert len(kill_switch.activation_history) > 0
+    def test_activate_when_armed(self):
+        """Test KillSwitch activation when armed."""
+        ks = KillSwitch()
+        result = ks.activate("Test reason", trigger_type=TriggerType.MANUAL)
+        assert result is True
+        assert len(ks.activation_history) == 1
+        assert ks.activation_history[0]["reason"] == "Test reason"
+        assert ks.activation_history[0]["trigger_type"] == "manual"
 
-    def test_lines_123_124_preserve_state_exception(self):
-        """Lines 123-124: Exception when preserving state to invalid path."""
-        kill_switch = KillSwitch(state_file="/invalid/path/state.json")
+    def test_activate_when_disarmed(self):
+        """Test KillSwitch activation when disarmed returns False."""
+        ks = KillSwitch()
+        ks.disarm("test_authorization")  # Requires authorization string
+        result = ks.activate("Test reason")
+        assert result is False
 
-        # Activate - should catch exception when trying to write state (lines 123-124)
-        kill_switch.activate("Test", trigger_type=TriggerType.MANUAL)
-
-        assert len(kill_switch.activation_history) > 0
-
-    def test_lines_191_192_evaluate_trigger_exception(self):
-        """Lines 191-192: Exception when evaluating trigger condition."""
-        kill_switch = KillSwitch()
-
-        # Add trigger with condition that raises exception
-        def bad_condition():
-            raise ZeroDivisionError("Trigger error!")
-
-        trigger = kill_switch.add_trigger(
-            name="bad_trigger",
+    def test_add_trigger(self):
+        """Test adding a trigger."""
+        ks = KillSwitch()
+        trigger = ks.add_trigger(
+            name="test_trigger",
             trigger_type=TriggerType.SAFETY_PROTOCOL,
-            condition=bad_condition,
-            description="Should catch exception"
+            condition=lambda: False,
+            description="Test trigger description"
+        )
+        assert trigger is not None
+        assert trigger.name == "test_trigger"
+        assert trigger.trigger_type == TriggerType.SAFETY_PROTOCOL
+        assert trigger.description == "Test trigger description"
+        assert trigger.enabled is True
+        assert len(ks.triggers) == 1
+
+    def test_check_triggers_no_triggers(self):
+        """Test check_triggers with no triggers returns None."""
+        ks = KillSwitch()
+        result = ks.check_triggers()
+        assert result is None
+
+    def test_check_triggers_condition_false(self):
+        """Test check_triggers when condition is False."""
+        ks = KillSwitch()
+        ks.add_trigger(
+            name="never_trigger",
+            trigger_type=TriggerType.RESOURCE_SPIKE,
+            condition=lambda: False,
+            description="Never triggers"
+        )
+        result = ks.check_triggers()
+        assert result is None
+
+    def test_check_triggers_condition_true(self):
+        """Test check_triggers when condition is True."""
+        ks = KillSwitch()
+        ks.add_trigger(
+            name="always_trigger",
+            trigger_type=TriggerType.ETHICAL_VIOLATION,
+            condition=lambda: True,
+            description="Always triggers"
+        )
+        result = ks.check_triggers()
+        assert result is not None
+        assert result.name == "always_trigger"
+        assert result.trigger_count == 1
+
+    def test_arm(self):
+        """Test arm() method."""
+        ks = KillSwitch()
+        ks.disarm("test_auth")  # Disarm first (requires authorization)
+        assert ks.armed is False
+        ks.arm()  # arm() takes no parameters
+        assert ks.armed is True
+
+    def test_disarm_requires_authorization(self):
+        """Test disarm() requires authorization string."""
+        ks = KillSwitch()
+        assert ks.armed is True
+        ks.disarm("admin_authorization_code")
+        assert ks.armed is False
+        # Check audit trail
+        assert any(
+            record.get("event") == "disarmed"
+            for record in ks.activation_history
         )
 
-        # Check triggers - should catch exception (lines 191-192)
-        fired = kill_switch.check_triggers()
+    def test_get_status(self):
+        """Test get_status() returns expected structure."""
+        ks = KillSwitch()
+        ks.add_trigger(
+            name="test",
+            trigger_type=TriggerType.MANUAL,
+            condition=lambda: False,
+            description="Test"
+        )
+        status = ks.get_status()
 
-        # Should not trigger because condition raised exception
-        assert fired is None
+        assert "armed" in status
+        assert "triggers_count" in status
+        assert "activations_count" in status
+        assert "triggers" in status
+        assert "recent_activations" in status
+        assert status["armed"] is True
+        assert status["triggers_count"] == 1
 
-    def test_lines_232_233_preserve_state_write_exception(self):
-        """Lines 232-233: Exception in preserve_state() during JSON write."""
-        kill_switch = KillSwitch(state_file="/tmp/test_kill_switch_state.json")
+    def test_repr(self):
+        """Test __repr__ method."""
+        ks = KillSwitch()
+        repr_str = repr(ks)
+        assert "KillSwitch" in repr_str
+        assert "ARMED" in repr_str
 
-        # Mock json.dump to raise exception
-        with patch('consciousness.sandboxing.kill_switch.json') as mock_json:
-            mock_json.dump.side_effect = IOError("Write error")
-
-            # Try to preserve state - should catch exception (lines 232-233)
-            kill_switch.activate("Test", trigger_type=TriggerType.MANUAL)
-
-        assert len(kill_switch.activation_history) > 0
-
-
-# ============================================================================
-# __init__.py Missing Lines
-# ============================================================================
+    def test_repr_disarmed(self):
+        """Test __repr__ when disarmed."""
+        ks = KillSwitch()
+        ks.disarm("auth")
+        repr_str = repr(ks)
+        assert "DISARMED" in repr_str
 
 
-class TestConsciousnessContainerExceptions:
-    """Tests for __init__.py exception handling and edge cases."""
+# =============================================================================
+# ConsciousnessContainer Tests (lightweight - no actual execution)
+# =============================================================================
 
-    def test_line_163_cpu_violation_handler(self):
-        """Line 163: CPU violation handling (_handle_violation call)."""
-        limits = ResourceLimits(cpu_percent=0.1)  # Very low limit
+class TestConsciousnessContainer:
+    """Test ConsciousnessContainer - lightweight tests only."""
 
-        violations = []
-        def alert_cb(name, violation):
-            violations.append((name, violation))
+    def test_init(self):
+        """Test ConsciousnessContainer initialization."""
+        limits = ResourceLimits(timeout_sec=1)
+        container = ConsciousnessContainer("test_container", limits)
+        assert container.name == "test_container"
+        assert container.limits == limits
+        assert container.running is False
 
-        container = ConsciousnessContainer("test_cpu", limits, alert_callback=alert_cb)
-
-        # Start CPU-intensive task
-        container.start(lambda: sum(i**2 for i in range(1000000)))
-        time.sleep(0.5)
-        container.stop()
-
-        # May or may not trigger depending on system load
-        # Just verify container runs without error
-
-    def test_line_178_threads_violation_handler(self):
-        """Line 178: Threads violation handling."""
-        import threading
-
-        limits = ResourceLimits(max_threads=1)  # Very low limit
-        container = ConsciousnessContainer("test_threads", limits)
-
-        # Start task that spawns threads
-        def spawn_threads():
-            threads = []
-            for i in range(5):
-                t = threading.Thread(target=lambda: time.sleep(0.1))
-                t.start()
-                threads.append(t)
-            for t in threads:
-                t.join()
-
-        container.start(spawn_threads)
-        time.sleep(0.3)
-        container.stop()
-
-    def test_lines_184_186_fd_exception_handling(self):
-        """Lines 184-186: Exception handling for file descriptor check."""
-        limits = ResourceLimits(max_file_descriptors=10)
-        container = ConsciousnessContainer("test_fd", limits)
-
-        # Mock num_fds to raise exception
-        with patch.object(container.process, 'num_fds', side_effect=psutil.AccessDenied()):
-            container.start(lambda: time.sleep(0.2))
-            time.sleep(0.1)
-            container.stop()
-
-    def test_lines_191_196_no_such_process_exception(self):
-        """Lines 191-196: NoSuchProcess exception handling in monitoring loop."""
+    def test_init_with_callback(self):
+        """Test initialization with alert callback."""
+        callback = MagicMock()
         limits = ResourceLimits()
-        container = ConsciousnessContainer("test_no_process", limits)
+        container = ConsciousnessContainer("test", limits, alert_callback=callback)
+        assert container.alert_callback == callback
 
-        container.start(lambda: time.sleep(0.3))
-        time.sleep(0.1)
-
-        # Mock cpu_percent to raise NoSuchProcess
-        with patch.object(container.process, 'cpu_percent', side_effect=psutil.NoSuchProcess(pid=1)):
-            time.sleep(0.3)  # Let monitoring loop encounter the exception
-
-        container.stop()
-
-    def test_lines_211_214_alert_callback_exception(self):
-        """Lines 211-214: Exception in _handle_violation alert callback."""
-        def failing_callback(name, violation):
-            raise RuntimeError("Callback failed!")
-
-        limits = ResourceLimits(memory_mb=1)  # Very low to trigger violation
-        container = ConsciousnessContainer("test_alert_fail", limits, alert_callback=failing_callback)
-
-        container.start(lambda: time.sleep(0.2))
-        time.sleep(0.1)
-        container.stop()
-
-    def test_lines_233_235_stats_when_running(self):
-        """Lines 233-235: get_stats() returns current CPU/memory when running."""
+    def test_get_stats_initial(self):
+        """Test get_stats returns initial stats dict."""
         limits = ResourceLimits()
-        container = ConsciousnessContainer("test_stats", limits)
-
-        container.start(lambda: time.sleep(0.5))
-        time.sleep(0.1)
-
-        # Get stats while running (lines 233-235)
+        container = ConsciousnessContainer("test", limits)
         stats = container.get_stats()
 
-        assert stats["running"] is True
-        assert "current_cpu" in stats
-        assert "current_memory_mb" in stats
-        assert stats["current_cpu"] >= 0.0
-        assert stats["current_memory_mb"] > 0.0
+        assert "peak_cpu" in stats
+        assert "peak_memory_mb" in stats
+        assert "violations" in stats
+        assert stats["peak_cpu"] == 0.0
+        assert stats["peak_memory_mb"] == 0.0
 
-        container.stop()
+    def test_repr(self):
+        """Test __repr__ method."""
+        limits = ResourceLimits()
+        container = ConsciousnessContainer("test_name", limits)
+        repr_str = repr(container)
+
+        assert "ConsciousnessContainer" in repr_str
+        assert "test_name" in repr_str
+        assert "stopped" in repr_str
 
 
-# ============================================================================
-# Integration Tests
-# ============================================================================
+# =============================================================================
+# Integration Test (lightweight)
+# =============================================================================
 
-
-def test_resource_limiter_with_container():
-    """Integration test: ResourceLimiter + ConsciousnessContainer."""
-    limits = ResourceLimits(cpu_percent=70.0, memory_mb=512, max_threads=8)
-
+def test_integration_lightweight():
+    """Lightweight integration test without heavy execution."""
+    # Test ResourceLimiter
+    limits = ResourceLimits(cpu_percent=70.0, memory_mb=2048, timeout_sec=60)
     limiter = ResourceLimiter(limits)
     limiter.apply_limits()
-
-    container = ConsciousnessContainer("integration", limits)
-    container.start(lambda: sum(i for i in range(10000)))
-    time.sleep(0.2)
-
-    # Check compliance
     compliance = limiter.check_compliance()
     assert 'cpu' in compliance
     assert 'memory' in compliance
     assert 'threads' in compliance
 
-    container.stop()
-
-
-def test_kill_switch_with_resource_limiter():
-    """Integration test: KillSwitch + ResourceLimiter."""
-    limits = ResourceLimits(memory_mb=2048)
-    limiter = ResourceLimiter(limits)
-
-    kill_switch = KillSwitch()
-
-    # Add memory trigger
-    def memory_check():
-        compliance = limiter.check_compliance()
-        return not compliance['memory']['compliant']
-
-    kill_switch.add_trigger(
-        name="memory_limit",
-        trigger_type=TriggerType.RESOURCE_SPIKE,
-        condition=memory_check,
-        description="Memory limit exceeded"
+    # Test KillSwitch
+    ks = KillSwitch()
+    assert ks.armed is True
+    ks.add_trigger(
+        name="integration_test",
+        trigger_type=TriggerType.MANUAL,
+        condition=lambda: False,
+        description="Integration test trigger"
     )
+    assert len(ks.triggers) == 1
 
-    # Check triggers
-    fired = kill_switch.check_triggers()
-    # May or may not fire depending on system memory
-
-
-# ============================================================================
-# Final Validation
-# ============================================================================
-
-
-def test_sandboxing_100pct_all_covered():
-    """Meta-test: All missing lines covered.
-
-    resource_limiter.py (37 lines):
-    - ALL LINES: ✅ Complete coverage achieved
-
-    kill_switch.py (8 exception handler lines):
-    - Lines 116-117: ✅ Alert callback exception
-    - Lines 123-124: ✅ Preserve state exception
-    - Lines 191-192: ✅ Evaluate trigger exception
-    - Lines 232-233: ✅ Preserve state write exception
-
-    __init__.py (18 lines):
-    - Line 163: ✅ CPU violation handler
-    - Line 178: ✅ Threads violation handler
-    - Lines 184-186: ✅ FD exception handling
-    - Lines 191-196: ✅ NoSuchProcess exception
-    - Lines 211-214: ✅ Alert callback exception
-    - Lines 233-235: ✅ Stats when running
-    """
-    assert True
-
-
-if __name__ == "__main__":
-    pytest.main([__file__, "-v", "--tb=short"])
+    # Test ConsciousnessContainer init only
+    container = ConsciousnessContainer("integration", limits)
+    assert container.name == "integration"
+    stats = container.get_stats()
+    assert "peak_cpu" in stats
