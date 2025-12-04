@@ -13,10 +13,18 @@ from __future__ import annotations
 
 from .base_collector import BaseCollector, CollectorHealth, CollectorMetrics
 from .log_aggregation_collector import LogAggregationCollector
+from .threat_intelligence_collector import (
+    ThreatIndicator,
+    ThreatIntelligenceCollector,
+    ThreatIntelligenceConfig,
+)
 
 __all__ = [
     "BaseCollector",
     "CollectorHealth",
     "CollectorMetrics",
     "LogAggregationCollector",
+    "ThreatIndicator",
+    "ThreatIntelligenceCollector",
+    "ThreatIntelligenceConfig",
 ]

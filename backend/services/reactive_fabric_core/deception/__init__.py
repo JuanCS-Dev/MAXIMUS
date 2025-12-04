@@ -9,19 +9,27 @@ from __future__ import annotations
 
 
 from .deception_engine import (
-    DeceptionEngine,
+    BreadcrumbTrail,
     DeceptionConfig,
-    Honeytoken,
-    DecoySystem,
+    DeceptionEngine,
     DeceptionEvent,
-    DeceptionType
+    DeceptionType,
+    DecoySystem,
+    Honeytoken,
+    HoneytokenGenerator,
+    TokenType,
+    TrapDocument,
 )
 
 __all__ = [
-    "DeceptionEngine",
+    "BreadcrumbTrail",
     "DeceptionConfig",
-    "Honeytoken",
-    "DecoySystem",
+    "DeceptionEngine",
     "DeceptionEvent",
-    "DeceptionType"
+    "DeceptionType",
+    "DecoySystem",
+    "Honeytoken",
+    "HoneytokenGenerator",
+    "TokenType",
+    "TrapDocument",
 ]

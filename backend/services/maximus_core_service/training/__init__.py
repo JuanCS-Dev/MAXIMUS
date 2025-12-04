@@ -17,10 +17,13 @@ Date: 2025-10-06
 from __future__ import annotations
 
 
-from .data_collection import CollectedEvent, DataCollector, DataSource, DataSourceType
+# TODO: Fix data_collection_pkg exports (Batch 5 incomplete)
+# from .data_collection_pkg import CollectedEvent, DataCollector, DataSource, DataSourceType
 from .data_preprocessor import DataPreprocessor, LayerPreprocessor, LayerType, PreprocessedSample
 from .data_validator import DataValidator, ValidationIssue, ValidationResult, ValidationSeverity
-from .dataset_builder import DatasetBuilder, DatasetSplit, PyTorchDatasetWrapper, SplitStrategy
+from .dataset_builder_pkg import DatasetBuilder, DatasetSplit, PyTorchDatasetWrapper, SplitStrategy
+from .evaluator_pkg import EvaluationMetrics, ModelEvaluator
+from .layer_trainer_pkg import Trainer, TrainingConfig
 
 __all__ = [
     # Data Collection

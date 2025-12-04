@@ -9,17 +9,27 @@ from __future__ import annotations
 
 
 from .orchestration_engine import (
-    OrchestrationEngine,
-    OrchestrationConfig,
     CorrelationRule,
+    EventCorrelationWindow,
+    EventCorrelator,
+    OrchestrationConfig,
+    OrchestrationEngine,
+    OrchestrationEvent,
+    PatternDetector,
+    ThreatCategory,
     ThreatScore,
-    OrchestrationEvent
+    ThreatScorer,
 )
 
 __all__ = [
-    "OrchestrationEngine",
-    "OrchestrationConfig",
     "CorrelationRule",
+    "EventCorrelationWindow",
+    "EventCorrelator",
+    "OrchestrationConfig",
+    "OrchestrationEngine",
+    "OrchestrationEvent",
+    "PatternDetector",
+    "ThreatCategory",
     "ThreatScore",
-    "OrchestrationEvent"
+    "ThreatScorer",
 ]

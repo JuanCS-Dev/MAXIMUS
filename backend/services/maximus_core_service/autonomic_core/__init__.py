@@ -17,6 +17,6 @@ Modules within this package include:
 from __future__ import annotations
 
 
-from .hcl_orchestrator import HomeostaticControlLoop, run_homeostatic_control_loop
+from .hcl_orchestrator_pkg import HCLConfig, HomeostaticControlLoop
 
-__all__ = ["HomeostaticControlLoop", "run_homeostatic_control_loop"]
+__all__ = ["HomeostaticControlLoop", "HCLConfig"]

@@ -30,8 +30,8 @@ from .policy_engine import PolicyEngine
 
 def print_header(title: str) -> None:
     """Print section header."""
-    print("\n" + "=" * 80)
-    print(f"  {title}")
+    logger.info("=" * 80)
+    logger.info("  %s", title)
     print("=" * 80 + "\n")
 
 
@@ -47,7 +47,7 @@ def example_1_erb_meeting_decision() -> None:
     erb = ERBManager(config)
 
     # Step 1: Add ERB members
-    print("📋 STEP 1: Adding ERB Members")
+    logger.info("📋 STEP 1: Adding ERB Members")
     members = [
         ("Dr. Alice Chen", "alice@vertice.ai", ERBMemberRole.CHAIR, ["AI Ethics", "Philosophy"]),
         ("Bob Martinez", "bob@vertice.ai", ERBMemberRole.VICE_CHAIR, ["Legal", "Compliance"]),
@@ -59,10 +59,10 @@ def example_1_erb_meeting_decision() -> None:
         result = erb.add_member(
             name, email, role, "VÉRTICE" if role != ERBMemberRole.EXTERNAL_ADVISOR else "External", expertise
         )
-        print(f"   ✓ Added: {name} ({role.value})")
+        logger.info("   ✓ Added: %s ({role.value})", name)
 
     # Step 2: Schedule meeting
-    print("\n📅 STEP 2: Scheduling ERB Meeting")
+    logger.info("\n📅 STEP 2: Scheduling ERB Meeting")
     meeting_date = datetime.utcnow() + timedelta(days=7)
     meeting_result = erb.schedule_meeting(
         scheduled_date=meeting_date,
@@ -73,14 +73,14 @@ def example_1_erb_meeting_decision() -> None:
     print(f"   ✓ Meeting scheduled for {meeting_date.strftime('%Y-%m-%d %H:%M')}")
 
     # Step 3: Record attendance
-    print("\n👥 STEP 3: Recording Attendance")
+    logger.info("\n👥 STEP 3: Recording Attendance")
     attendee_ids = [m.member_id for m in erb.get_voting_members()]
     attendance_result = erb.record_attendance(meeting_id, attendee_ids[:3], attendee_ids[3:])
-    print(f"   ✓ Quorum met: {attendance_result.metadata.get('quorum_met')}")
-    print(f"   ✓ Voting attendees: {attendance_result.metadata.get('voting_attendees')}")
+    logger.info("   ✓ Quorum met: %s", attendance_result.metadata.get('quorum_met'))
+    logger.info("   ✓ Voting attendees: %s", attendance_result.metadata.get('voting_attendees'))
 
     # Step 4: Record decision
-    print("\n🗳️  STEP 4: Recording Decision")
+    logger.info("\n🗳️  STEP 4: Recording Decision")
     decision_result = erb.record_decision(
         meeting_id=meeting_id,
         title="Approve Ethical Use Policy v1.0",
@@ -91,10 +91,10 @@ def example_1_erb_meeting_decision() -> None:
         rationale="Policy aligns with EU AI Act and organizational values",
         related_policies=[PolicyType.ETHICAL_USE],
     )
-    print(f"   ✓ Decision: {erb.decisions[decision_result.entity_id].decision_type.value}")
-    print(f"   ✓ Approval rate: {decision_result.metadata['approval_percentage']:.1f}%")
+    logger.info("   ✓ Decision: %s", erb.decisions[decision_result.entity_id].decision_type.value)
+    logger.info("   ✓ Approval rate: %.1f%", decision_result.metadata['approval_percentage'])
 
-    print("\n✅ Example 1 Complete!\n")
+    logger.info("\n✅ Example 1 Complete!\n")
 
 
 def example_2_policy_enforcement() -> None:
@@ -110,7 +110,7 @@ def example_2_policy_enforcement() -> None:
     engine = PolicyEngine(config)
 
     # Scenario 1: Authorized red team operation
-    print("🎯 SCENARIO 1: Authorized Red Team Operation")
+    logger.info("🎯 SCENARIO 1: Authorized Red Team Operation")
     result1 = engine.enforce_policy(
         policy_type=PolicyType.RED_TEAMING,
         action="execute_exploit",
@@ -122,12 +122,12 @@ def example_2_policy_enforcement() -> None:
         },
         actor="red_team_lead",
     )
-    print(f"   Compliant: {result1.is_compliant}")
-    print(f"   Checked rules: {result1.checked_rules}")
-    print(f"   Violations: {len(result1.violations)}")
+    logger.info("   Compliant: %s", result1.is_compliant)
+    logger.info("   Checked rules: %s", result1.checked_rules)
+    logger.info("   Violations: %s", len(result1.violations))
 
     # Scenario 2: Unauthorized action
-    print("\n🚨 SCENARIO 2: Unauthorized Action (Should Fail)")
+    logger.info("\n🚨 SCENARIO 2: Unauthorized Action (Should Fail)")
     result2 = engine.enforce_policy(
         policy_type=PolicyType.RED_TEAMING,
         action="execute_exploit",
@@ -137,13 +137,13 @@ def example_2_policy_enforcement() -> None:
         },
         actor="unauthorized_user",
     )
-    print(f"   Compliant: {result2.is_compliant}")
-    print(f"   Violations: {len(result2.violations)}")
+    logger.info("   Compliant: %s", result2.is_compliant)
+    logger.info("   Violations: %s", len(result2.violations))
     if result2.violations:
-        print(f"   First violation: {result2.violations[0].title}")
+        logger.info("   First violation: %s", result2.violations[0].title)
 
     # Scenario 3: Data privacy check
-    print("\n🔒 SCENARIO 3: Data Privacy Check")
+    logger.info("\n🔒 SCENARIO 3: Data Privacy Check")
     result3 = engine.enforce_policy(
         policy_type=PolicyType.DATA_PRIVACY,
         action="store_personal_data",
@@ -154,10 +154,10 @@ def example_2_policy_enforcement() -> None:
         },
         actor="system",
     )
-    print(f"   Compliant: {result3.is_compliant}")
-    print(f"   Compliance: {result3.compliance_percentage():.1f}%")
+    logger.info("   Compliant: %s", result3.is_compliant)
+    logger.info("   Compliance: %.1f%", result3.compliance_percentage())
 
-    print("\n✅ Example 2 Complete!\n")
+    logger.info("\n✅ Example 2 Complete!\n")
 
 
 def example_3_whistleblower_report() -> None:
@@ -169,7 +169,7 @@ def example_3_whistleblower_report() -> None:
     print_header("EXAMPLE 3: Whistleblower Report Handling")
 
     # Create anonymous whistleblower report
-    print("📢 STEP 1: Submitting Anonymous Whistleblower Report")
+    logger.info("📢 STEP 1: Submitting Anonymous Whistleblower Report")
     report = WhistleblowerReport(
         submission_date=datetime.utcnow(),
         reporter_id=None,  # Anonymous
@@ -183,37 +183,37 @@ def example_3_whistleblower_report() -> None:
         status="submitted",
         retaliation_concerns=True,
     )
-    print(f"   ✓ Report ID: {report.report_id}")
-    print(f"   ✓ Anonymous: {report.is_anonymous}")
-    print(f"   ✓ Severity: {report.severity.value}")
+    logger.info("   ✓ Report ID: %s", report.report_id)
+    logger.info("   ✓ Anonymous: %s", report.is_anonymous)
+    logger.info("   ✓ Severity: %s", report.severity.value)
 
     # Assign investigator
-    print("\n🔍 STEP 2: Assigning Investigator")
+    logger.info("\n🔍 STEP 2: Assigning Investigator")
     report.status = "under_review"
     report.assigned_investigator = "security_lead@vertice.ai"
-    print(f"   ✓ Status: {report.status}")
-    print(f"   ✓ Investigator: {report.assigned_investigator}")
+    logger.info("   ✓ Status: %s", report.status)
+    logger.info("   ✓ Investigator: %s", report.assigned_investigator)
 
     # Apply protection measures
-    print("\n🛡️  STEP 3: Applying Whistleblower Protection")
+    logger.info("\n🛡️  STEP 3: Applying Whistleblower Protection")
     report.protection_measures = [
         "Anonymous identity maintained",
         "No retaliation monitoring active",
         "Legal support available if needed",
     ]
     for measure in report.protection_measures:
-        print(f"   ✓ {measure}")
+        logger.info("   ✓ %s", measure)
 
     # Resolve
-    print("\n✅ STEP 4: Investigation Complete")
+    logger.info("\n✅ STEP 4: Investigation Complete")
     report.status = "resolved"
     report.resolution = "Violation confirmed. Tools access revoked. Additional training mandated."
     report.resolution_date = datetime.utcnow()
     report.escalated_to_erb = True
-    print(f"   ✓ Resolution: {report.resolution}")
-    print(f"   ✓ Escalated to ERB: {report.escalated_to_erb}")
+    logger.info("   ✓ Resolution: %s", report.resolution)
+    logger.info("   ✓ Escalated to ERB: %s", report.escalated_to_erb)
 
-    print("\n✅ Example 3 Complete!\n")
+    logger.info("\n✅ Example 3 Complete!\n")
 
 
 def run_all_examples() -> None:
@@ -226,9 +226,9 @@ def run_all_examples() -> None:
     example_2_policy_enforcement()
     example_3_whistleblower_report()
 
-    print("=" * 80)
-    print("  All examples completed!")
-    print("=" * 80)
+    logger.info("=" * 80)
+    logger.info("  All examples completed!")
+    logger.info("=" * 80)
 
 
 if __name__ == "__main__":

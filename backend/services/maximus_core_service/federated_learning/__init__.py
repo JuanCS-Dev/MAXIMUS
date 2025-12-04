@@ -70,21 +70,18 @@ from .fl_client import (
     ClientConfig,
     FLClient,
 )
-from .fl_coordinator import (
+from .fl_coordinator_pkg import (
     CoordinatorConfig,
     FLCoordinator,
 )
+from .storage_pkg import FLModelRegistry, FLRoundHistory, ModelVersion, safe_pickle_load
 from .model_adapters import (
     BaseModelAdapter,
     MalwareDetectorAdapter,
     ModelType,
     ThreatClassifierAdapter,
 )
-from .storage import (
-    FLModelRegistry,
-    FLRoundHistory,
-    ModelVersion,
-)
+# Moved to storage_pkg imports above (line 77)
 
 __all__ = [
     # Base classes

@@ -7,6 +7,8 @@ __pycache__/
 venv/
 env/
 .env
+.env.*
+!.env.example
 
 # IDE
 .vscode/
@@ -22,3 +24,12 @@ Thumbs.db
 # Maximus
 legacy/
 backups/
+
+# Security
+*.key
+*.pem
+*.p12
+*.pfx
+secrets/
+.secrets/
+*.secret.*
