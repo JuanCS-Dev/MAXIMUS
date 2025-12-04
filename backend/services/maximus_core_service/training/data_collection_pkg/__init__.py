@@ -1,8 +1,8 @@
-"""Training package - data_collection."""
+"""Data collection package."""
 
 from __future__ import annotations
 
-from .core import Trainer
-from .models import TrainingConfig
+from .core import DataCollector
+from .models import CollectedEvent, DataSource, DataSourceType
 
-__all__ = ["Trainer", "TrainingConfig"]
+__all__ = ["DataCollector", "DataSource", "DataSourceType", "CollectedEvent"]

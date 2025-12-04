@@ -79,7 +79,7 @@ from .audit_trail import (
     AuditTrail,
     ComplianceReport,
 )
-from .base import (
+from .base_pkg import (
     ActionType,
     AuditEntry,
     # Enums
