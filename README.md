@@ -1,4 +1,4 @@
-![MAXIMUS 2.0 Banner](docs/assets/banner.jpeg)
+![MAXIMUS 2.0 Banner](docs/pre-docs/assets/banner.jpeg)
 
 # MAXIMUS 2.0 🧠
 > **A Constitutional Meta-Cognitive AI that Manages Agents**
