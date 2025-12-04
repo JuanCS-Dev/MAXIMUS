@@ -9,12 +9,12 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from ..base import DecisionStatus
+from ..base_pkg import DecisionStatus
 from .enums import EscalationType
 from .models import EscalationEvent, EscalationRule
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, RiskLevel
+    from ..base_pkg import HITLDecision, RiskLevel
 
 
 class EscalationExecutionMixin:
@@ -118,7 +118,7 @@ class EscalationExecutionMixin:
         Returns:
             Next role in escalation chain
         """
-        from ..base import RiskLevel
+        from ..base_pkg import RiskLevel
 
         # Use risk-based target if critical/high risk
         if decision.risk_level == RiskLevel.CRITICAL:

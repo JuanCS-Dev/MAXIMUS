@@ -20,7 +20,7 @@ from .constants import (
 from .models import RiskFactors
 
 if TYPE_CHECKING:
-    from ..base import DecisionContext
+    from ..base_pkg import DecisionContext
 
 
 class FactorComputationMixin:

@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ..base import AuditEntry
+from ..base_pkg import AuditEntry
 
 if TYPE_CHECKING:
     from .models import AuditQuery

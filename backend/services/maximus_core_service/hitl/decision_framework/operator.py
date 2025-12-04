@@ -9,10 +9,10 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from ..base import DecisionStatus
+from ..base_pkg import DecisionStatus
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, OperatorAction
+    from ..base_pkg import HITLDecision, OperatorAction
 
 
 class OperatorIntegrationMixin:

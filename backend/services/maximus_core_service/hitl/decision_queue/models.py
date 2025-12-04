@@ -11,7 +11,7 @@ from datetime import datetime, timedelta
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision
+    from ..base_pkg import HITLDecision
 
 
 @dataclass

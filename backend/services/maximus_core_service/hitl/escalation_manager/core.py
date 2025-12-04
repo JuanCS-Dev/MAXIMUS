@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Callable
 
-from ..base import EscalationConfig
+from ..base_pkg import EscalationConfig
 from .escalation import EscalationExecutionMixin
 from .metrics import MetricsHistoryMixin
 from .models import EscalationEvent, EscalationRule

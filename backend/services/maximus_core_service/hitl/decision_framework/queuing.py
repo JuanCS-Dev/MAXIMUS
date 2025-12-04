@@ -11,7 +11,7 @@ from typing import TYPE_CHECKING
 from .models import DecisionResult
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision
+    from ..base_pkg import HITLDecision
 
 
 class ReviewQueueingMixin:

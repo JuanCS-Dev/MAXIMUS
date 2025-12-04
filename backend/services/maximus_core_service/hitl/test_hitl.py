@@ -24,7 +24,7 @@ from datetime import datetime, timedelta
 import pytest
 
 from .audit_trail import AuditQuery, AuditTrail
-from .base import (
+from .base_pkg import (
     ActionType,
     AutomationLevel,
     DecisionContext,

@@ -17,7 +17,7 @@ from .recommendations import RecommendationsMixin
 from .scoring import ScoringMixin
 
 if TYPE_CHECKING:
-    from ..base import DecisionContext
+    from ..base_pkg import DecisionContext
 
 
 class RiskAssessor(

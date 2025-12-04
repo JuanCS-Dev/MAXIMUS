@@ -12,7 +12,7 @@ from .enums import EscalationType
 from .models import EscalationRule
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, RiskLevel
+    from ..base_pkg import HITLDecision, RiskLevel
 
 
 class EscalationRulesMixin:
@@ -24,7 +24,7 @@ class EscalationRulesMixin:
 
     def _initialize_default_rules(self) -> None:
         """Initialize default escalation rules."""
-        from ..base import RiskLevel
+        from ..base_pkg import RiskLevel
 
         # Rule 1: Timeout escalation
         self.rules.append(

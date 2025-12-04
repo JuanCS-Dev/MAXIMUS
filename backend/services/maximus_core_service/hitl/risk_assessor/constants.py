@@ -6,7 +6,7 @@ Thresholds, weights, and mappings for risk calculation.
 
 from __future__ import annotations
 
-from ..base import ActionType
+from ..base_pkg import ActionType
 
 # Risk level thresholds
 CRITICAL_THRESHOLD = 0.75  # ≥0.75 → CRITICAL

@@ -20,7 +20,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 
 from .audit_trail import AuditQuery, AuditTrail
-from .base import (
+from .base_pkg import (
     ActionType,
     AutomationLevel,
     DecisionContext,
@@ -333,7 +333,7 @@ def example_3_compliance_reporting():
             threat_score=threat_score,
         )
 
-        from .base import HITLDecision
+        from .base_pkg import HITLDecision
 
         decision = HITLDecision(
             context=context,

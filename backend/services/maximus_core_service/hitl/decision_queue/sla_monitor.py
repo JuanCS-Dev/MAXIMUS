@@ -10,10 +10,10 @@ import logging
 import threading
 from typing import TYPE_CHECKING
 
-from ..base import DecisionStatus
+from ..base_pkg import DecisionStatus
 
 if TYPE_CHECKING:
-    from ..base import SLAConfig
+    from ..base_pkg import SLAConfig
     from .models import QueuedDecision
 
 

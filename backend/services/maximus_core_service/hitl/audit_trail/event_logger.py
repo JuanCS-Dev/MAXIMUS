@@ -8,10 +8,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Any
 
-from ..base import AuditEntry
+from ..base_pkg import AuditEntry
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, OperatorAction
+    from ..base_pkg import HITLDecision, OperatorAction
     from ..risk_assessor import RiskScore
 
 

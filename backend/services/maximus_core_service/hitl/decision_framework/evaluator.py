@@ -9,11 +9,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from ..base import AutomationLevel, DecisionStatus, HITLDecision
+from ..base_pkg import AutomationLevel, DecisionStatus, HITLDecision
 from .models import DecisionResult
 
 if TYPE_CHECKING:
-    from ..base import ActionType, DecisionContext
+    from ..base_pkg import ActionType, DecisionContext
 
 
 class ActionEvaluationMixin:
@@ -50,7 +50,7 @@ class ActionEvaluationMixin:
         Returns:
             DecisionResult indicating execution status
         """
-        from ..base import DecisionContext
+        from ..base_pkg import DecisionContext
 
         start_time = datetime.utcnow()
         self.metrics["total_decisions"] += 1

@@ -10,7 +10,7 @@ import uuid
 from datetime import datetime, timedelta
 from typing import Any
 
-from ..base import HITLDecision, RiskLevel
+from ..base_pkg import HITLDecision, RiskLevel
 from .actions import ActionMixin
 from .models import OperatorMetrics, OperatorSession
 

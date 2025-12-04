@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from ..base import (
+from ..base_pkg import (
     AuditEntry,
     AutomationLevel,
     DecisionStatus,

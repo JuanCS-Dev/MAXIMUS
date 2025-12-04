@@ -9,11 +9,11 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING, Any
 
-from ..base import DecisionStatus
+from ..base_pkg import DecisionStatus
 from .models import DecisionResult
 
 if TYPE_CHECKING:
-    from ..base import DecisionContext, HITLDecision, OperatorAction
+    from ..base_pkg import DecisionContext, HITLDecision, OperatorAction
 
 
 class ExecutionMixin:

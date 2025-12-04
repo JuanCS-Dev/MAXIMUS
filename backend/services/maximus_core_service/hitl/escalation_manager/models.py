@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Any
 from .enums import EscalationType
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, RiskLevel
+    from ..base_pkg import HITLDecision, RiskLevel
 
 
 @dataclass
@@ -56,7 +56,7 @@ class EscalationRule:
         Returns:
             True if rule matches
         """
-        from ..base import RiskLevel
+        from ..base_pkg import RiskLevel
 
         if not self.active:
             return False

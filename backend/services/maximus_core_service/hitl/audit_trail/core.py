@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from ..base import AuditEntry, AutomationLevel, HITLDecision, RiskLevel
+from ..base_pkg import AuditEntry, AutomationLevel, HITLDecision, RiskLevel
 from .compliance import ComplianceReportingMixin
 from .event_logger import EventLoggingMixin
 from .query_engine import QueryMixin

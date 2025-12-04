@@ -10,7 +10,7 @@ import logging
 from collections.abc import Callable
 from typing import Any
 
-from ..base import ActionType, HITLConfig
+from ..base_pkg import ActionType, HITLConfig
 from ..risk_assessor import RiskAssessor
 from .evaluator import ActionEvaluationMixin
 from .executor import ExecutionMixin

@@ -8,10 +8,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ..base import RiskLevel
+from ..base_pkg import RiskLevel
 
 if TYPE_CHECKING:
-    from ..base import DecisionContext
+    from ..base_pkg import DecisionContext
     from .models import RiskFactors
 
 

@@ -11,7 +11,7 @@ from collections import deque
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, RiskLevel
+    from ..base_pkg import HITLDecision, RiskLevel
     from .models import QueuedDecision
 
 
@@ -79,7 +79,7 @@ class QueueManagementMixin:
         Returns:
             HITLDecision, or None if queue is empty
         """
-        from ..base import RiskLevel
+        from ..base_pkg import RiskLevel
 
         # Determine which queue to dequeue from
         if risk_level:

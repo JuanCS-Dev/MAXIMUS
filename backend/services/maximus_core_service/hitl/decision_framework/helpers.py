@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from ..base import ActionType
+from ..base_pkg import ActionType
 
 if TYPE_CHECKING:
     from .models import DecisionResult

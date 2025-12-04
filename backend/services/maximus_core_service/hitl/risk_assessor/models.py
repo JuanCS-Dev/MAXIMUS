@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from ..base import RiskLevel
+from ..base_pkg import RiskLevel
 
 
 @dataclass

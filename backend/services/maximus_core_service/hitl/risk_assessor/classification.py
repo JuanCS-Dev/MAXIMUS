@@ -6,7 +6,7 @@ Converts numeric risk scores to discrete risk levels.
 
 from __future__ import annotations
 
-from ..base import RiskLevel
+from ..base_pkg import RiskLevel
 from .constants import CRITICAL_THRESHOLD, HIGH_THRESHOLD, MEDIUM_THRESHOLD
 
 

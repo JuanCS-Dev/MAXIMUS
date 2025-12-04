@@ -12,7 +12,7 @@ from typing import TYPE_CHECKING
 from .models import EscalationEvent, EscalationRule
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, RiskLevel
+    from ..base_pkg import HITLDecision, RiskLevel
 
 
 class NotificationMixin:
@@ -57,7 +57,7 @@ class NotificationMixin:
             event.email_sent = self._send_email_notification(decision, event)
 
         # SMS notification (for critical only)
-        from ..base import RiskLevel
+        from ..base_pkg import RiskLevel
 
         if send_sms and decision.risk_level == RiskLevel.CRITICAL:
             event.sms_sent = self._send_sms_notification(decision, event)

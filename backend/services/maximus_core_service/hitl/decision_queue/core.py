@@ -9,7 +9,7 @@ from __future__ import annotations
 import logging
 from collections import deque
 
-from ..base import RiskLevel, SLAConfig
+from ..base_pkg import RiskLevel, SLAConfig
 from .metrics import MetricsMixin
 from .operator_assignment import OperatorAssignmentMixin
 from .priority import PriorityMixin

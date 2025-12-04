@@ -9,7 +9,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision, RiskLevel
+    from ..base_pkg import HITLDecision, RiskLevel
 
 
 class PriorityMixin:
@@ -31,7 +31,7 @@ class PriorityMixin:
         Returns:
             Priority score (0.0 to 1.0)
         """
-        from ..base import RiskLevel
+        from ..base_pkg import RiskLevel
 
         # Base priority from risk level
         risk_priority = {

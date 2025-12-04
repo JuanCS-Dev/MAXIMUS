@@ -8,10 +8,10 @@ from __future__ import annotations
 import logging
 from typing import TYPE_CHECKING, Any
 
-from ..base import OperatorAction
+from ..base_pkg import OperatorAction
 
 if TYPE_CHECKING:
-    from ..base import HITLDecision
+    from ..base_pkg import HITLDecision
     from .interface import OperatorInterface
     from .models import OperatorSession
 

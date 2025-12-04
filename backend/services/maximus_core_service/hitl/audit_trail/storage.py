@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from ..base import AuditEntry
+    from ..base_pkg import AuditEntry
 
 
 class StorageBackend(ABC):

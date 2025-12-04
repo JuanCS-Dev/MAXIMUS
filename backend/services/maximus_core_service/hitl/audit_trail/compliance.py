@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING
 from .models import ComplianceReport
 
 if TYPE_CHECKING:
-    from ..base import AuditEntry
+    from ..base_pkg import AuditEntry
 
 
 class ComplianceReportingMixin:
