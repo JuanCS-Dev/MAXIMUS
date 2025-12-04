@@ -355,10 +355,16 @@ All Maximus code follows:
 
 ## 📚 **Documentation**
 
-- [Architecture Diagram](docs/MAXIMUS_ARCHITECTURE_DIAGRAM.md)
-- [Meta-Cognitive Standard](docs/META_COGNITIVE_AGENT_STANDARD.md)
-- [AGI Research Report](docs/AGI%20&%20Meta-Agents:%20State-of-the-Art%20Deep%20Research%20Report.md)
-- [Reflector Walkthrough](/.gemini/antigravity/brain/e6540c3d-60e2-4e06-80e5-3058a509fdc1/walkthrough.md)
+| Document | Description |
+|----------|-------------|
+| **[📚 Documentation Hub](docs/README.md)** | Complete index with quick start guides |
+| **[🏗️ Architecture Overview](docs/architecture/OVERVIEW.md)** | 13 microservices, system design, data flow |
+| **[📜 Code Constitution](docs/development/CODE_CONSTITUTION.md)** | Google-inspired code standards |
+| **[💻 Development Guide](docs/development/DEVELOPMENT_GUIDE.md)** | Workflow, testing, contribution |
+| **[👤 HITL Module](docs/modules/HITL_MODULE.md)** | Human-in-the-Loop framework |
+| **[📋 Changelog](docs/sprints/CHANGELOG.md)** | Version history and releases |
+
+**Legacy docs**: [pre-docs/](docs/pre-docs/) (research papers, migration plans)
 
 ---
 
